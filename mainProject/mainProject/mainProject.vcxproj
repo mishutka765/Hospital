@@ -119,9 +119,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Algorithms.cpp" />
+    <ClCompile Include="Classes.cpp" />
+    <ClCompile Include="Data.cpp" />
+    <ClCompile Include="Exceptions.cpp" />
     <ClCompile Include="MyForm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Algorithms.h" />
+    <ClInclude Include="Classes.h" />
+    <ClInclude Include="Data.h" />
+    <ClInclude Include="Exceptions.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
