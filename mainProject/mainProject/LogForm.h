@@ -1,9 +1,11 @@
 #pragma once
-
+#include "Include.h"
+#include "Data.h"
+#include "Algorithms.h"
 #include "NewRecordForm.h"
 
-namespace mainProject {
 
+namespace mainProject {
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -14,12 +16,31 @@ namespace mainProject {
 	/// <summary>
 	/// Summary for LogForm
 	/// </summary>
+	///
+	//Дані користувача який авторизувався
+	static User us;
+	//Його телефон
+	static std::string ph;
 	public ref class LogForm : public System::Windows::Forms::Form
 	{
+	private:
+		//Айді
+		int UserID;
+	private: System::Windows::Forms::Button^ bCancle;
+	private: System::Windows::Forms::Button^ button2;
+	private: System::Windows::Forms::TextBox^ TbOld;
+
 	public:
-		LogForm(void)
+		System::String^ pass;
+
+		LogForm(User& user, String^ password, std::string phone)
 		{
 			InitializeComponent();
+			ph = phone;
+			UserID = 0;
+			us = user;
+			pass = password;
+
 			//
 			//TODO: Add the constructor code here
 			//
@@ -39,28 +60,21 @@ namespace mainProject {
 	private: System::Windows::Forms::MonthCalendar^ monthCalendar;
 	private: System::Windows::Forms::ComboBox^ CbLast;
 
-
-
-
 	private: System::Windows::Forms::Label^ lFio;
 
 	private: System::Windows::Forms::Label^ lTel;
 	private: System::Windows::Forms::Label^ lAge;
 
-
-
-
 	private: System::Windows::Forms::CheckBox^ CbShow;
 	private: System::Windows::Forms::MaskedTextBox^ mTbPassw;
 	private: System::Windows::Forms::Label^ lPassw;
-
 
 	private: System::Windows::Forms::Label^ lLast;
 	private: System::Windows::Forms::Label^ lFuture;
 	private: System::Windows::Forms::ComboBox^ CbFuture;
 	private: System::Windows::Forms::Label^ lShowData;
 
-	private: System::Windows::Forms::DateTimePicker^ dateBith;
+
 	private: System::Windows::Forms::TextBox^ TbPatr;
 	private: System::Windows::Forms::TextBox^ TbSurn;
 	private: System::Windows::Forms::TextBox^ TbTel;
@@ -83,17 +97,13 @@ namespace mainProject {
 	private: System::Windows::Forms::Label^ linfo;
 	private: System::Windows::Forms::PictureBox^ piсBox;
 
-
-
-
 	protected:
-
 
 	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -115,7 +125,6 @@ namespace mainProject {
 			this->lFuture = (gcnew System::Windows::Forms::Label());
 			this->CbFuture = (gcnew System::Windows::Forms::ComboBox());
 			this->lShowData = (gcnew System::Windows::Forms::Label());
-			this->dateBith = (gcnew System::Windows::Forms::DateTimePicker());
 			this->TbPatr = (gcnew System::Windows::Forms::TextBox());
 			this->TbSurn = (gcnew System::Windows::Forms::TextBox());
 			this->TbTel = (gcnew System::Windows::Forms::TextBox());
@@ -133,6 +142,9 @@ namespace mainProject {
 			this->lName = (gcnew System::Windows::Forms::Label());
 			this->linfo = (gcnew System::Windows::Forms::Label());
 			this->piсBox = (gcnew System::Windows::Forms::PictureBox());
+			this->bCancle = (gcnew System::Windows::Forms::Button());
+			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->TbOld = (gcnew System::Windows::Forms::TextBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->piсBox))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -175,9 +187,9 @@ namespace mainProject {
 			this->lAge->AutoSize = true;
 			this->lAge->Location = System::Drawing::Point(28, 212);
 			this->lAge->Name = L"lAge";
-			this->lAge->Size = System::Drawing::Size(104, 13);
+			this->lAge->Size = System::Drawing::Size(28, 13);
 			this->lAge->TabIndex = 5;
-			this->lAge->Text = L"Дата народження :";
+			this->lAge->Text = L"Вік :";
 			// 
 			// CbShow
 			// 
@@ -245,14 +257,7 @@ namespace mainProject {
 			this->lShowData->Size = System::Drawing::Size(84, 18);
 			this->lShowData->TabIndex = 22;
 			this->lShowData->Text = L"Ваші дані : ";
-			// 
-			// dateBith
-			// 
-			this->dateBith->Format = System::Windows::Forms::DateTimePickerFormat::Short;
-			this->dateBith->Location = System::Drawing::Point(138, 212);
-			this->dateBith->Name = L"dateBith";
-			this->dateBith->Size = System::Drawing::Size(200, 20);
-			this->dateBith->TabIndex = 24;
+			this->lShowData->Click += gcnew System::EventHandler(this, &LogForm::lShowData_Click);
 			// 
 			// TbPatr
 			// 
@@ -278,6 +283,7 @@ namespace mainProject {
 			this->TbTel->Name = L"TbTel";
 			this->TbTel->Size = System::Drawing::Size(108, 20);
 			this->TbTel->TabIndex = 26;
+			this->TbTel->TextChanged += gcnew System::EventHandler(this, &LogForm::TbTel_TextChanged);
 			// 
 			// TbName
 			// 
@@ -286,6 +292,7 @@ namespace mainProject {
 			this->TbName->Name = L"TbName";
 			this->TbName->Size = System::Drawing::Size(108, 20);
 			this->TbName->TabIndex = 25;
+			this->TbName->TextChanged += gcnew System::EventHandler(this, &LogForm::TbName_TextChanged);
 			// 
 			// TbDocPatr
 			// 
@@ -317,9 +324,9 @@ namespace mainProject {
 			this->lDocFio->AutoSize = true;
 			this->lDocFio->Location = System::Drawing::Point(29, 373);
 			this->lDocFio->Name = L"lDocFio";
-			this->lDocFio->Size = System::Drawing::Size(38, 13);
+			this->lDocFio->Size = System::Drawing::Size(34, 13);
 			this->lDocFio->TabIndex = 29;
-			this->lDocFio->Text = L"ФІО : ";
+			this->lDocFio->Text = L"ПІБ : ";
 			// 
 			// lExp
 			// 
@@ -359,6 +366,7 @@ namespace mainProject {
 			this->gBFamDoc->TabIndex = 36;
 			this->gBFamDoc->TabStop = false;
 			this->gBFamDoc->Text = L"Ваш сімейний лікар : ";
+			this->gBFamDoc->Enter += gcnew System::EventHandler(this, &LogForm::gBFamDoc_Enter);
 			// 
 			// lPatr
 			// 
@@ -411,11 +419,42 @@ namespace mainProject {
 			this->piсBox->TabIndex = 41;
 			this->piсBox->TabStop = false;
 			// 
+			// bCancle
+			// 
+			this->bCancle->Location = System::Drawing::Point(533, 476);
+			this->bCancle->Name = L"bCancle";
+			this->bCancle->Size = System::Drawing::Size(151, 34);
+			this->bCancle->TabIndex = 42;
+			this->bCancle->Text = L"Відмовитися";
+			this->bCancle->UseVisualStyleBackColor = true;
+			this->bCancle->Click += gcnew System::EventHandler(this, &LogForm::bCancle_Click);
+			// 
+			// button2
+			// 
+			this->button2->Location = System::Drawing::Point(432, 521);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(8, 8);
+			this->button2->TabIndex = 43;
+			this->button2->Text = L"button2";
+			this->button2->UseVisualStyleBackColor = true;
+			// 
+			// TbOld
+			// 
+			this->TbOld->Location = System::Drawing::Point(138, 212);
+			this->TbOld->Margin = System::Windows::Forms::Padding(2);
+			this->TbOld->Name = L"TbOld";
+			this->TbOld->Size = System::Drawing::Size(23, 20);
+			this->TbOld->TabIndex = 44;
+			this->TbOld->TextChanged += gcnew System::EventHandler(this, &LogForm::TbOld_TextChanged);
+			// 
 			// LogForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(734, 611);
+			this->ClientSize = System::Drawing::Size(734, 552);
+			this->Controls->Add(this->TbOld);
+			this->Controls->Add(this->button2);
+			this->Controls->Add(this->bCancle);
 			this->Controls->Add(this->piсBox);
 			this->Controls->Add(this->linfo);
 			this->Controls->Add(this->lPatr);
@@ -431,7 +470,6 @@ namespace mainProject {
 			this->Controls->Add(this->TbSurn);
 			this->Controls->Add(this->TbTel);
 			this->Controls->Add(this->TbName);
-			this->Controls->Add(this->dateBith);
 			this->Controls->Add(this->lShowData);
 			this->Controls->Add(this->lFuture);
 			this->Controls->Add(this->CbFuture);
@@ -449,7 +487,8 @@ namespace mainProject {
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"LogForm";
-			this->Text = L"LogForm";
+			this->Text = L"Головна сторінка";
+			this->Load += gcnew System::EventHandler(this, &LogForm::LogForm_Load);
 			this->HelpRequested += gcnew System::Windows::Forms::HelpEventHandler(this, &LogForm::LogForm_HelpRequested);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->piсBox))->EndInit();
 			this->ResumeLayout(false);
@@ -457,56 +496,248 @@ namespace mainProject {
 
 		}
 #pragma endregion
+
 	private: System::Void bSingUp_Click(System::Object^ sender, System::EventArgs^ e) {
-		// Створюємо новий екземпляр форми 
-		NewRecordForm^ newRecordForm = gcnew NewRecordForm();
-		// Показуємо нову форму
+		NewRecordForm^ newRecordForm = gcnew NewRecordForm(TbTel->Text, CbFuture);
+
 		newRecordForm->Show();
 	}
-	 private: System::Void CbShow_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-	   if (CbShow->Checked) {
-		   mTbPassw->PasswordChar = '\0'; // Показати пароль
-	   }
-	   else {
-		   mTbPassw->PasswordChar = '*'; // Приховати пароль
-	   }
+	private: System::Void CbShow_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		if (CbShow->Checked) {
+			mTbPassw->PasswordChar = '\0'; // Показати пароль
+		}
+		else {
+			mTbPassw->PasswordChar = '*'; // Приховати пароль
+		}
 	}
 
 		   System::Windows::Forms::ToolTip^ toolTip1;
 
-private: System::Void CbFuture_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-	System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-	toolTip1->SetToolTip(CbFuture, "Натисніть щоб переглянути свої майбутні записи до лікаря");
-}
+	private: System::Void CbFuture_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
+		toolTip1->SetToolTip(CbFuture, "Натисніть щоб переглянути свої майбутні записи до лікаря");
+	}
 
-private: System::Void CbLast_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-	System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-	toolTip1->SetToolTip(CbLast, "Натисніть щоб переглянути свої минулі записи до лікаря");
-}
-private: System::Void  bSingUp_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-	System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-	toolTip1->SetToolTip(bSingUp, "Натисніть щоб записатися до лікаря");
-}
-private: System::Void monthCalendar_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-	System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-	toolTip1->SetToolTip(monthCalendar, "Календар для відображення поточного дня");
-}
+	private: System::Void CbLast_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
+		toolTip1->SetToolTip(CbLast, "Натисніть щоб переглянути свої минулі записи до лікаря");
+	}
+	private: System::Void  bSingUp_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
+		toolTip1->SetToolTip(bSingUp, "Натисніть щоб записатися до лікаря");
+	}
+	private: System::Void monthCalendar_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
+		toolTip1->SetToolTip(monthCalendar, "Календар для відображення поточного дня");
+	}
 
-private: System::Void LogForm_HelpRequested(System::Object^ sender, System::Windows::Forms::HelpEventArgs^ hlpevent) {
-	// Текст допомоги або пояснення для форми LogForm
-	String^ helpText = "Ця форма дозволяє користувачам переглядати свої дані та дані сімейного лікаря, записуватися до лікаря та переглядати історію записів.\n";
-	helpText += "Щоб переглянути свої майбутні записи, виберіть відповідний пункт у списку 'Майбутні'.\n";
-	helpText += "Щоб переглянути свої минулі записи, виберіть відповідний пункт у списку 'Минулі'.\n";
-	helpText += "Щоб записатися до лікаря, натисніть кнопку 'Записатися до лікаря'.\n";
-	helpText += "Ви також можете переглядати інформацію за допомогою календаря та ввести свої особисті дані.\n";
+	private: System::Void LogForm_HelpRequested(System::Object^ sender, System::Windows::Forms::HelpEventArgs^ hlpevent) {
+		// Текст допомоги або пояснення для форми LogForm
+		String^ helpText = "Ця форма дозволяє користувачам переглядати свої дані та дані сімейного лікаря, записуватися до лікаря та переглядати історію записів.\n";
+		helpText += "Щоб переглянути свої майбутні записи, виберіть відповідний пункт у списку 'Майбутні'.\n";
+		helpText += "Щоб переглянути свої минулі записи, виберіть відповідний пункт у списку 'Минулі'.\n";
+		helpText += "Щоб записатися до лікаря, натисніть кнопку 'Записатися до лікаря'.\n";
+		helpText += "Ви також можете переглядати інформацію за допомогою календаря та ввести свої особисті дані.\n";
 
-	// Показати MessageBox із текстом допомоги
-	MessageBox::Show(helpText, "Довідка", MessageBoxButtons::OK, MessageBoxIcon::Information);
-}
-private: System::Void mTbPassw_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-	System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-	toolTip1->SetToolTip(mTbPassw, "Введіть тут свій пароль ");
-}
+		// Показати MessageBox із текстом допомоги
+		MessageBox::Show(helpText, "Довідка", MessageBoxButtons::OK, MessageBoxIcon::Information);
+	}
+	private: System::Void mTbPassw_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
+		toolTip1->SetToolTip(mTbPassw, "Введіть тут свій пароль ");
+	}
 
+	private: System::Void LogForm_Load(System::Object^ sender, System::EventArgs^ e) {
+		std::vector<Doctor> doctors = read_doctortable();
+		std::vector<Visit> visits = read_visittable();
+		std::vector<User> users = read_usertable();
+		//Чистка визитов
+		System::DateTime currentDate = System::DateTime::Now;
+		//Ініціалізація UserID.
+		for (const User& User : users)
+		{
+			if (ph == User.userPhone)
+			{
+				UserID = User.userID;
+			}
+		}
+
+		System::String^ name = ParseToStringorSTDSTRING(us.userName);
+		System::String^ surname = ParseToStringorSTDSTRING(us.userSurname);
+		System::String^ middlename = ParseToStringorSTDSTRING(us.userMiddleName);
+		System::String^ phone = ParseToStringorSTDSTRING(us.userPhone);
+
+		TbName->Text = name;
+		TbSurn->Text = surname;
+		TbPatr->Text = middlename;
+		TbTel->Text = phone;
+		TbOld->Text = us.userAge.ToString();
+
+		mTbPassw->Text = pass;
+
+		System::Collections::Generic::List<System::String^>^ visitList = gcnew System::Collections::Generic::List<System::String^>();
+		System::Collections::Generic::List<System::String^>^ visitListM = gcnew System::Collections::Generic::List<System::String^>();
+		//Ініціалізація ComboBox майбутні записи
+		for (Visit& Visit : visits)
+		{
+			System::DateTime visitDateTime = ConvertTmToDateTime(Visit.visitDate);
+				//Якщо теперішній час більше ніж коли ми записувалия, то ми опоздали.
+				if (visitDateTime < currentDate)
+				{
+					Visit.visitStatus = false;
+					Visit.update_visitStatus();
+				}
+				//Якщо 1 то це майбутній запис, + перевірка айді користувача
+			if (Visit.visitStatus == 1 && Visit.clientID == UserID)
+			{
+				System::DateTime visitTime(Visit.visitDate.tm_year, Visit.visitDate.tm_mon, Visit.visitDate.tm_mday, Visit.visitTime.tm_hour, Visit.visitTime.tm_min, Visit.visitTime.tm_sec);
+				System::String^ dateTimeString = visitTime.ToString("yyyy-MM-dd HH:mm:ss");
+				std::string spec;
+				for (Doctor& Doctor : doctors)
+				{
+					if (Doctor.docID == Visit.doctorID)
+					{
+						spec = Doctor.docSpeciality;
+					}
+				}
+				System::String^ fullInfoString = gcnew System::String(dateTimeString + " - " + ParseToStringorSTDSTRING(spec));
+				visitList->Add(fullInfoString);
+				//Сортируємо
+				sortVisits(visitList);
+			}
+			//Минулі завантаження в комбо бокс
+			if (Visit.visitStatus == 0 && Visit.clientID == UserID)
+			{
+				System::DateTime visitTime(Visit.visitDate.tm_year, Visit.visitDate.tm_mon, Visit.visitDate.tm_mday, Visit.visitTime.tm_hour, Visit.visitTime.tm_min, Visit.visitTime.tm_sec);
+				System::String^ dateTimeString = visitTime.ToString("yyyy-MM-dd HH:mm:ss");
+				std::string spec;
+				for (Doctor& Doctor : doctors)
+				{
+					if (Doctor.docID == Visit.doctorID)
+					{
+						spec = Doctor.docSpeciality;
+					}
+				}
+				System::String^ fullInfoString = gcnew System::String(dateTimeString + " - " + ParseToStringorSTDSTRING(spec));
+				visitListM->Add(fullInfoString);
+				//Сортируємо
+				sortVisits(visitListM);
+			}
+		}
+		for each (System::String ^ visitString in visitListM)
+		{
+			CbLast->Items->Add(visitString);
+		}
+		//Додаємо на комбо бокс візити
+		for each (System::String ^ visitString in visitList)
+		{
+			CbFuture->Items->Add(visitString);
+		}
+	}
+	private: System::Void gBFamDoc_Enter(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void TbName_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void lShowData_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void TbTel_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void dateBith_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void bCancle_Click(System::Object^ sender, System::EventArgs^ e) {
+		Visit obj;
+		std::vector<Visit> visits = read_visittable();
+		std::vector<User> users = read_usertable();
+		std::vector<Doctor> doctors = read_doctortable();
+
+		System::Object^ selectedItem = CbFuture->SelectedItem;
+
+		System::String^ selectedItemString = dynamic_cast<System::String^>(selectedItem);
+		if (selectedItemString != nullptr)
+		{
+			int year, month, day, hour, minute, second;
+			if (sscanf_s(msclr::interop::marshal_as<std::string>(selectedItemString).c_str(),
+				"%d-%d-%d %d:%d:%d",
+				//Ріжимо дату
+				&year, &month, &day, &hour, &minute, &second) == 6)
+			{
+
+				for (Visit& visit : visits) 
+				{
+					if (visit.clientID == UserID&&
+						visit.visitDate.tm_year == year&&
+						visit.visitDate.tm_mon == month&&
+						visit.visitDate.tm_mday == day &&
+						visit.visitTime.tm_hour == hour &&
+						visit.visitTime.tm_min == minute)
+					{
+						//Отмєна
+						visit.visitStatus = false;
+						visit.update_visitStatus();
+						break; 
+					}
+				}
+			}
+		}
+		CbFuture->Items->Clear();
+		CbLast->Items->Clear();
+		visits = read_visittable();
+		System::Collections::Generic::List<System::String^>^ visitList = gcnew System::Collections::Generic::List<System::String^>();
+		System::Collections::Generic::List<System::String^>^ visitListM = gcnew System::Collections::Generic::List<System::String^>();
+
+		for (Visit& Visit : visits)
+		{
+			System::DateTime visitDateTime = ConvertTmToDateTime(Visit.visitDate);
+
+			//Якщо 1 то це майбутній запис, + перевірка айді користувача
+			if (Visit.visitStatus == 1 && Visit.clientID == UserID)
+			{
+				System::DateTime visitTime(Visit.visitDate.tm_year, Visit.visitDate.tm_mon, Visit.visitDate.tm_mday, Visit.visitTime.tm_hour, Visit.visitTime.tm_min, Visit.visitTime.tm_sec);
+				System::String^ dateTimeString = visitTime.ToString("yyyy-MM-dd HH:mm:ss");
+				std::string spec;
+				for (Doctor& Doctor : doctors)
+				{
+					if (Doctor.docID == Visit.doctorID)
+					{
+						spec = Doctor.docSpeciality;
+					}
+				}
+				System::String^ fullInfoString = gcnew System::String(dateTimeString + " - " + ParseToStringorSTDSTRING(spec));
+				visitList->Add(fullInfoString);
+				//Сортируємо
+				sortVisits(visitList);
+			}
+			//Минулі завантаження в комбо бокс
+			if (Visit.visitStatus == 0 && Visit.clientID == UserID)
+			{
+				System::DateTime visitTime(Visit.visitDate.tm_year, Visit.visitDate.tm_mon, Visit.visitDate.tm_mday, Visit.visitTime.tm_hour, Visit.visitTime.tm_min, Visit.visitTime.tm_sec);
+				System::String^ dateTimeString = visitTime.ToString("yyyy-MM-dd HH:mm:ss");
+				std::string spec;
+				for (Doctor& Doctor : doctors)
+				{
+					if (Doctor.docID == Visit.doctorID)
+					{
+						spec = Doctor.docSpeciality;
+					}
+				}
+				System::String^ fullInfoString = gcnew System::String(dateTimeString + " - " + ParseToStringorSTDSTRING(spec));
+				visitListM->Add(fullInfoString);
+				//Сортируємо
+				sortVisits(visitListM);
+			}
+		}
+		for each (System::String ^ visitString in visitListM)
+		{
+			CbLast->Items->Add(visitString);
+		}
+		//Додаємо на комбо бокс візити
+		for each (System::String ^ visitString in visitList)
+		{
+			CbFuture->Items->Add(visitString);
+		}
+
+	}
+	private: System::Void TbOld_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
 };
 }

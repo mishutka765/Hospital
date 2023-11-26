@@ -1,0 +1,43 @@
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Release\mainProject.vcxproj.AssemblyReference.cache
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Release\mainProject.AboutAppForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Release\mainProject.LogForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Release\mainProject.NewRecordForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\Hospital\mainProject\mainProject\x64\Release\mainProject.vcxproj.AssemblyReference.cache
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\Hospital\mainProject\mainProject\x64\Release\mainProject.AboutAppForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\Hospital\mainProject\mainProject\x64\Release\mainProject.LogForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\Hospital\mainProject\mainProject\x64\Release\mainProject.NewRecordForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\Hospital\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\Hospital\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\Hospital\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\mainProject\mainProject\x64\Release\mainProject.vcxproj.AssemblyReference.cache
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\mainProject\mainProject\x64\Release\mainProject.AboutAppForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\mainProject\mainProject\x64\Release\mainProject.LogForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\mainProject\mainProject\x64\Release\mainProject.NewRecordForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache
+C:\Users\lika9\Downloads\Hospital\mainProject\mainProject\x64\Release\mainProject.vcxproj.AssemblyReference.cache
+C:\Users\lika9\Downloads\Hospital\mainProject\mainProject\x64\Release\mainProject.vcxproj.SuggestedBindingRedirects.cache
+C:\Users\lika9\Downloads\Hospital\mainProject\mainProject\x64\Release\mainProject.AboutAppForm.resources
+C:\Users\lika9\Downloads\Hospital\mainProject\mainProject\x64\Release\mainProject.LogForm.resources
+C:\Users\lika9\Downloads\Hospital\mainProject\mainProject\x64\Release\mainProject.NewRecordForm.resources
+C:\Users\lika9\Downloads\Hospital\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
+C:\Users\lika9\Downloads\Hospital\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
+C:\Users\lika9\Downloads\Hospital\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Interface\mainProject\mainProject\x64\Release\mainProject.vcxproj.AssemblyReference.cache
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Interface\mainProject\mainProject\x64\Release\mainProject.AboutAppForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Interface\mainProject\mainProject\x64\Release\mainProject.LogForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Interface\mainProject\mainProject\x64\Release\mainProject.NewRecordForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Interface\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Interface\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Interface\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\Algorithms\mainProject\mainProject\x64\Release\mainProject.vcxproj.AssemblyReference.cache
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\Algorithms\mainProject\mainProject\x64\Release\mainProject.AboutAppForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\Algorithms\mainProject\mainProject\x64\Release\mainProject.LogForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\Algorithms\mainProject\mainProject\x64\Release\mainProject.NewRecordForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\Algorithms\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\Algorithms\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\Algorithms\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache

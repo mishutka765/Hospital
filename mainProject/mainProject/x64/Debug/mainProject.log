@@ -1,0 +1,14 @@
+﻿  pugixml.cpp
+  Algorithms.cpp
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\Data.h(8,10): fatal  error C1083: Не удается открыть файл включение: jdbc/mysql_driver.h: No such file or directory,
+  Data.cpp
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\Data.h(8,10): fatal  error C1083: Не удается открыть файл включение: jdbc/mysql_driver.h: No such file or directory,
+  LogForm.cpp
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\Data.h(8,10): fatal  error C1083: Не удается открыть файл включение: jdbc/mysql_driver.h: No such file or directory,
+  NewRecordForm.cpp
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\Data.h(8,10): fatal  error C1083: Не удается открыть файл включение: jdbc/mysql_driver.h: No such file or directory,
+  SignForm.cpp
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\Data.h(8,10): fatal  error C1083: Не удается открыть файл включение: jdbc/mysql_driver.h: No such file or directory,
+  StartForm.cpp
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\Data.h(8,10): fatal  error C1083: Не удается открыть файл включение: jdbc/mysql_driver.h: No such file or directory,
+  Создание кода...

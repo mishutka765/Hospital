@@ -1,0 +1,7 @@
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Debug\mainProject.vcxproj.AssemblyReference.cache
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Debug\mainProject.AboutAppForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Debug\mainProject.LogForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Debug\mainProject.NewRecordForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Debug\mainProject.SignForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Debug\mainProject.StartForm.resources
+F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\mainProject\mainProject\x64\Debug\mainProject.vcxproj.GenerateResource.cache
