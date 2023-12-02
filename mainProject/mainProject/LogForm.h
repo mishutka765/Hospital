@@ -403,7 +403,7 @@ namespace mainProject {
 			// 
 			this->linfo->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->linfo->AutoSize = true;
-			this->linfo->Location = System::Drawing::Point(9, 589);
+			this->linfo->Location = System::Drawing::Point(9, 639);
 			this->linfo->Name = L"linfo";
 			this->linfo->Size = System::Drawing::Size(256, 13);
 			this->linfo->TabIndex = 40;
@@ -451,7 +451,7 @@ namespace mainProject {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(734, 552);
+			this->ClientSize = System::Drawing::Size(734, 602);
 			this->Controls->Add(this->TbOld);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->bCancle);

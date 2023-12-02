@@ -101,37 +101,35 @@ namespace mainProject {
 						std::sprintf(selectedDateStr, "%04d-%02d-%02d",
 							selectedDate.Year, selectedDate.Month, selectedDate.Day);
 						//Генерація інтервалів часу(тут ми приблизно беремо на опрацювання лікаря користувача 30 хвилин)
-						for (int hour = startHour; hour <= endHour; hour++)
-						{
-							int minuteStart = 0; // Початкова минута
+						for (int hour = startHour; hour <= endHour; hour++) {
+							int minuteStart = (hour == startHour) ? startMinute : 0;
 
-							//Перший час встановлення початкової хвилини
-							if (hour == startHour)
-							{
-								minuteStart = startMinute;
-							}
-
-							// Цикл для хвилин
-							for (int minute = minuteStart; minute < 60; minute += 30)
-							{
-								// Щоб не перевишало
-								if (hour == endHour && minute > endMinute)
-								{
+							for (int minute = minuteStart; minute < 60; minute += 30) {
+								if (hour == endHour && minute > endMinute) {
 									break;
 								}
 
 								char timeSlotStr[20];
 								std::sprintf(timeSlotStr, "%s %02d:%02d:00", selectedDateStr, hour, minute);
 
-								// Перевірка на доступність
-								if (std::find(doctorVisits.begin(), doctorVisits.end(), timeSlotStr) == doctorVisits.end())
-								{
-									// Якщо в візиті нема, то воно вільне, і ми його додаємо.
-									System::String^ timeSlot = gcnew System::String(timeSlotStr + 11); // +11, щоб пропустити дату
+								// Новая проверка: проверка на доступность слота
+								bool isSlotAvailable = true;
+								for (const Visit& visit : visits) {
+									if (visit.doctorID == DoctorId &&
+										std::string(timeSlotStr) == ParseTmToString(visit.visitTime) && // Предполагаемая функция для форматирования времени визита
+										visit.visitStatus == true) { // Проверка, что визит не отменен
+										isSlotAvailable = false;
+										break;
+									}
+								}
+
+								if (isSlotAvailable) {
+									System::String^ timeSlot = gcnew System::String(timeSlotStr + 11);
 									cBTimeSelect->Items->Add(timeSlot);
 								}
 							}
 						}
+
 					}
 				}
 			}
