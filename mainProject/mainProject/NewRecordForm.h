@@ -112,12 +112,12 @@ namespace mainProject {
 								char timeSlotStr[20];
 								std::sprintf(timeSlotStr, "%s %02d:%02d:00", selectedDateStr, hour, minute);
 
-								// Новая проверка: проверка на доступность слота
+								// Чи доступний час
 								bool isSlotAvailable = true;
 								for (const Visit& visit : visits) {
 									if (visit.doctorID == DoctorId &&
-										std::string(timeSlotStr) == ParseTmToString(visit.visitTime) && // Предполагаемая функция для форматирования времени визита
-										visit.visitStatus == true) { // Проверка, что визит не отменен
+										std::string(timeSlotStr) == ParseTmToString(visit.visitTime) && 
+										visit.visitStatus == true) { // Перевірка чи актуальний цей візит
 										isSlotAvailable = false;
 										break;
 									}
@@ -207,21 +207,26 @@ namespace mainProject {
 			std::vector<Hospital> hospitals = read_hospitaltable();
 			std::vector<Doctor> doctors = read_doctortable();
 
+			// Створюємо масив для зберігання назв лікарень
+			array<System::String^>^ hospitalNames = gcnew array<System::String^>(hospitals.size());
+			for (size_t i = 0; i < hospitals.size(); i++) {
+				hospitalNames[i] = gcnew System::String(hospitals[i].hospitalName.c_str());
+			}
+
+			// Сортуємо лікарні за рейтингом
+			SortHospitalsByRating(hospitals, hospitalNames);
+
 			this->cLbHospital->Items->Clear();
 
-			for (size_t i = 0; i < hospitals.size(); i++)
-			{
+			for (size_t i = 0; i < hospitals.size(); i++) {
 				Hospital hospital = hospitals[i];
-				// Перевіряємо, чи відповідає лікарня обраним регіонам та спеціалізаціям
+
 				bool regionSelected = selectedRegions->Count > 0 ? IsHospitalSelected(hospital.hospitalDistrict) : true;
-				// Якщо спеціальність обрана, перевіряємо наявність фахівців у лікарні
 				bool specSelected = selectedSpec->Count > 0 ? HospitalHasRequiredSpecialties(hospital, doctors) : true;
 				bool typeSelected = selectedHospitalTypes->Count > 0 ? selectedHospitalTypes->Contains(hospital.hospitalIsPrivate) : true;
 
-				// Додаємо лікарню, якщо вона відповідає обраним критеріям
-				if (regionSelected && specSelected && typeSelected)
-				{
-					this->cLbHospital->Items->Add(gcnew String(hospital.hospitalName.c_str()));
+				if (regionSelected && specSelected && typeSelected) {
+					this->cLbHospital->Items->Add(hospitalNames[i]);
 				}
 			}
 		}

@@ -38,8 +38,8 @@ std::string ParseTmToString(const std::tm& timeStruct)
 {
 	char buffer[20];
 	std::sprintf(buffer, "%04d-%02d-%02d %02d:%02d:%02d",
-		timeStruct.tm_year + 1900, // tm_year хранит годы с 1900, поэтому добавл€ем 1900
-		timeStruct.tm_mon + 1,     // tm_mon хранит мес€цы начина€ с 0, поэтому добавл€ем 1
+		timeStruct.tm_year + 1900, 
+		timeStruct.tm_mon + 1,     
 		timeStruct.tm_mday,
 		timeStruct.tm_hour,
 		timeStruct.tm_min,
