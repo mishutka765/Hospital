@@ -478,7 +478,7 @@ namespace mainProject {
 			// 
 			this->linfo->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->linfo->AutoSize = true;
-			this->linfo->Location = System::Drawing::Point(3, 862);
+			this->linfo->Location = System::Drawing::Point(3, 850);
 			this->linfo->Name = L"linfo";
 			this->linfo->Size = System::Drawing::Size(256, 13);
 			this->linfo->TabIndex = 31;
@@ -554,7 +554,7 @@ namespace mainProject {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(861, 725);
+			this->ClientSize = System::Drawing::Size(838, 713);
 			this->Controls->Add(this->piÒBox);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->l—linic);

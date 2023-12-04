@@ -27,7 +27,7 @@ namespace mainProject {
 		//Àéä³
 		int UserID;
 	private: System::Windows::Forms::Button^ bCancle;
-	private: System::Windows::Forms::Button^ button2;
+
 	private: System::Windows::Forms::TextBox^ TbOld;
 
 	public:
@@ -79,18 +79,18 @@ namespace mainProject {
 	private: System::Windows::Forms::TextBox^ TbSurn;
 	private: System::Windows::Forms::TextBox^ TbTel;
 	private: System::Windows::Forms::TextBox^ TbName;
-	private: System::Windows::Forms::TextBox^ TbDocPatr;
 
-	private: System::Windows::Forms::TextBox^ TbDocSurn;
 
-	private: System::Windows::Forms::TextBox^ TbDocName;
 
-	private: System::Windows::Forms::Label^ lDocFio;
-	private: System::Windows::Forms::Label^ lExp;
+
+
+
+
+
 	private: System::Windows::Forms::Button^ bSingUp;
 
 	private: System::Windows::Forms::GroupBox^ gBAppoin;
-	private: System::Windows::Forms::GroupBox^ gBFamDoc;
+
 	private: System::Windows::Forms::Label^ lPatr;
 	private: System::Windows::Forms::Label^ lSurname;
 	private: System::Windows::Forms::Label^ lName;
@@ -129,21 +129,14 @@ namespace mainProject {
 			this->TbSurn = (gcnew System::Windows::Forms::TextBox());
 			this->TbTel = (gcnew System::Windows::Forms::TextBox());
 			this->TbName = (gcnew System::Windows::Forms::TextBox());
-			this->TbDocPatr = (gcnew System::Windows::Forms::TextBox());
-			this->TbDocSurn = (gcnew System::Windows::Forms::TextBox());
-			this->TbDocName = (gcnew System::Windows::Forms::TextBox());
-			this->lDocFio = (gcnew System::Windows::Forms::Label());
-			this->lExp = (gcnew System::Windows::Forms::Label());
 			this->bSingUp = (gcnew System::Windows::Forms::Button());
 			this->gBAppoin = (gcnew System::Windows::Forms::GroupBox());
-			this->gBFamDoc = (gcnew System::Windows::Forms::GroupBox());
 			this->lPatr = (gcnew System::Windows::Forms::Label());
 			this->lSurname = (gcnew System::Windows::Forms::Label());
 			this->lName = (gcnew System::Windows::Forms::Label());
 			this->linfo = (gcnew System::Windows::Forms::Label());
 			this->piñBox = (gcnew System::Windows::Forms::PictureBox());
 			this->bCancle = (gcnew System::Windows::Forms::Button());
-			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->TbOld = (gcnew System::Windows::Forms::TextBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->piñBox))->BeginInit();
 			this->SuspendLayout();
@@ -167,7 +160,7 @@ namespace mainProject {
 			// lFio
 			// 
 			this->lFio->AutoSize = true;
-			this->lFio->Location = System::Drawing::Point(28, 136);
+			this->lFio->Location = System::Drawing::Point(23, 211);
 			this->lFio->Name = L"lFio";
 			this->lFio->Size = System::Drawing::Size(34, 13);
 			this->lFio->TabIndex = 3;
@@ -176,7 +169,7 @@ namespace mainProject {
 			// lTel
 			// 
 			this->lTel->AutoSize = true;
-			this->lTel->Location = System::Drawing::Point(28, 173);
+			this->lTel->Location = System::Drawing::Point(23, 248);
 			this->lTel->Name = L"lTel";
 			this->lTel->Size = System::Drawing::Size(61, 13);
 			this->lTel->TabIndex = 4;
@@ -185,7 +178,7 @@ namespace mainProject {
 			// lAge
 			// 
 			this->lAge->AutoSize = true;
-			this->lAge->Location = System::Drawing::Point(28, 212);
+			this->lAge->Location = System::Drawing::Point(23, 287);
 			this->lAge->Name = L"lAge";
 			this->lAge->Size = System::Drawing::Size(28, 13);
 			this->lAge->TabIndex = 5;
@@ -195,7 +188,7 @@ namespace mainProject {
 			// 
 			this->CbShow->AutoSize = true;
 			this->CbShow->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7));
-			this->CbShow->Location = System::Drawing::Point(138, 271);
+			this->CbShow->Location = System::Drawing::Point(133, 346);
 			this->CbShow->Name = L"CbShow";
 			this->CbShow->Size = System::Drawing::Size(109, 17);
 			this->CbShow->TabIndex = 18;
@@ -205,7 +198,7 @@ namespace mainProject {
 			// 
 			// mTbPassw
 			// 
-			this->mTbPassw->Location = System::Drawing::Point(138, 248);
+			this->mTbPassw->Location = System::Drawing::Point(133, 323);
 			this->mTbPassw->Name = L"mTbPassw";
 			this->mTbPassw->PasswordChar = '*';
 			this->mTbPassw->Size = System::Drawing::Size(108, 20);
@@ -215,7 +208,7 @@ namespace mainProject {
 			// lPassw
 			// 
 			this->lPassw->AutoSize = true;
-			this->lPassw->Location = System::Drawing::Point(28, 248);
+			this->lPassw->Location = System::Drawing::Point(23, 323);
 			this->lPassw->Name = L"lPassw";
 			this->lPassw->Size = System::Drawing::Size(70, 13);
 			this->lPassw->TabIndex = 16;
@@ -252,7 +245,7 @@ namespace mainProject {
 			// 
 			this->lShowData->AutoSize = true;
 			this->lShowData->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11));
-			this->lShowData->Location = System::Drawing::Point(206, 31);
+			this->lShowData->Location = System::Drawing::Point(275, 69);
 			this->lShowData->Name = L"lShowData";
 			this->lShowData->Size = System::Drawing::Size(84, 18);
 			this->lShowData->TabIndex = 22;
@@ -262,24 +255,24 @@ namespace mainProject {
 			// TbPatr
 			// 
 			this->TbPatr->ForeColor = System::Drawing::Color::Black;
-			this->TbPatr->Location = System::Drawing::Point(380, 133);
-			this->TbPatr->Margin = System::Windows::Forms::Padding(2);
+			this->TbPatr->Location = System::Drawing::Point(375, 208);
+			this->TbPatr->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->TbPatr->Name = L"TbPatr";
 			this->TbPatr->Size = System::Drawing::Size(108, 20);
 			this->TbPatr->TabIndex = 28;
 			// 
 			// TbSurn
 			// 
-			this->TbSurn->Location = System::Drawing::Point(256, 133);
-			this->TbSurn->Margin = System::Windows::Forms::Padding(2);
+			this->TbSurn->Location = System::Drawing::Point(251, 208);
+			this->TbSurn->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->TbSurn->Name = L"TbSurn";
 			this->TbSurn->Size = System::Drawing::Size(108, 20);
 			this->TbSurn->TabIndex = 27;
 			// 
 			// TbTel
 			// 
-			this->TbTel->Location = System::Drawing::Point(139, 173);
-			this->TbTel->Margin = System::Windows::Forms::Padding(2);
+			this->TbTel->Location = System::Drawing::Point(134, 248);
+			this->TbTel->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->TbTel->Name = L"TbTel";
 			this->TbTel->Size = System::Drawing::Size(108, 20);
 			this->TbTel->TabIndex = 26;
@@ -287,61 +280,18 @@ namespace mainProject {
 			// 
 			// TbName
 			// 
-			this->TbName->Location = System::Drawing::Point(138, 133);
-			this->TbName->Margin = System::Windows::Forms::Padding(2);
+			this->TbName->Location = System::Drawing::Point(133, 208);
+			this->TbName->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->TbName->Name = L"TbName";
 			this->TbName->Size = System::Drawing::Size(108, 20);
 			this->TbName->TabIndex = 25;
 			this->TbName->TextChanged += gcnew System::EventHandler(this, &LogForm::TbName_TextChanged);
 			// 
-			// TbDocPatr
-			// 
-			this->TbDocPatr->ForeColor = System::Drawing::Color::Black;
-			this->TbDocPatr->Location = System::Drawing::Point(381, 370);
-			this->TbDocPatr->Margin = System::Windows::Forms::Padding(2);
-			this->TbDocPatr->Name = L"TbDocPatr";
-			this->TbDocPatr->Size = System::Drawing::Size(108, 20);
-			this->TbDocPatr->TabIndex = 32;
-			// 
-			// TbDocSurn
-			// 
-			this->TbDocSurn->Location = System::Drawing::Point(257, 370);
-			this->TbDocSurn->Margin = System::Windows::Forms::Padding(2);
-			this->TbDocSurn->Name = L"TbDocSurn";
-			this->TbDocSurn->Size = System::Drawing::Size(108, 20);
-			this->TbDocSurn->TabIndex = 31;
-			// 
-			// TbDocName
-			// 
-			this->TbDocName->Location = System::Drawing::Point(139, 370);
-			this->TbDocName->Margin = System::Windows::Forms::Padding(2);
-			this->TbDocName->Name = L"TbDocName";
-			this->TbDocName->Size = System::Drawing::Size(108, 20);
-			this->TbDocName->TabIndex = 30;
-			// 
-			// lDocFio
-			// 
-			this->lDocFio->AutoSize = true;
-			this->lDocFio->Location = System::Drawing::Point(29, 373);
-			this->lDocFio->Name = L"lDocFio";
-			this->lDocFio->Size = System::Drawing::Size(34, 13);
-			this->lDocFio->TabIndex = 29;
-			this->lDocFio->Text = L"Ï²Á : ";
-			// 
-			// lExp
-			// 
-			this->lExp->AutoSize = true;
-			this->lExp->Location = System::Drawing::Point(28, 408);
-			this->lExp->Name = L"lExp";
-			this->lExp->Size = System::Drawing::Size(36, 13);
-			this->lExp->TabIndex = 33;
-			this->lExp->Text = L"Ñòàæ:";
-			// 
 			// bSingUp
 			// 
-			this->bSingUp->Location = System::Drawing::Point(533, 525);
+			this->bSingUp->Location = System::Drawing::Point(26, 450);
 			this->bSingUp->Name = L"bSingUp";
-			this->bSingUp->Size = System::Drawing::Size(151, 37);
+			this->bSingUp->Size = System::Drawing::Size(188, 59);
 			this->bSingUp->TabIndex = 34;
 			this->bSingUp->Text = L"Çàïèñàòèñÿ äî ë³êàðÿ";
 			this->bSingUp->UseVisualStyleBackColor = true;
@@ -358,21 +308,11 @@ namespace mainProject {
 			this->gBAppoin->TabStop = false;
 			this->gBAppoin->Text = L"Âàø³ çàïèñè: ";
 			// 
-			// gBFamDoc
-			// 
-			this->gBFamDoc->Location = System::Drawing::Point(12, 339);
-			this->gBFamDoc->Name = L"gBFamDoc";
-			this->gBFamDoc->Size = System::Drawing::Size(494, 119);
-			this->gBFamDoc->TabIndex = 36;
-			this->gBFamDoc->TabStop = false;
-			this->gBFamDoc->Text = L"Âàø ñ³ìåéíèé ë³êàð : ";
-			this->gBFamDoc->Enter += gcnew System::EventHandler(this, &LogForm::gBFamDoc_Enter);
-			// 
 			// lPatr
 			// 
 			this->lPatr->AutoSize = true;
 			this->lPatr->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 6));
-			this->lPatr->Location = System::Drawing::Point(407, 155);
+			this->lPatr->Location = System::Drawing::Point(402, 230);
 			this->lPatr->Name = L"lPatr";
 			this->lPatr->Size = System::Drawing::Size(47, 9);
 			this->lPatr->TabIndex = 39;
@@ -382,7 +322,7 @@ namespace mainProject {
 			// 
 			this->lSurname->AutoSize = true;
 			this->lSurname->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 6));
-			this->lSurname->Location = System::Drawing::Point(288, 155);
+			this->lSurname->Location = System::Drawing::Point(283, 230);
 			this->lSurname->Name = L"lSurname";
 			this->lSurname->Size = System::Drawing::Size(38, 9);
 			this->lSurname->TabIndex = 38;
@@ -393,7 +333,7 @@ namespace mainProject {
 			this->lName->AutoSize = true;
 			this->lName->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 6, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->lName->Location = System::Drawing::Point(191, 155);
+			this->lName->Location = System::Drawing::Point(186, 230);
 			this->lName->Name = L"lName";
 			this->lName->Size = System::Drawing::Size(19, 9);
 			this->lName->TabIndex = 37;
@@ -403,7 +343,7 @@ namespace mainProject {
 			// 
 			this->linfo->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->linfo->AutoSize = true;
-			this->linfo->Location = System::Drawing::Point(9, 639);
+			this->linfo->Location = System::Drawing::Point(9, 768);
 			this->linfo->Name = L"linfo";
 			this->linfo->Size = System::Drawing::Size(256, 13);
 			this->linfo->TabIndex = 40;
@@ -412,7 +352,7 @@ namespace mainProject {
 			// piñBox
 			// 
 			this->piñBox->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"piñBox.Image")));
-			this->piñBox->Location = System::Drawing::Point(-27, -3);
+			this->piñBox->Location = System::Drawing::Point(-1, 12);
 			this->piñBox->Name = L"piñBox";
 			this->piñBox->Size = System::Drawing::Size(181, 117);
 			this->piñBox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
@@ -421,7 +361,7 @@ namespace mainProject {
 			// 
 			// bCancle
 			// 
-			this->bCancle->Location = System::Drawing::Point(533, 476);
+			this->bCancle->Location = System::Drawing::Point(527, 475);
 			this->bCancle->Name = L"bCancle";
 			this->bCancle->Size = System::Drawing::Size(151, 34);
 			this->bCancle->TabIndex = 42;
@@ -429,19 +369,10 @@ namespace mainProject {
 			this->bCancle->UseVisualStyleBackColor = true;
 			this->bCancle->Click += gcnew System::EventHandler(this, &LogForm::bCancle_Click);
 			// 
-			// button2
-			// 
-			this->button2->Location = System::Drawing::Point(432, 521);
-			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(8, 8);
-			this->button2->TabIndex = 43;
-			this->button2->Text = L"button2";
-			this->button2->UseVisualStyleBackColor = true;
-			// 
 			// TbOld
 			// 
-			this->TbOld->Location = System::Drawing::Point(138, 212);
-			this->TbOld->Margin = System::Windows::Forms::Padding(2);
+			this->TbOld->Location = System::Drawing::Point(133, 287);
+			this->TbOld->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->TbOld->Name = L"TbOld";
 			this->TbOld->Size = System::Drawing::Size(23, 20);
 			this->TbOld->TabIndex = 44;
@@ -451,9 +382,8 @@ namespace mainProject {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(734, 602);
+			this->ClientSize = System::Drawing::Size(734, 535);
 			this->Controls->Add(this->TbOld);
-			this->Controls->Add(this->button2);
 			this->Controls->Add(this->bCancle);
 			this->Controls->Add(this->piñBox);
 			this->Controls->Add(this->linfo);
@@ -461,11 +391,6 @@ namespace mainProject {
 			this->Controls->Add(this->lSurname);
 			this->Controls->Add(this->lName);
 			this->Controls->Add(this->bSingUp);
-			this->Controls->Add(this->lExp);
-			this->Controls->Add(this->TbDocPatr);
-			this->Controls->Add(this->TbDocSurn);
-			this->Controls->Add(this->TbDocName);
-			this->Controls->Add(this->lDocFio);
 			this->Controls->Add(this->TbPatr);
 			this->Controls->Add(this->TbSurn);
 			this->Controls->Add(this->TbTel);
@@ -483,9 +408,8 @@ namespace mainProject {
 			this->Controls->Add(this->CbLast);
 			this->Controls->Add(this->monthCalendar);
 			this->Controls->Add(this->gBAppoin);
-			this->Controls->Add(this->gBFamDoc);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->Margin = System::Windows::Forms::Padding(2);
+			this->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->Name = L"LogForm";
 			this->Text = L"Ãîëîâíà ñòîð³íêà";
 			this->Load += gcnew System::EventHandler(this, &LogForm::LogForm_Load);
