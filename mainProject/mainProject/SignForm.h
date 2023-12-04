@@ -158,7 +158,7 @@ namespace mainProject {
 			// 
 			this->TbPatr->ForeColor = System::Drawing::Color::Black;
 			this->TbPatr->Location = System::Drawing::Point(393, 210);
-			this->TbPatr->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->TbPatr->Margin = System::Windows::Forms::Padding(2);
 			this->TbPatr->Name = L"TbPatr";
 			this->TbPatr->Size = System::Drawing::Size(108, 20);
 			this->TbPatr->TabIndex = 21;
@@ -167,7 +167,7 @@ namespace mainProject {
 			// TbSurn
 			// 
 			this->TbSurn->Location = System::Drawing::Point(272, 210);
-			this->TbSurn->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->TbSurn->Margin = System::Windows::Forms::Padding(2);
 			this->TbSurn->Name = L"TbSurn";
 			this->TbSurn->Size = System::Drawing::Size(108, 20);
 			this->TbSurn->TabIndex = 20;
@@ -176,7 +176,7 @@ namespace mainProject {
 			// TbTel
 			// 
 			this->TbTel->Location = System::Drawing::Point(155, 250);
-			this->TbTel->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->TbTel->Margin = System::Windows::Forms::Padding(2);
 			this->TbTel->Name = L"TbTel";
 			this->TbTel->Size = System::Drawing::Size(108, 20);
 			this->TbTel->TabIndex = 19;
@@ -185,7 +185,7 @@ namespace mainProject {
 			// TbName
 			// 
 			this->TbName->Location = System::Drawing::Point(154, 210);
-			this->TbName->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->TbName->Margin = System::Windows::Forms::Padding(2);
 			this->TbName->Name = L"TbName";
 			this->TbName->Size = System::Drawing::Size(108, 20);
 			this->TbName->TabIndex = 18;
@@ -214,7 +214,7 @@ namespace mainProject {
 			// BSign
 			// 
 			this->BSign->Location = System::Drawing::Point(196, 406);
-			this->BSign->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->BSign->Margin = System::Windows::Forms::Padding(2);
 			this->BSign->Name = L"BSign";
 			this->BSign->Size = System::Drawing::Size(140, 30);
 			this->BSign->TabIndex = 22;
@@ -334,7 +334,7 @@ namespace mainProject {
 			this->Controls->Add(this->lEnterData);
 			this->Controls->Add(this->picBox);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"SignForm";
 			this->Text = L"Зареєструватися";
 			this->Load += gcnew System::EventHandler(this, &SignForm::SignForm_Load);

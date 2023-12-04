@@ -340,16 +340,16 @@ namespace mainProject {
 				L"Voznesenivskyi", L"Dniprovskyi ", L"Kommunarsky",
 					L"Oleksandrivskyi ", L"Shevchenkivskyi", L"Khortytskyi", L"Zavodskoy"
 			});
-			this->cLBplace->Location = System::Drawing::Point(6, 133);
+			this->cLBplace->Location = System::Drawing::Point(16, 152);
 			this->cLBplace->Name = L"cLBplace";
-			this->cLBplace->Size = System::Drawing::Size(277, 124);
+			this->cLBplace->Size = System::Drawing::Size(267, 124);
 			this->cLBplace->TabIndex = 0;
 			this->cLBplace->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::cLBplace_MouseMove);
 			// 
 			// CbPrivate
 			// 
 			this->CbPrivate->AutoSize = true;
-			this->CbPrivate->Location = System::Drawing::Point(13, 49);
+			this->CbPrivate->Location = System::Drawing::Point(13, 47);
 			this->CbPrivate->Name = L"CbPrivate";
 			this->CbPrivate->Size = System::Drawing::Size(75, 17);
 			this->CbPrivate->TabIndex = 1;
@@ -360,7 +360,7 @@ namespace mainProject {
 			// CbState
 			// 
 			this->CbState->AutoSize = true;
-			this->CbState->Location = System::Drawing::Point(13, 95);
+			this->CbState->Location = System::Drawing::Point(13, 90);
 			this->CbState->Name = L"CbState";
 			this->CbState->Size = System::Drawing::Size(79, 17);
 			this->CbState->TabIndex = 2;
@@ -376,7 +376,7 @@ namespace mainProject {
 					L"Gastroenterologist", L"Hematologist", L"Gynaecologist", L"Cardiologist", L"Neurologist", L"Oculist", L"Onkoloh", L"Ortoped",
 					L"Otolarynholoh (LOR-likar)", L"Psykhiatr", L"Pulmonoloh", L"Revmatoloh", L"Dentist", L"Terapevt", L"Uroloh", L"Endokrynoloh"
 			});
-			this->cLbDocType->Location = System::Drawing::Point(297, 133);
+			this->cLbDocType->Location = System::Drawing::Point(301, 153);
 			this->cLbDocType->Name = L"cLbDocType";
 			this->cLbDocType->Size = System::Drawing::Size(161, 124);
 			this->cLbDocType->TabIndex = 3;
@@ -387,9 +387,9 @@ namespace mainProject {
 			// 
 			this->groupBox1->Controls->Add(this->CbState);
 			this->groupBox1->Controls->Add(this->CbPrivate);
-			this->groupBox1->Location = System::Drawing::Point(473, 127);
+			this->groupBox1->Location = System::Drawing::Point(477, 147);
 			this->groupBox1->Name = L"groupBox1";
-			this->groupBox1->Size = System::Drawing::Size(118, 145);
+			this->groupBox1->Size = System::Drawing::Size(118, 130);
 			this->groupBox1->TabIndex = 6;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"Òèï êë³í³êè:";
@@ -397,7 +397,7 @@ namespace mainProject {
 			// lPlace
 			// 
 			this->lPlace->AutoSize = true;
-			this->lPlace->Location = System::Drawing::Point(6, 116);
+			this->lPlace->Location = System::Drawing::Point(10, 136);
 			this->lPlace->Name = L"lPlace";
 			this->lPlace->Size = System::Drawing::Size(87, 13);
 			this->lPlace->TabIndex = 7;
@@ -406,7 +406,7 @@ namespace mainProject {
 			// lDocType
 			// 
 			this->lDocType->AutoSize = true;
-			this->lDocType->Location = System::Drawing::Point(294, 116);
+			this->lDocType->Location = System::Drawing::Point(298, 136);
 			this->lDocType->Name = L"lDocType";
 			this->lDocType->Size = System::Drawing::Size(112, 13);
 			this->lDocType->TabIndex = 8;
@@ -415,7 +415,7 @@ namespace mainProject {
 			// lDateVizit
 			// 
 			this->lDateVizit->AutoSize = true;
-			this->lDateVizit->Location = System::Drawing::Point(6, 291);
+			this->lDateVizit->Location = System::Drawing::Point(16, 312);
 			this->lDateVizit->Name = L"lDateVizit";
 			this->lDateVizit->Size = System::Drawing::Size(195, 13);
 			this->lDateVizit->TabIndex = 9;
@@ -424,9 +424,9 @@ namespace mainProject {
 			// cBTimeSelect
 			// 
 			this->cBTimeSelect->FormattingEnabled = true;
-			this->cBTimeSelect->Location = System::Drawing::Point(12, 362);
+			this->cBTimeSelect->Location = System::Drawing::Point(16, 383);
 			this->cBTimeSelect->Name = L"cBTimeSelect";
-			this->cBTimeSelect->Size = System::Drawing::Size(202, 21);
+			this->cBTimeSelect->Size = System::Drawing::Size(195, 21);
 			this->cBTimeSelect->TabIndex = 10;
 			this->cBTimeSelect->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::cBTimeSelect_MouseMove);
 			// 
@@ -453,7 +453,7 @@ namespace mainProject {
 			this->lChoose->AutoSize = true;
 			this->lChoose->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->lChoose->Location = System::Drawing::Point(311, 26);
+			this->lChoose->Location = System::Drawing::Point(309, 39);
 			this->lChoose->Name = L"lChoose";
 			this->lChoose->Size = System::Drawing::Size(227, 18);
 			this->lChoose->TabIndex = 14;
@@ -465,7 +465,7 @@ namespace mainProject {
 			this->bSend->FlatAppearance->MouseOverBackColor = System::Drawing::Color::White;
 			this->bSend->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->bSend->Location = System::Drawing::Point(12, 616);
+			this->bSend->Location = System::Drawing::Point(9, 641);
 			this->bSend->Name = L"bSend";
 			this->bSend->Size = System::Drawing::Size(202, 61);
 			this->bSend->TabIndex = 15;
@@ -487,7 +487,7 @@ namespace mainProject {
 			// dTPSelect
 			// 
 			this->dTPSelect->Format = System::Windows::Forms::DateTimePickerFormat::Time;
-			this->dTPSelect->Location = System::Drawing::Point(12, 324);
+			this->dTPSelect->Location = System::Drawing::Point(16, 345);
 			this->dTPSelect->Name = L"dTPSelect";
 			this->dTPSelect->Size = System::Drawing::Size(89, 20);
 			this->dTPSelect->TabIndex = 32;
@@ -497,7 +497,7 @@ namespace mainProject {
 			// cLbDoc
 			// 
 			this->cLbDoc->FormattingEnabled = true;
-			this->cLbDoc->Location = System::Drawing::Point(384, 324);
+			this->cLbDoc->Location = System::Drawing::Point(384, 342);
 			this->cLbDoc->Name = L"cLbDoc";
 			this->cLbDoc->Size = System::Drawing::Size(438, 199);
 			this->cLbDoc->TabIndex = 34;
@@ -506,7 +506,7 @@ namespace mainProject {
 			// cLbHospital
 			// 
 			this->cLbHospital->FormattingEnabled = true;
-			this->cLbHospital->Location = System::Drawing::Point(610, 133);
+			this->cLbHospital->Location = System::Drawing::Point(614, 153);
 			this->cLbHospital->Name = L"cLbHospital";
 			this->cLbHospital->Size = System::Drawing::Size(212, 124);
 			this->cLbHospital->TabIndex = 35;
@@ -514,7 +514,7 @@ namespace mainProject {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(12, 557);
+			this->button1->Location = System::Drawing::Point(9, 576);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(202, 35);
 			this->button1->TabIndex = 36;
@@ -525,7 +525,7 @@ namespace mainProject {
 			// lÑlinic
 			// 
 			this->lÑlinic->AutoSize = true;
-			this->lÑlinic->Location = System::Drawing::Point(607, 116);
+			this->lÑlinic->Location = System::Drawing::Point(611, 136);
 			this->lÑlinic->Name = L"lÑlinic";
 			this->lÑlinic->Size = System::Drawing::Size(49, 13);
 			this->lÑlinic->TabIndex = 37;
@@ -534,7 +534,7 @@ namespace mainProject {
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(385, 291);
+			this->label2->Location = System::Drawing::Point(385, 312);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(40, 13);
 			this->label2->TabIndex = 38;
@@ -543,7 +543,7 @@ namespace mainProject {
 			// piñBox
 			// 
 			this->piñBox->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"piñBox.Image")));
-			this->piñBox->Location = System::Drawing::Point(-26, -4);
+			this->piñBox->Location = System::Drawing::Point(-24, 3);
 			this->piñBox->Name = L"piñBox";
 			this->piñBox->Size = System::Drawing::Size(181, 117);
 			this->piñBox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
