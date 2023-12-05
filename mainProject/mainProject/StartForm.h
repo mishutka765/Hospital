@@ -5,6 +5,8 @@
 #include "AboutAppForm.h"
 #include "Data.h"
 #include "Algorithms.h"
+#include "Exceptions.h"
+
 
 namespace mainProject {
 	using namespace System;
@@ -47,6 +49,10 @@ namespace mainProject {
 	private: System::Windows::Forms::Label^ Ltel;
 	private: System::Windows::Forms::Label^ Lpassw;
 	private: System::Windows::Forms::Label^ lAbo;
+
+		   // Створення загальної підказки
+	private: System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
+
 	protected:
 
 	protected:
@@ -91,142 +97,140 @@ namespace mainProject {
 			this->picBox = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->picBox))->BeginInit();
 			this->SuspendLayout();
-			//
+			// 
 			// Blog
-			//
-			this->Blog->Location = System::Drawing::Point(212, 322);
-			this->Blog->Margin = System::Windows::Forms::Padding(2);
+			// 
+			this->Blog->Location = System::Drawing::Point(270, 392);
+			this->Blog->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->Blog->Name = L"Blog";
-			this->Blog->Size = System::Drawing::Size(140, 30);
+			this->Blog->Size = System::Drawing::Size(187, 37);
 			this->Blog->TabIndex = 0;
 			this->Blog->Text = L"Увійти";
 			this->Blog->UseVisualStyleBackColor = true;
 			this->Blog->Click += gcnew System::EventHandler(this, &StartForm::Blog_Click);
-			this->Blog->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &StartForm::Blog_MouseMove);
-			//
+			// 
 			// BSign
-			//
-			this->BSign->Location = System::Drawing::Point(212, 387);
-			this->BSign->Margin = System::Windows::Forms::Padding(2);
+			// 
+			this->BSign->Location = System::Drawing::Point(270, 471);
+			this->BSign->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->BSign->Name = L"BSign";
-			this->BSign->Size = System::Drawing::Size(140, 30);
+			this->BSign->Size = System::Drawing::Size(187, 37);
 			this->BSign->TabIndex = 1;
 			this->BSign->Text = L"Зареєструватись";
 			this->BSign->UseVisualStyleBackColor = true;
 			this->BSign->Click += gcnew System::EventHandler(this, &StartForm::BSign_Click);
-			this->BSign->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &StartForm::BSign_MouseMove);
-			//
+			// 
 			// Ltel
-			//
+			// 
 			this->Ltel->AutoSize = true;
-			this->Ltel->Location = System::Drawing::Point(154, 228);
-			this->Ltel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->Ltel->Location = System::Drawing::Point(205, 281);
 			this->Ltel->Name = L"Ltel";
-			this->Ltel->Size = System::Drawing::Size(55, 13);
+			this->Ltel->Size = System::Drawing::Size(70, 16);
 			this->Ltel->TabIndex = 3;
 			this->Ltel->Text = L"Телефон:";
-			//
+			// 
 			// Lpassw
-			//
+			// 
 			this->Lpassw->AutoSize = true;
-			this->Lpassw->Location = System::Drawing::Point(154, 270);
-			this->Lpassw->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->Lpassw->Location = System::Drawing::Point(216, 332);
 			this->Lpassw->Name = L"Lpassw";
-			this->Lpassw->Size = System::Drawing::Size(48, 13);
+			this->Lpassw->Size = System::Drawing::Size(59, 16);
 			this->Lpassw->TabIndex = 4;
 			this->Lpassw->Text = L"Пароль:";
-			//
+			// 
 			// lAbo
-			//
+			// 
 			this->lAbo->AutoSize = true;
-			this->lAbo->Location = System::Drawing::Point(274, 362);
-			this->lAbo->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->lAbo->Location = System::Drawing::Point(345, 441);
 			this->lAbo->Name = L"lAbo";
-			this->lAbo->Size = System::Drawing::Size(25, 13);
+			this->lAbo->Size = System::Drawing::Size(31, 16);
 			this->lAbo->TabIndex = 5;
 			this->lAbo->Text = L"або";
-			//
+			// 
 			// TbTel
-			//
-			this->TbTel->Location = System::Drawing::Point(236, 228);
-			this->TbTel->Margin = System::Windows::Forms::Padding(2);
+			// 
+			this->TbTel->Location = System::Drawing::Point(296, 278);
+			this->TbTel->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->TbTel->Name = L"TbTel";
-			this->TbTel->Size = System::Drawing::Size(108, 20);
+			this->TbTel->Size = System::Drawing::Size(143, 22);
 			this->TbTel->TabIndex = 7;
 			this->TbTel->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &StartForm::TbTel_MouseMove);
-			//
+			// 
 			// lWelcome
-			//
+			// 
 			this->lWelcome->AutoSize = true;
 			this->lWelcome->BackColor = System::Drawing::SystemColors::Control;
 			this->lWelcome->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 25, System::Drawing::FontStyle::Bold));
-			this->lWelcome->Location = System::Drawing::Point(205, 138);
-			this->lWelcome->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->lWelcome->Location = System::Drawing::Point(262, 171);
 			this->lWelcome->Name = L"lWelcome";
-			this->lWelcome->Size = System::Drawing::Size(160, 39);
+			this->lWelcome->Size = System::Drawing::Size(194, 48);
 			this->lWelcome->TabIndex = 11;
 			this->lWelcome->Text = L"Вітаємо!";
-			//
+			// 
 			// mTbPassw
-			//
-			this->mTbPassw->Location = System::Drawing::Point(234, 270);
+			// 
+			this->mTbPassw->Location = System::Drawing::Point(296, 329);
+			this->mTbPassw->Margin = System::Windows::Forms::Padding(4);
 			this->mTbPassw->Name = L"mTbPassw";
 			this->mTbPassw->PasswordChar = '*';
-			this->mTbPassw->Size = System::Drawing::Size(108, 20);
+			this->mTbPassw->Size = System::Drawing::Size(143, 22);
 			this->mTbPassw->TabIndex = 12;
 			this->mTbPassw->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &StartForm::mTbPassw_MouseMove);
-			//
+			// 
 			// CbShow
-			//
+			// 
 			this->CbShow->AutoSize = true;
 			this->CbShow->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7));
-			this->CbShow->Location = System::Drawing::Point(350, 273);
+			this->CbShow->Location = System::Drawing::Point(463, 331);
+			this->CbShow->Margin = System::Windows::Forms::Padding(4);
 			this->CbShow->Name = L"CbShow";
-			this->CbShow->Size = System::Drawing::Size(109, 17);
+			this->CbShow->Size = System::Drawing::Size(128, 19);
 			this->CbShow->TabIndex = 13;
 			this->CbShow->Text = L"показати пароль";
 			this->CbShow->UseVisualStyleBackColor = true;
 			this->CbShow->CheckedChanged += gcnew System::EventHandler(this, &StartForm::CbShow_CheckedChanged);
 			this->CbShow->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &StartForm::CbShow_MouseMove);
-			//
+			// 
 			// bQuestion
-			//
+			// 
 			this->bQuestion->Font = (gcnew System::Drawing::Font(L"Snap ITC", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->bQuestion->Location = System::Drawing::Point(494, 474);
+			this->bQuestion->Location = System::Drawing::Point(659, 583);
+			this->bQuestion->Margin = System::Windows::Forms::Padding(4);
 			this->bQuestion->Name = L"bQuestion";
-			this->bQuestion->Size = System::Drawing::Size(28, 25);
+			this->bQuestion->Size = System::Drawing::Size(37, 31);
 			this->bQuestion->TabIndex = 17;
 			this->bQuestion->Text = L"❓";
 			this->bQuestion->UseVisualStyleBackColor = true;
 			this->bQuestion->Click += gcnew System::EventHandler(this, &StartForm::button1_Click);
-			this->bQuestion->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &StartForm::bQuestion_MouseMove);
-			//
+			// 
 			// linfo
-			//
+			// 
 			this->linfo->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->linfo->AutoSize = true;
-			this->linfo->Location = System::Drawing::Point(12, 489);
+			this->linfo->Location = System::Drawing::Point(16, 602);
+			this->linfo->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->linfo->Name = L"linfo";
-			this->linfo->Size = System::Drawing::Size(256, 13);
+			this->linfo->Size = System::Drawing::Size(321, 16);
 			this->linfo->TabIndex = 18;
 			this->linfo->Text = L"Для отриманя інформації по формі - натисніть F1";
-			//
+			// 
 			// picBox
-			//
+			// 
 			this->picBox->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"picBox.Image")));
-			this->picBox->Location = System::Drawing::Point(144, -26);
+			this->picBox->Location = System::Drawing::Point(185, -32);
+			this->picBox->Margin = System::Windows::Forms::Padding(4);
 			this->picBox->Name = L"picBox";
-			this->picBox->Size = System::Drawing::Size(270, 193);
+			this->picBox->Size = System::Drawing::Size(360, 238);
 			this->picBox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->picBox->TabIndex = 19;
 			this->picBox->TabStop = false;
-			//
+			// 
 			// StartForm
-			//
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			// 
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(534, 511);
+			this->ClientSize = System::Drawing::Size(712, 629);
 			this->Controls->Add(this->linfo);
 			this->Controls->Add(this->bQuestion);
 			this->Controls->Add(this->CbShow);
@@ -239,8 +243,9 @@ namespace mainProject {
 			this->Controls->Add(this->BSign);
 			this->Controls->Add(this->Blog);
 			this->Controls->Add(this->picBox);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->Margin = System::Windows::Forms::Padding(2);
+			this->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->Name = L"StartForm";
 			this->Text = L"Вхід";
 			this->Load += gcnew System::EventHandler(this, &StartForm::StartForm_Load);
@@ -248,12 +253,15 @@ namespace mainProject {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->picBox))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
+
 		}
 #pragma endregion
 
 	private:
 		//Вхід
 		System::Void Blog_Click(System::Object^ sender, System::EventArgs^ e) {
+			System::String^ errorMsg;
+			
 			//Використовуємо для хешування
 			Hash obj;
 			std::vector<User> UsVec1 = read_usertable();
@@ -262,28 +270,45 @@ namespace mainProject {
 			//То шо написав зараз
 			System::String^ NowNumber = TbTel->Text;
 			System::String^ NowPassword = mTbPassw->Text;
+			
 			//Стадартизуємо
 			std::string Phone_Number = ParseToStringorSTDSTRING(NowNumber);
-			Phone_Number = standardizePhoneNumberUA(Phone_Number);
-			if (Phone_Number == "Invalid Number")
+			try 
 			{
-				MessageBox::Show("Неправильний формат номера. Введіть правильний номер.", "Помилка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				if (Phone_Number != "")
+					Phone_Number = standardizePhoneNumberUA(Phone_Number);
+				else 
+					throw Exceptions::PhoneFormatException();
+			}
+			catch (const Exceptions::PhoneFormatException& ex)
+			{
+				errorMsg = gcnew System::String(ex.what());
+				MessageBox::Show(errorMsg, "Помилка входу", MessageBoxButtons::OK, MessageBoxIcon::Error);
 				return;
 			}
+			catch (const std::exception& ex)
+			{
+				std::cerr << "Sign in error: " << ex.what() << std::endl;
+				errorMsg = gcnew System::String(ex.what());
+				MessageBox::Show(errorMsg, "Помилка входу", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				return;
+			}
+
+			if (NowPassword == "") {
+				std::cerr << "Sign in error: Empty password." << std::endl;
+				MessageBox::Show("Введіть пароль!", "Помилка входу", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				return;
+			}
+
 			std::string Password = ParseToStringorSTDSTRING(NowPassword);
+
 			//Перевірочні змінні
 			bool phoneNumberExists = false;
 			bool passwordExists = false;
 			//Хеш
 			std::string hashPassword;
 			hashPassword = obj.getHash(Password, 6);
-			//Якщо користувач нічого не ввів
-			//if (Phone_Number.length() == 0 || Password.length() == 0)
-			//{
-			//	//Треба зробити викид якогось повідомлення.
-			//	Console::WriteLine("Write password or login");
-			//	return;
-			//}
+
 			//Записуємо номера
 
 			bool isPasswordMatching = false;
@@ -331,14 +356,15 @@ namespace mainProject {
 				}
 				else
 				{
-					Console::WriteLine("Неправильний пароль");
 					// Номер телефону існує, але пароль не співпадає
+					std::cerr << "Sign up error: Wrong password" << std::endl;
+					MessageBox::Show("Неправильний пароль!", "Помилка входу", MessageBoxButtons::OK, MessageBoxIcon::Error);
 				}
 			}
-			// Якщо користувача немає в базі
 			else
-			{
-				Console::WriteLine("Користувача не знайдено");
+			{	// Якщо користувача немає в базі
+				std::cerr << "Sign up error: User not found" << std::endl;
+				MessageBox::Show("Користувача з таким номером телефону не знайдено!", "Помилка входу", MessageBoxButtons::OK, MessageBoxIcon::Error);
 			}
 		}
 	private: System::Void BSign_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -364,36 +390,16 @@ namespace mainProject {
 		aboutForm->Show();
 	}
 
-		   System::Windows::Forms::ToolTip^ toolTip1;
-
 	private: System::Void TbTel_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(TbTel, "Введіть тут свій телефон ");
 	}
 
 	private: System::Void mTbPassw_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(mTbPassw, "Введіть тут свій пароль ");
 	}
 
 	private: System::Void CbShow_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(CbShow, "Відмітьте галочкою, якщо хочете побачити введений пароль ");
-	}
-
-	private: System::Void Blog_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-		toolTip1->SetToolTip(Blog, "Якщо всі поля заповнено коректними даними - натисніть цю кнопку і увійдіть в свій обліковий запис ");
-	}
-
-	private: System::Void BSign_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-		toolTip1->SetToolTip(BSign, "Якщо в вас немає облікового запису - Натисніть цю кнопку щоб створити ");
-	}
-
-	private: System::Void bQuestion_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-		toolTip1->SetToolTip(bQuestion, "Кнопка виводу інформації о додатку та розробниках ");
 	}
 	private: System::Void StartForm_HelpRequested(System::Object^ sender, System::Windows::Forms::HelpEventArgs^ hlpevent) {
 		String^ helpText = "Ця форма дозволяє користувачам увійти в систему або зареєструвати новий обліковий запис.\n";

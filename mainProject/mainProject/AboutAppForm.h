@@ -37,12 +37,6 @@ namespace mainProject {
 	protected: System::Windows::Forms::Button^ button1;
 	protected: System::Windows::Forms::Label^ linfo;
 
-	protected:
-
-	protected:
-
-	protected:
-
 	private:
 		/// <summary>
 		/// Required designer variable.
@@ -61,58 +55,64 @@ namespace mainProject {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->linfo = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
-			//
+			// 
 			// rTbAbout
-			//
+			// 
 			this->rTbAbout->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->rTbAbout->ForeColor = System::Drawing::SystemColors::WindowText;
-			this->rTbAbout->Location = System::Drawing::Point(12, 12);
+			this->rTbAbout->Location = System::Drawing::Point(16, 15);
+			this->rTbAbout->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->rTbAbout->Name = L"rTbAbout";
-			this->rTbAbout->Size = System::Drawing::Size(660, 573);
+			this->rTbAbout->ReadOnly = true;
+			this->rTbAbout->Size = System::Drawing::Size(879, 704);
 			this->rTbAbout->TabIndex = 0;
 			this->rTbAbout->Text = resources->GetString(L"rTbAbout.Text");
 			this->rTbAbout->TextChanged += gcnew System::EventHandler(this, &AboutAppForm::rTbAbout_TextChanged);
-			//
+			// 
 			// button1
-			//
+			// 
 			this->button1->BackColor = System::Drawing::Color::OrangeRed;
 			this->button1->ForeColor = System::Drawing::SystemColors::ActiveCaptionText;
-			this->button1->Location = System::Drawing::Point(301, 601);
+			this->button1->Location = System::Drawing::Point(401, 740);
+			this->button1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(59, 32);
+			this->button1->Size = System::Drawing::Size(79, 39);
 			this->button1->TabIndex = 1;
 			this->button1->Text = L"OK";
 			this->button1->UseVisualStyleBackColor = false;
 			this->button1->Click += gcnew System::EventHandler(this, &AboutAppForm::button1_Click);
-			//
+			// 
 			// linfo
-			//
+			// 
 			this->linfo->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->linfo->AutoSize = true;
-			this->linfo->Location = System::Drawing::Point(12, 639);
+			this->linfo->Location = System::Drawing::Point(16, 786);
+			this->linfo->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->linfo->Name = L"linfo";
-			this->linfo->Size = System::Drawing::Size(256, 13);
+			this->linfo->Size = System::Drawing::Size(321, 16);
 			this->linfo->TabIndex = 31;
 			this->linfo->Text = L"Для отриманя інформації по формі - натисніть F1";
 			this->linfo->Click += gcnew System::EventHandler(this, &AboutAppForm::linfo_Click);
-			//
+			// 
 			// AboutAppForm
-			//
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			// 
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(684, 661);
+			this->ClientSize = System::Drawing::Size(912, 814);
 			this->Controls->Add(this->linfo);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->rTbAbout);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->Margin = System::Windows::Forms::Padding(2);
+			this->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->Name = L"AboutAppForm";
 			this->Text = L"Про застосунок і розробників";
 			this->Load += gcnew System::EventHandler(this, &AboutAppForm::AboutAppForm_Load);
 			this->HelpRequested += gcnew System::Windows::Forms::HelpEventHandler(this, &AboutAppForm::AboutAppForm_HelpRequested);
 			this->ResumeLayout(false);
 			this->PerformLayout();
+
 		}
 #pragma endregion
 

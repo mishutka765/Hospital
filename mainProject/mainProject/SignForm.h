@@ -3,6 +3,7 @@
 #include "LogForm.h"
 #include "Algorithms.h"
 #include "Data.h"
+#include "Exceptions.h"
 
 namespace mainProject {
 	using namespace System;
@@ -72,6 +73,9 @@ namespace mainProject {
 	private: System::Windows::Forms::ProgressBar^ progressBarPasswordStrength;
 	private: System::Windows::Forms::Label^ passwordStrong;
 
+		   // Створення загальної підказки
+	private: System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
+
 	protected:
 
 	private:
@@ -115,18 +119,20 @@ namespace mainProject {
 			// 
 			this->lEnterData->AutoSize = true;
 			this->lEnterData->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11));
-			this->lEnterData->Location = System::Drawing::Point(165, 145);
+			this->lEnterData->Location = System::Drawing::Point(220, 178);
+			this->lEnterData->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lEnterData->Name = L"lEnterData";
-			this->lEnterData->Size = System::Drawing::Size(226, 18);
+			this->lEnterData->Size = System::Drawing::Size(294, 24);
 			this->lEnterData->TabIndex = 0;
 			this->lEnterData->Text = L"Введіть свої дані в поля нижче:";
 			// 
 			// lPassw
 			// 
 			this->lPassw->AutoSize = true;
-			this->lPassw->Location = System::Drawing::Point(34, 323);
+			this->lPassw->Location = System::Drawing::Point(28, 397);
+			this->lPassw->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lPassw->Name = L"lPassw";
-			this->lPassw->Size = System::Drawing::Size(111, 13);
+			this->lPassw->Size = System::Drawing::Size(142, 16);
 			this->lPassw->TabIndex = 4;
 			this->lPassw->Text = L"Придумайте пароль:";
 			// 
@@ -134,9 +140,10 @@ namespace mainProject {
 			// 
 			this->CbShow->AutoSize = true;
 			this->CbShow->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7));
-			this->CbShow->Location = System::Drawing::Point(271, 323);
+			this->CbShow->Location = System::Drawing::Point(346, 397);
+			this->CbShow->Margin = System::Windows::Forms::Padding(4);
 			this->CbShow->Name = L"CbShow";
-			this->CbShow->Size = System::Drawing::Size(109, 17);
+			this->CbShow->Size = System::Drawing::Size(128, 19);
 			this->CbShow->TabIndex = 15;
 			this->CbShow->Text = L"показати пароль";
 			this->CbShow->UseVisualStyleBackColor = true;
@@ -145,98 +152,93 @@ namespace mainProject {
 			// 
 			// mTbPassw
 			// 
-			this->mTbPassw->Location = System::Drawing::Point(155, 320);
+			this->mTbPassw->Location = System::Drawing::Point(188, 395);
+			this->mTbPassw->Margin = System::Windows::Forms::Padding(4);
 			this->mTbPassw->Name = L"mTbPassw";
 			this->mTbPassw->PasswordChar = '*';
-			this->mTbPassw->Size = System::Drawing::Size(108, 20);
+			this->mTbPassw->Size = System::Drawing::Size(143, 22);
 			this->mTbPassw->TabIndex = 14;
 			this->mTbPassw->MaskInputRejected += gcnew System::Windows::Forms::MaskInputRejectedEventHandler(this, &SignForm::mTbPassw_MaskInputRejected);
 			this->mTbPassw->TextChanged += gcnew System::EventHandler(this, &SignForm::mTbPassw_TextChanged_1);
-			this->mTbPassw->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &SignForm::mTbPassw_MouseMove);
 			// 
 			// TbPatr
 			// 
 			this->TbPatr->ForeColor = System::Drawing::Color::Black;
-			this->TbPatr->Location = System::Drawing::Point(393, 210);
-			this->TbPatr->Margin = System::Windows::Forms::Padding(2);
+			this->TbPatr->Location = System::Drawing::Point(507, 258);
+			this->TbPatr->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->TbPatr->Name = L"TbPatr";
-			this->TbPatr->Size = System::Drawing::Size(108, 20);
+			this->TbPatr->Size = System::Drawing::Size(143, 22);
 			this->TbPatr->TabIndex = 21;
-			this->TbPatr->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &SignForm::TbPatr_MouseMove);
 			// 
 			// TbSurn
 			// 
-			this->TbSurn->Location = System::Drawing::Point(272, 210);
-			this->TbSurn->Margin = System::Windows::Forms::Padding(2);
+			this->TbSurn->Location = System::Drawing::Point(346, 258);
+			this->TbSurn->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->TbSurn->Name = L"TbSurn";
-			this->TbSurn->Size = System::Drawing::Size(108, 20);
+			this->TbSurn->Size = System::Drawing::Size(143, 22);
 			this->TbSurn->TabIndex = 20;
-			this->TbSurn->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &SignForm::TbSurn_MouseMove);
 			// 
 			// TbTel
 			// 
-			this->TbTel->Location = System::Drawing::Point(155, 250);
-			this->TbTel->Margin = System::Windows::Forms::Padding(2);
+			this->TbTel->Location = System::Drawing::Point(188, 308);
+			this->TbTel->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->TbTel->Name = L"TbTel";
-			this->TbTel->Size = System::Drawing::Size(108, 20);
+			this->TbTel->Size = System::Drawing::Size(143, 22);
 			this->TbTel->TabIndex = 19;
-			this->TbTel->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &SignForm::TbTel_MouseMove);
 			// 
 			// TbName
 			// 
-			this->TbName->Location = System::Drawing::Point(154, 210);
-			this->TbName->Margin = System::Windows::Forms::Padding(2);
+			this->TbName->Location = System::Drawing::Point(188, 258);
+			this->TbName->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->TbName->Name = L"TbName";
-			this->TbName->Size = System::Drawing::Size(108, 20);
+			this->TbName->Size = System::Drawing::Size(143, 22);
 			this->TbName->TabIndex = 18;
-			this->TbName->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &SignForm::TbName_MouseMove);
 			// 
 			// lTel
 			// 
 			this->lTel->AutoSize = true;
-			this->lTel->Location = System::Drawing::Point(78, 253);
-			this->lTel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->lTel->Location = System::Drawing::Point(100, 311);
 			this->lTel->Name = L"lTel";
-			this->lTel->Size = System::Drawing::Size(55, 13);
+			this->lTel->Size = System::Drawing::Size(70, 16);
 			this->lTel->TabIndex = 17;
 			this->lTel->Text = L"Телефон:";
 			// 
 			// lFio
 			// 
 			this->lFio->AutoSize = true;
-			this->lFio->Location = System::Drawing::Point(78, 213);
-			this->lFio->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			this->lFio->Location = System::Drawing::Point(138, 261);
 			this->lFio->Name = L"lFio";
-			this->lFio->Size = System::Drawing::Size(28, 13);
+			this->lFio->Size = System::Drawing::Size(32, 16);
 			this->lFio->TabIndex = 16;
 			this->lFio->Text = L"ПІБ:";
 			// 
 			// BSign
 			// 
-			this->BSign->Location = System::Drawing::Point(196, 406);
-			this->BSign->Margin = System::Windows::Forms::Padding(2);
+			this->BSign->Location = System::Drawing::Point(254, 489);
+			this->BSign->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->BSign->Name = L"BSign";
-			this->BSign->Size = System::Drawing::Size(140, 30);
+			this->BSign->Size = System::Drawing::Size(187, 37);
 			this->BSign->TabIndex = 22;
 			this->BSign->Text = L"Зареєструватись";
 			this->BSign->UseVisualStyleBackColor = true;
 			this->BSign->Click += gcnew System::EventHandler(this, &SignForm::BSign_Click);
-			this->BSign->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &SignForm::BSign_MouseMove);
 			// 
 			// dateBith
 			// 
-			this->dateBith->Location = System::Drawing::Point(155, 285);
+			this->dateBith->Location = System::Drawing::Point(188, 351);
+			this->dateBith->Margin = System::Windows::Forms::Padding(4);
 			this->dateBith->Name = L"dateBith";
-			this->dateBith->Size = System::Drawing::Size(200, 20);
+			this->dateBith->Size = System::Drawing::Size(265, 22);
 			this->dateBith->TabIndex = 26;
 			this->dateBith->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &SignForm::dateBith_MouseMove);
 			// 
 			// lBirthDate
 			// 
 			this->lBirthDate->AutoSize = true;
-			this->lBirthDate->Location = System::Drawing::Point(34, 285);
+			this->lBirthDate->Location = System::Drawing::Point(45, 351);
+			this->lBirthDate->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lBirthDate->Name = L"lBirthDate";
-			this->lBirthDate->Size = System::Drawing::Size(101, 13);
+			this->lBirthDate->Size = System::Drawing::Size(125, 16);
 			this->lBirthDate->TabIndex = 25;
 			this->lBirthDate->Text = L"Дата народження:";
 			// 
@@ -244,9 +246,10 @@ namespace mainProject {
 			// 
 			this->lPatr->AutoSize = true;
 			this->lPatr->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 6));
-			this->lPatr->Location = System::Drawing::Point(417, 232);
+			this->lPatr->Location = System::Drawing::Point(504, 284);
+			this->lPatr->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lPatr->Name = L"lPatr";
-			this->lPatr->Size = System::Drawing::Size(47, 9);
+			this->lPatr->Size = System::Drawing::Size(62, 13);
 			this->lPatr->TabIndex = 29;
 			this->lPatr->Text = L"по-батькові";
 			// 
@@ -254,9 +257,10 @@ namespace mainProject {
 			// 
 			this->lSurname->AutoSize = true;
 			this->lSurname->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 6));
-			this->lSurname->Location = System::Drawing::Point(298, 232);
+			this->lSurname->Location = System::Drawing::Point(343, 284);
+			this->lSurname->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lSurname->Name = L"lSurname";
-			this->lSurname->Size = System::Drawing::Size(38, 9);
+			this->lSurname->Size = System::Drawing::Size(51, 13);
 			this->lSurname->TabIndex = 28;
 			this->lSurname->Text = L"прізвище";
 			// 
@@ -265,9 +269,10 @@ namespace mainProject {
 			this->lName->AutoSize = true;
 			this->lName->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 6, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->lName->Location = System::Drawing::Point(201, 232);
+			this->lName->Location = System::Drawing::Point(185, 284);
+			this->lName->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lName->Name = L"lName";
-			this->lName->Size = System::Drawing::Size(19, 9);
+			this->lName->Size = System::Drawing::Size(23, 13);
 			this->lName->TabIndex = 27;
 			this->lName->Text = L"ім\'я";
 			// 
@@ -275,44 +280,50 @@ namespace mainProject {
 			// 
 			this->linfo->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->linfo->AutoSize = true;
-			this->linfo->Location = System::Drawing::Point(12, 594);
+			this->linfo->Location = System::Drawing::Point(16, 572);
+			this->linfo->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->linfo->Name = L"linfo";
-			this->linfo->Size = System::Drawing::Size(256, 13);
+			this->linfo->Size = System::Drawing::Size(321, 16);
 			this->linfo->TabIndex = 30;
 			this->linfo->Text = L"Для отриманя інформації по формі - натисніть F1";
 			// 
 			// picBox
 			// 
 			this->picBox->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"picBox.Image")));
-			this->picBox->Location = System::Drawing::Point(141, -30);
+			this->picBox->Location = System::Drawing::Point(188, -37);
+			this->picBox->Margin = System::Windows::Forms::Padding(4);
 			this->picBox->Name = L"picBox";
-			this->picBox->Size = System::Drawing::Size(270, 193);
+			this->picBox->Size = System::Drawing::Size(360, 238);
 			this->picBox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->picBox->TabIndex = 31;
 			this->picBox->TabStop = false;
 			// 
 			// progressBarPasswordStrength
 			// 
-			this->progressBarPasswordStrength->Location = System::Drawing::Point(155, 346);
+			this->progressBarPasswordStrength->Location = System::Drawing::Point(188, 425);
+			this->progressBarPasswordStrength->Margin = System::Windows::Forms::Padding(4);
 			this->progressBarPasswordStrength->Maximum = 3;
 			this->progressBarPasswordStrength->Name = L"progressBarPasswordStrength";
-			this->progressBarPasswordStrength->Size = System::Drawing::Size(107, 10);
+			this->progressBarPasswordStrength->Size = System::Drawing::Size(143, 10);
 			this->progressBarPasswordStrength->TabIndex = 32;
 			this->progressBarPasswordStrength->Value = 1;
 			// 
 			// passwordStrong
 			// 
 			this->passwordStrong->AutoSize = true;
-			this->passwordStrong->Location = System::Drawing::Point(34, 343);
+			this->passwordStrong->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->passwordStrong->Location = System::Drawing::Point(105, 420);
+			this->passwordStrong->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->passwordStrong->Name = L"passwordStrong";
-			this->passwordStrong->Size = System::Drawing::Size(0, 13);
+			this->passwordStrong->Size = System::Drawing::Size(0, 15);
 			this->passwordStrong->TabIndex = 33;
 			// 
 			// SignForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(534, 511);
+			this->ClientSize = System::Drawing::Size(712, 599);
 			this->Controls->Add(this->passwordStrong);
 			this->Controls->Add(this->progressBarPasswordStrength);
 			this->Controls->Add(this->linfo);
@@ -333,10 +344,11 @@ namespace mainProject {
 			this->Controls->Add(this->lPassw);
 			this->Controls->Add(this->lEnterData);
 			this->Controls->Add(this->picBox);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->Margin = System::Windows::Forms::Padding(2);
+			this->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
 			this->Name = L"SignForm";
-			this->Text = L"Зареєструватися";
+			this->Text = L"Реєстрація";
 			this->Load += gcnew System::EventHandler(this, &SignForm::SignForm_Load);
 			this->HelpRequested += gcnew System::Windows::Forms::HelpEventHandler(this, &SignForm::SignForm_HelpRequested);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->picBox))->EndInit();
@@ -347,6 +359,10 @@ namespace mainProject {
 #pragma endregion
 
 	private: System::Void BSign_Click(System::Object^ sender, System::EventArgs^ e) {
+		System::String^ errorMsg;
+
+		std::vector<User> UsVec1 = read_usertable();
+
 		User obj;
 		Hash pass;
 		std::vector<User> users;
@@ -368,14 +384,60 @@ namespace mainProject {
 
 		// Заповнюємо об'єкт користувача даними та обчислюємо вік.
 
+		if (Name == "" || Surname == "" || MiddleName == "") {
+			MessageBox::Show("Заповніть дані!", "Помилка реєстрації", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
+
+		if (Password == "") {
+			std::cerr << "Sign up error: Empty password." << std::endl;
+			MessageBox::Show("Введіть пароль!", "Помилка реєстрації", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
+
 		obj.userName = Name;
 		obj.userSurname = Surname;
 		obj.userMiddleName = MiddleName;
-		Telephone = standardizePhoneNumberUA(Telephone); // Стандартизуємо формат номеру телефону
-		if (Telephone == "Invalid Number")
+
+
+				// Перевірка номеру телефону
+		try
 		{
-			// Виводимо сповіщення користувачу у випадку невірного формату номера телефону.
-			MessageBox::Show("Неправильний формат телефонного номера. Будь ласка, введіть правильний номер.", "Помилка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			if (Telephone != "")
+			{ 
+				Telephone = standardizePhoneNumberUA(Telephone);
+
+				for (const User& user : UsVec1)
+				{
+					// Перевіряємо, чи співпадає номер телефону
+					if (Telephone == standardizePhoneNumberUA(user.userPhone))
+					{
+						throw Exceptions::PhoneNumberExistsException();
+						break;
+					}
+				}
+			}	
+			else {
+				throw Exceptions::PhoneFormatException();
+			}	
+		}
+		catch (const Exceptions::PhoneFormatException& ex)
+		{
+			errorMsg = gcnew System::String(ex.what());
+			MessageBox::Show(errorMsg, "Помилка реєстрації", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
+		catch (const Exceptions::PhoneNumberExistsException& ex)
+		{
+			errorMsg = gcnew System::String(ex.what());
+			MessageBox::Show(errorMsg, "Помилка реєстрації", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+			return;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Sign up phone error: " << ex.what() << std::endl;
+			errorMsg = gcnew System::String(ex.what());
+			MessageBox::Show(errorMsg, "Помилка реєстрації", MessageBoxButtons::OK, MessageBoxIcon::Error);
 			return;
 		}
 
@@ -384,15 +446,35 @@ namespace mainProject {
 		if (strengthLevel <= 1)
 		{
 			// Виводимо сповіщення користувачу у випадку слабкого паролю.
-			MessageBox::Show("Слабкий пароль, введіть краще", "Ненадійний пароль", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+			MessageBox::Show("Слабкий пароль, введіть кращий!", "Ненадійний пароль", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 			return;
 		}
-		obj.userPassword = pass.getHash(Password, 6); // Обчислюємо хеш пароля.
-		obj.userAge = AgeCalculator(obj, Birthday); // Обчислюємо вік користувача.
 
+		obj.userPassword = pass.getHash(Password, 6); // Обчислюємо хеш пароля.
+
+		try
+		{
+			obj.userAge = AgeCalculator(obj, Birthday); // Обчислюємо вік користувача.
+			std::cerr << obj.userAge << std::endl;
+		}
+		catch (const Exceptions::AgeCalculationException& ex)
+		{
+			errorMsg = gcnew System::String(ex.what());
+			MessageBox::Show(errorMsg, "Помилка реєстрації", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Sign up age error: " << ex.what() << std::endl;
+			errorMsg = gcnew System::String(ex.what());
+			MessageBox::Show(errorMsg, "Помилка реєстрації", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			return;
+		}
+		
 		obj.write_userrow(); // Записуємо дані користувача.
 
 		System::String^ Pass = ParseToStringorSTDSTRING(Password);
+
 		LogForm^ logForm = gcnew LogForm(obj, Pass, Telephone);
 
 		this->Hide();
@@ -400,45 +482,12 @@ namespace mainProject {
 		logForm->Show();
 	}
 
-		   System::Windows::Forms::ToolTip^ toolTip1;
-
-	private: System::Void TbName_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-		toolTip1->SetToolTip(TbName, "Введіть тут своє ім'я");
-	}
-
-	private: System::Void TbSurn_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-		toolTip1->SetToolTip(TbSurn, "Введіть тут своє прізвище");
-	}
-
-	private: System::Void TbPatr_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-		toolTip1->SetToolTip(TbPatr, "Введіть тут своє по-батькові ");
-	}
-
-	private: System::Void TbTel_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-		toolTip1->SetToolTip(TbTel, "Введіть тут свій телефон ");
-	}
-
 	private: System::Void dateBith_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(dateBith, "Введіть тут свою дату народження ");
 	}
 
 	private: System::Void CbShow_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(CbShow, "Відмітьте галочкою, якщо хочете побачити введений пароль ");
-	}
-
-	private: System::Void mTbPassw_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-		toolTip1->SetToolTip(mTbPassw, "Придумайте та введіть тут свій пароль ");
-	}
-	private: System::Void BSign_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
-		toolTip1->SetToolTip(BSign, "Якщо все введено коректно, то натисніть цю кнопку ");
 	}
 	private: System::Void SignForm_HelpRequested(System::Object^ sender, System::Windows::Forms::HelpEventArgs^ hlpevent) {
 		// Текст допомоги або пояснення для форми SignForm

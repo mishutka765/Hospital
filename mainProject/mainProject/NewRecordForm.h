@@ -2,6 +2,7 @@
 #include "Include.h"
 #include "Data.h"
 #include "Algorithms.h"
+#include "Exceptions.h"
 
 namespace mainProject {
 	using namespace System;
@@ -23,6 +24,8 @@ namespace mainProject {
 
 		int DoctorId;
 		int UserID;
+			// Створення загальної підказки
+		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 
 	public:
 		List<System::String^>^ selectedRegions;
@@ -101,35 +104,37 @@ namespace mainProject {
 						std::sprintf(selectedDateStr, "%04d-%02d-%02d",
 							selectedDate.Year, selectedDate.Month, selectedDate.Day);
 						//Генерація інтервалів часу(тут ми приблизно беремо на опрацювання лікаря користувача 30 хвилин)
-						for (int hour = startHour; hour <= endHour; hour++) {
-							int minuteStart = (hour == startHour) ? startMinute : 0;
+						for (int hour = startHour; hour <= endHour; hour++)
+						{
+							int minuteStart = 0; // Початкова минута
 
-							for (int minute = minuteStart; minute < 60; minute += 30) {
-								if (hour == endHour && minute > endMinute) {
+							//Перший час встановлення початкової хвилини
+							if (hour == startHour)
+							{
+								minuteStart = startMinute;
+							}
+
+							// Цикл для хвилин
+							for (int minute = minuteStart; minute < 60; minute += 30)
+							{
+								// Щоб не перевишало
+								if (hour == endHour && minute > endMinute)
+								{
 									break;
 								}
 
 								char timeSlotStr[20];
 								std::sprintf(timeSlotStr, "%s %02d:%02d:00", selectedDateStr, hour, minute);
 
-								// Чи доступний час
-								bool isSlotAvailable = true;
-								for (const Visit& visit : visits) {
-									if (visit.doctorID == DoctorId &&
-										std::string(timeSlotStr) == ParseTmToString(visit.visitTime) && 
-										visit.visitStatus == true) { // Перевірка чи актуальний цей візит
-										isSlotAvailable = false;
-										break;
-									}
-								}
-
-								if (isSlotAvailable) {
-									System::String^ timeSlot = gcnew System::String(timeSlotStr + 11);
+								// Перевірка на доступність
+								if (std::find(doctorVisits.begin(), doctorVisits.end(), timeSlotStr) == doctorVisits.end())
+								{
+									// Якщо в візиті нема, то воно вільне, і ми його додаємо.
+									System::String^ timeSlot = gcnew System::String(timeSlotStr + 11); // +11, щоб пропустити дату
 									cBTimeSelect->Items->Add(timeSlot);
 								}
 							}
 						}
-
 					}
 				}
 			}
@@ -180,7 +185,7 @@ namespace mainProject {
 				selectedRegions->Remove(selectedItem);
 			}
 
-			// Обновляем
+			// Оновлюємо
 			UpdateClinicsList();
 		}
 		// Оброблюємо спеціальність
@@ -198,7 +203,7 @@ namespace mainProject {
 				selectedSpec->Remove(selectedItem);
 			}
 
-			// Обновляем
+			// Оновлюємо
 			UpdateClinicsList();
 		}
 		// Оновлення списку лікарень
@@ -207,26 +212,21 @@ namespace mainProject {
 			std::vector<Hospital> hospitals = read_hospitaltable();
 			std::vector<Doctor> doctors = read_doctortable();
 
-			// Створюємо масив для зберігання назв лікарень
-			array<System::String^>^ hospitalNames = gcnew array<System::String^>(hospitals.size());
-			for (size_t i = 0; i < hospitals.size(); i++) {
-				hospitalNames[i] = gcnew System::String(hospitals[i].hospitalName.c_str());
-			}
-
-			// Сортуємо лікарні за рейтингом
-			SortHospitalsByRating(hospitals, hospitalNames);
-
 			this->cLbHospital->Items->Clear();
 
-			for (size_t i = 0; i < hospitals.size(); i++) {
+			for (size_t i = 0; i < hospitals.size(); i++)
+			{
 				Hospital hospital = hospitals[i];
-
+				// Перевіряємо, чи відповідає лікарня обраним регіонам та спеціалізаціям
 				bool regionSelected = selectedRegions->Count > 0 ? IsHospitalSelected(hospital.hospitalDistrict) : true;
+				// Якщо спеціальність обрана, перевіряємо наявність фахівців у лікарні
 				bool specSelected = selectedSpec->Count > 0 ? HospitalHasRequiredSpecialties(hospital, doctors) : true;
 				bool typeSelected = selectedHospitalTypes->Count > 0 ? selectedHospitalTypes->Contains(hospital.hospitalIsPrivate) : true;
 
-				if (regionSelected && specSelected && typeSelected) {
-					this->cLbHospital->Items->Add(hospitalNames[i]);
+				// Додаємо лікарню, якщо вона відповідає обраним критеріям
+				if (regionSelected && specSelected && typeSelected)
+				{
+					this->cLbHospital->Items->Add(gcnew String(hospital.hospitalName.c_str()));
 				}
 			}
 		}
@@ -340,18 +340,20 @@ namespace mainProject {
 				L"Voznesenivskyi", L"Dniprovskyi ", L"Kommunarsky",
 					L"Oleksandrivskyi ", L"Shevchenkivskyi", L"Khortytskyi", L"Zavodskoy"
 			});
-			this->cLBplace->Location = System::Drawing::Point(16, 152);
+			this->cLBplace->Location = System::Drawing::Point(8, 184);
+			this->cLBplace->Margin = System::Windows::Forms::Padding(4);
 			this->cLBplace->Name = L"cLBplace";
-			this->cLBplace->Size = System::Drawing::Size(267, 124);
+			this->cLBplace->Size = System::Drawing::Size(183, 140);
 			this->cLBplace->TabIndex = 0;
 			this->cLBplace->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::cLBplace_MouseMove);
 			// 
 			// CbPrivate
 			// 
 			this->CbPrivate->AutoSize = true;
-			this->CbPrivate->Location = System::Drawing::Point(13, 47);
+			this->CbPrivate->Location = System::Drawing::Point(8, 47);
+			this->CbPrivate->Margin = System::Windows::Forms::Padding(4);
 			this->CbPrivate->Name = L"CbPrivate";
-			this->CbPrivate->Size = System::Drawing::Size(75, 17);
+			this->CbPrivate->Size = System::Drawing::Size(94, 20);
 			this->CbPrivate->TabIndex = 1;
 			this->CbPrivate->Text = L"Приватна";
 			this->CbPrivate->UseVisualStyleBackColor = true;
@@ -360,9 +362,10 @@ namespace mainProject {
 			// CbState
 			// 
 			this->CbState->AutoSize = true;
-			this->CbState->Location = System::Drawing::Point(13, 90);
+			this->CbState->Location = System::Drawing::Point(7, 90);
+			this->CbState->Margin = System::Windows::Forms::Padding(4);
 			this->CbState->Name = L"CbState";
-			this->CbState->Size = System::Drawing::Size(79, 17);
+			this->CbState->Size = System::Drawing::Size(95, 20);
 			this->CbState->TabIndex = 2;
 			this->CbState->Text = L"Державна";
 			this->CbState->UseVisualStyleBackColor = true;
@@ -376,9 +379,10 @@ namespace mainProject {
 					L"Gastroenterologist", L"Hematologist", L"Gynaecologist", L"Cardiologist", L"Neurologist", L"Oculist", L"Onkoloh", L"Ortoped",
 					L"Otolarynholoh (LOR-likar)", L"Psykhiatr", L"Pulmonoloh", L"Revmatoloh", L"Dentist", L"Terapevt", L"Uroloh", L"Endokrynoloh"
 			});
-			this->cLbDocType->Location = System::Drawing::Point(301, 153);
+			this->cLbDocType->Location = System::Drawing::Point(217, 184);
+			this->cLbDocType->Margin = System::Windows::Forms::Padding(4);
 			this->cLbDocType->Name = L"cLbDocType";
-			this->cLbDocType->Size = System::Drawing::Size(161, 124);
+			this->cLbDocType->Size = System::Drawing::Size(213, 140);
 			this->cLbDocType->TabIndex = 3;
 			this->cLbDocType->Tag = L"";
 			this->cLbDocType->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::cLbDocType_MouseMove);
@@ -387,9 +391,11 @@ namespace mainProject {
 			// 
 			this->groupBox1->Controls->Add(this->CbState);
 			this->groupBox1->Controls->Add(this->CbPrivate);
-			this->groupBox1->Location = System::Drawing::Point(477, 147);
+			this->groupBox1->Location = System::Drawing::Point(452, 184);
+			this->groupBox1->Margin = System::Windows::Forms::Padding(4);
 			this->groupBox1->Name = L"groupBox1";
-			this->groupBox1->Size = System::Drawing::Size(118, 130);
+			this->groupBox1->Padding = System::Windows::Forms::Padding(4);
+			this->groupBox1->Size = System::Drawing::Size(111, 140);
 			this->groupBox1->TabIndex = 6;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"Тип клініки:";
@@ -397,54 +403,60 @@ namespace mainProject {
 			// lPlace
 			// 
 			this->lPlace->AutoSize = true;
-			this->lPlace->Location = System::Drawing::Point(10, 136);
+			this->lPlace->Location = System::Drawing::Point(8, 163);
+			this->lPlace->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lPlace->Name = L"lPlace";
-			this->lPlace->Size = System::Drawing::Size(87, 13);
+			this->lPlace->Size = System::Drawing::Size(88, 16);
 			this->lPlace->TabIndex = 7;
-			this->lPlace->Text = L"Виберіть район:";
+			this->lPlace->Text = L"Район міста:";
 			// 
 			// lDocType
 			// 
 			this->lDocType->AutoSize = true;
-			this->lDocType->Location = System::Drawing::Point(298, 136);
+			this->lDocType->Location = System::Drawing::Point(213, 163);
+			this->lDocType->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lDocType->Name = L"lDocType";
-			this->lDocType->Size = System::Drawing::Size(112, 13);
+			this->lDocType->Size = System::Drawing::Size(143, 16);
 			this->lDocType->TabIndex = 8;
 			this->lDocType->Text = L"Спеціалізація лікаря:";
 			// 
 			// lDateVizit
 			// 
 			this->lDateVizit->AutoSize = true;
-			this->lDateVizit->Location = System::Drawing::Point(16, 312);
+			this->lDateVizit->Location = System::Drawing::Point(8, 358);
+			this->lDateVizit->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lDateVizit->Name = L"lDateVizit";
-			this->lDateVizit->Size = System::Drawing::Size(195, 13);
+			this->lDateVizit->Size = System::Drawing::Size(252, 16);
 			this->lDateVizit->TabIndex = 9;
 			this->lDateVizit->Text = L"Оберіть дату та вільний час прийому:";
 			// 
 			// cBTimeSelect
 			// 
 			this->cBTimeSelect->FormattingEnabled = true;
-			this->cBTimeSelect->Location = System::Drawing::Point(16, 383);
+			this->cBTimeSelect->Location = System::Drawing::Point(16, 446);
+			this->cBTimeSelect->Margin = System::Windows::Forms::Padding(4);
 			this->cBTimeSelect->Name = L"cBTimeSelect";
-			this->cBTimeSelect->Size = System::Drawing::Size(195, 21);
+			this->cBTimeSelect->Size = System::Drawing::Size(268, 24);
 			this->cBTimeSelect->TabIndex = 10;
 			this->cBTimeSelect->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::cBTimeSelect_MouseMove);
 			// 
 			// tBComments
 			// 
-			this->tBComments->Location = System::Drawing::Point(384, 584);
+			this->tBComments->Location = System::Drawing::Point(516, 686);
+			this->tBComments->Margin = System::Windows::Forms::Padding(4);
 			this->tBComments->Multiline = true;
 			this->tBComments->Name = L"tBComments";
-			this->tBComments->Size = System::Drawing::Size(438, 118);
+			this->tBComments->Size = System::Drawing::Size(583, 144);
 			this->tBComments->TabIndex = 12;
 			this->tBComments->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::tBComments_MouseUp);
 			// 
 			// lComments
 			// 
 			this->lComments->AutoSize = true;
-			this->lComments->Location = System::Drawing::Point(385, 557);
+			this->lComments->Location = System::Drawing::Point(513, 662);
+			this->lComments->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lComments->Name = L"lComments";
-			this->lComments->Size = System::Drawing::Size(271, 13);
+			this->lComments->Size = System::Drawing::Size(343, 16);
 			this->lComments->TabIndex = 13;
 			this->lComments->Text = L"Можете залишити скарги щодо самопочуття нижче:";
 			// 
@@ -453,9 +465,10 @@ namespace mainProject {
 			this->lChoose->AutoSize = true;
 			this->lChoose->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->lChoose->Location = System::Drawing::Point(309, 39);
+			this->lChoose->Location = System::Drawing::Point(415, 32);
+			this->lChoose->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lChoose->Name = L"lChoose";
-			this->lChoose->Size = System::Drawing::Size(227, 18);
+			this->lChoose->Size = System::Drawing::Size(294, 24);
 			this->lChoose->TabIndex = 14;
 			this->lChoose->Text = L"Заповніть блоки нижче даними";
 			// 
@@ -465,9 +478,10 @@ namespace mainProject {
 			this->bSend->FlatAppearance->MouseOverBackColor = System::Drawing::Color::White;
 			this->bSend->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->bSend->Location = System::Drawing::Point(9, 641);
+			this->bSend->Location = System::Drawing::Point(16, 755);
+			this->bSend->Margin = System::Windows::Forms::Padding(4);
 			this->bSend->Name = L"bSend";
-			this->bSend->Size = System::Drawing::Size(202, 61);
+			this->bSend->Size = System::Drawing::Size(269, 75);
 			this->bSend->TabIndex = 15;
 			this->bSend->Text = L"Записатися";
 			this->bSend->UseVisualStyleBackColor = true;
@@ -478,18 +492,20 @@ namespace mainProject {
 			// 
 			this->linfo->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->linfo->AutoSize = true;
-			this->linfo->Location = System::Drawing::Point(3, 850);
+			this->linfo->Location = System::Drawing::Point(4, 1014);
+			this->linfo->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->linfo->Name = L"linfo";
-			this->linfo->Size = System::Drawing::Size(256, 13);
+			this->linfo->Size = System::Drawing::Size(321, 16);
 			this->linfo->TabIndex = 31;
 			this->linfo->Text = L"Для отриманя інформації по формі - натисніть F1";
 			// 
 			// dTPSelect
 			// 
 			this->dTPSelect->Format = System::Windows::Forms::DateTimePickerFormat::Time;
-			this->dTPSelect->Location = System::Drawing::Point(16, 345);
+			this->dTPSelect->Location = System::Drawing::Point(16, 399);
+			this->dTPSelect->Margin = System::Windows::Forms::Padding(4);
 			this->dTPSelect->Name = L"dTPSelect";
-			this->dTPSelect->Size = System::Drawing::Size(89, 20);
+			this->dTPSelect->Size = System::Drawing::Size(117, 22);
 			this->dTPSelect->TabIndex = 32;
 			this->dTPSelect->ValueChanged += gcnew System::EventHandler(this, &NewRecordForm::dTPSelect_ValueChanged);
 			this->dTPSelect->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::dTPSelect_MouseMove);
@@ -497,26 +513,29 @@ namespace mainProject {
 			// cLbDoc
 			// 
 			this->cLbDoc->FormattingEnabled = true;
-			this->cLbDoc->Location = System::Drawing::Point(384, 342);
+			this->cLbDoc->Location = System::Drawing::Point(516, 399);
+			this->cLbDoc->Margin = System::Windows::Forms::Padding(4);
 			this->cLbDoc->Name = L"cLbDoc";
-			this->cLbDoc->Size = System::Drawing::Size(438, 199);
+			this->cLbDoc->Size = System::Drawing::Size(583, 242);
 			this->cLbDoc->TabIndex = 34;
 			this->cLbDoc->SelectedIndexChanged += gcnew System::EventHandler(this, &NewRecordForm::cLbDoc_SelectedIndexChanged);
 			// 
 			// cLbHospital
 			// 
 			this->cLbHospital->FormattingEnabled = true;
-			this->cLbHospital->Location = System::Drawing::Point(614, 153);
+			this->cLbHospital->Location = System::Drawing::Point(589, 184);
+			this->cLbHospital->Margin = System::Windows::Forms::Padding(4);
 			this->cLbHospital->Name = L"cLbHospital";
-			this->cLbHospital->Size = System::Drawing::Size(212, 124);
+			this->cLbHospital->Size = System::Drawing::Size(510, 140);
 			this->cLbHospital->TabIndex = 35;
 			this->cLbHospital->SelectedIndexChanged += gcnew System::EventHandler(this, &NewRecordForm::cLbHospital_SelectedIndexChanged);
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(9, 576);
+			this->button1->Location = System::Drawing::Point(16, 686);
+			this->button1->Margin = System::Windows::Forms::Padding(4);
 			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(202, 35);
+			this->button1->Size = System::Drawing::Size(269, 43);
 			this->button1->TabIndex = 36;
 			this->button1->Text = L"Знайти доступних лікарів";
 			this->button1->UseVisualStyleBackColor = true;
@@ -525,36 +544,39 @@ namespace mainProject {
 			// lСlinic
 			// 
 			this->lСlinic->AutoSize = true;
-			this->lСlinic->Location = System::Drawing::Point(611, 136);
+			this->lСlinic->Location = System::Drawing::Point(586, 164);
+			this->lСlinic->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lСlinic->Name = L"lСlinic";
-			this->lСlinic->Size = System::Drawing::Size(49, 13);
+			this->lСlinic->Size = System::Drawing::Size(55, 16);
 			this->lСlinic->TabIndex = 37;
-			this->lСlinic->Text = L"Кліники:";
+			this->lСlinic->Text = L"Клініки:";
 			// 
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(385, 312);
+			this->label2->Location = System::Drawing::Point(334, 358);
+			this->label2->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(40, 13);
+			this->label2->Size = System::Drawing::Size(48, 16);
 			this->label2->TabIndex = 38;
 			this->label2->Text = L"Лікарі:";
 			// 
 			// piсBox
 			// 
 			this->piсBox->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"piсBox.Image")));
-			this->piсBox->Location = System::Drawing::Point(-24, 3);
+			this->piсBox->Location = System::Drawing::Point(-35, -5);
+			this->piсBox->Margin = System::Windows::Forms::Padding(4);
 			this->piсBox->Name = L"piсBox";
-			this->piсBox->Size = System::Drawing::Size(181, 117);
+			this->piсBox->Size = System::Drawing::Size(241, 144);
 			this->piсBox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->piсBox->TabIndex = 42;
 			this->piсBox->TabStop = false;
 			// 
 			// NewRecordForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(838, 713);
+			this->ClientSize = System::Drawing::Size(1113, 845);
 			this->Controls->Add(this->piсBox);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->lСlinic);
@@ -574,7 +596,9 @@ namespace mainProject {
 			this->Controls->Add(this->cLbDocType);
 			this->Controls->Add(this->cLBplace);
 			this->Controls->Add(this->groupBox1);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
+			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"NewRecordForm";
 			this->Text = L"Створити новий запис";
 			this->Load += gcnew System::EventHandler(this, &NewRecordForm::NewRecordForm_Load);
@@ -665,37 +689,29 @@ namespace mainProject {
 		}
 	}
 	private: System::Void cLBplace_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
+		//System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(cLBplace, "Відмітьте галочкою райони в яких ви хочете побачити клініки ");
 	}
 	private: System::Void CbPrivate_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
+		//System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(CbPrivate, "Відмітьте галочкою тип клініки ");
 	}
 	private: System::Void CbState_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(CbState, "Відмітьте галочкою тип клініки ");
 	}
 	private: System::Void cLbDocType_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(cLbDocType, "Відмітьте галочкою Обрану спеціалізацію лікаря");
 	}
-
 	private: System::Void cBTimeSelect_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(cBTimeSelect, "Оберіть доступні час та дату прийому ");
 	}
 	private: System::Void tBComments_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(tBComments, "Тут ви можете написати коментарі щодо вашого самопочуття ");
 	}
 	private: System::Void bSend_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(bSend, "Кнопка для підтвердження реєстрації");
 	}
-
 	private: System::Void dTPSelect_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		System::Windows::Forms::ToolTip^ toolTip1 = gcnew System::Windows::Forms::ToolTip();
 		toolTip1->SetToolTip(dTPSelect, "Оберіть час та дату прийому");
 	}
 	private: System::Void NewRecordForm_HelpRequested(System::Object^ sender, System::Windows::Forms::HelpEventArgs^ hlpevent) {
@@ -741,22 +757,24 @@ namespace mainProject {
 		System::Collections::Generic::List<System::String^>^ checkedDocTypes = gcnew System::Collections::Generic::List<System::String^>();
 		System::DateTime currentDate = System::DateTime::Now;
 		System::DateTime datetime = dTPSelect->Value;
+		
 
 		if (datetime < currentDate)
 		{
-			MessageBox::Show("Выбрана прошедшая дата.");
+			std::cerr << "Doctor search error: Past date." << std::endl;
+			MessageBox::Show("Обрана минула дата.");
 		}
 		else
 		{
 			std::vector<Hospital> hospitals = read_hospitaltable();
 			std::vector<Doctor> doctors = read_doctortable();
-
+			int idHospital;
 			DateTime^ dateTime = dTPSelect->Value;
 			int hour = dateTime->Hour;
 			int minute = dateTime->Minute;
 			int second = dateTime->Second;
 			DayOfWeek dayOfWeek = dateTime->DayOfWeek;
-			int idHospital;
+			
 
 			//ЛІКАРНЯ ПЕРЕБОР
 			if (cLbHospital->CheckedIndices->Count > 0)
@@ -796,7 +814,7 @@ namespace mainProject {
 
 					System::String^ workingDays = gcnew System::String(doctors[i].docWorkingDays.c_str());
 
-					// Чи працює врач в цей день
+					// Чи працює лікар в цей день
 					if (workingDays->Contains(dayOfWeekStr))
 					{
 						// Перевіряємо, що обраний час входить в робочі часи лікаря
@@ -828,5 +846,5 @@ namespace mainProject {
 	}
 	private: System::Void cLbDoc_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
-	};
+};
 }

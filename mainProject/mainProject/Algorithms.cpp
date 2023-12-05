@@ -1,16 +1,25 @@
 #pragma once
 #include "Algorithms.h"
+#include "Exceptions.h"
 #include "Include.h"
 
 using namespace System;
-//Функція для розрахунку віку
+
+     // Функція для розрахунку віку
 int AgeCalculator(User& obj, tm Date)
 {
 	DateTime now = DateTime::Now;
-	int age = now.Year - (Date.tm_year + 1900);
-	return age;
+	int age = now.Year - Date.tm_year - 1900;
+
+	if (age < 120 && age > 0) {
+		return age;
+	}
+
+	throw Exceptions::AgeCalculationException();
+	return -1;
 }
-//Парсинг
+
+	//Парсинг
 std::string ParseToStringorSTDSTRING(System::Object^ data)
 {
 	if (System::String^ str = dynamic_cast<System::String^>(data))
@@ -18,6 +27,7 @@ std::string ParseToStringorSTDSTRING(System::Object^ data)
 		return msclr::interop::marshal_as<std::string>(data->ToString());
 	}
 }
+
 std::tm ParseToTm(System::DateTime^ data)
 {
 	std::tm Date = {};
@@ -29,25 +39,14 @@ std::tm ParseToTm(System::DateTime^ data)
 	Date.tm_sec = data->Second;
 	return Date;
 }
+
 System::String^ ParseToStringorSTDSTRING(std::string data)
 {
 	System::String^ parse_data = msclr::interop::marshal_as<System::String^>(data);
 	return parse_data;
 }
-std::string ParseTmToString(const std::tm& timeStruct)
-{
-	char buffer[20];
-	std::sprintf(buffer, "%04d-%02d-%02d %02d:%02d:%02d",
-		timeStruct.tm_year + 1900, 
-		timeStruct.tm_mon + 1,     
-		timeStruct.tm_mday,
-		timeStruct.tm_hour,
-		timeStruct.tm_min,
-		timeStruct.tm_sec);
 
-	return std::string(buffer);
-}
-//Конвертація (рік, місяць, день)
+	//Конвертація (рік, місяць, день)
 System::DateTime^ ConvertToDateTime(std::tm dateInfo)
 {
 	int year = dateInfo.tm_year + 1900;
@@ -64,7 +63,7 @@ System::DateTime ConvertTmToDateTime(std::tm tmStruct)
 
 	return System::DateTime(year, month, day);
 }
-//Функції хешування паролю
+	//Функції хешування паролю
 int Hash::receivingCodes(int x)
 {
 	//здвигаємо значення в діапазон таблиці ASCII
@@ -78,10 +77,18 @@ int Hash::receivingCodes(int x)
 		else
 			x -= 48;
 	}
+
+	if (!(((x <= 57) && (x >= 48)) || ((x <= 90) && (x >= 65)) || ((x <= 122) && (x >= 97)))) {
+		throw Exceptions::InvalidCharacterException();
+	}
+
 	return x;
 }
 int Hash::getControlSum(std::string str)
 {
+	if (str.empty()) {
+		throw Exceptions::EmptyStringException();
+	}
 	//sault = сума кодів символів в рядку
 	//iter_str = ітерація по рядку.
 	int sault = 0;
@@ -95,65 +102,90 @@ int Hash::getControlSum(std::string str)
 }
 std::string Hash::getHash(std::string userpass, int lengthHash)
 {
-	//мінімальна довжина рядка хеша, кратна 2
-	int minLenStrHash = 6;
-	//приблизна довжина рядка
-	int realMinLenStrHash = 0;
-
-	//отримуємо сіль рядка(контрольну суму)
-	int orginalStrSault = getControlSum(userpass);
-	//розмір рядка
-	int originalLenghtStr = (userpass.size());
-	//отримання довжини рядка, кратной степені 2, ближньої до заданої довжини хеша
-	while (minLenStrHash <= lengthHash)
-		//удвоюємо рядок
-		realMinLenStrHash = (minLenStrHash *= 2);
-	//отримання приблизного до довжини початкової довжини рядка типу - 2^n
-	//наприклад якщо вхідний рядок буде 50 символів(то ми використовуємо цей другий цикл)
-	while (minLenStrHash < originalLenghtStr)
-		minLenStrHash *= 2;
-	//перевірка щоб рядок хеша був як мінімум, в 2 рази довше оригінального рядка
-	//maxLenStrHash = максимальна довжина хеша
-	if ((minLenStrHash - originalLenghtStr) < minLenStrHash)
-		minLenStrHash *= 2;
-	//кількість символів, які потрібно додати то рядка
-	int addCount = minLenStrHash - originalLenghtStr;
-	//додаємо
-	for (int i = 0; i < addCount; i++)
-		//беремо 0 символ рядка і додаємо до 1 символа рядка, і кладемо в кінець
-		userpass += receivingCodes(userpass[i] + userpass[i + 1]);
-	//отримуємо максимальні сіль
-	int maxSault = getControlSum(userpass);
-	int maxLengthstr = (userpass.size());
-	//сжимаємо до той довжини яка нам потрібна
-	while (userpass.size() != realMinLenStrHash)
+	try 
 	{
-		for (int i = 0, center = userpass.size() / 2; i < center; i++)
-			//записуємо суму символів, з кінця, і із початку.
-			hash += receivingCodes(userpass[center - i] + userpass[center + i]);
-		userpass = hash;
-		hash.clear();
-	}
-	//скільки нам потрібно ще убрати символів дял отримання довжини
-	int del_symbol = realMinLenStrHash - lengthHash;
-	//убираємо
-	for (int i = 0, countCompress = realMinLenStrHash / del_symbol; hash.size() < (lengthHash - 4); i++)
-	{
-		if (i % countCompress == 0)
-			hash += receivingCodes(userpass[i] + userpass[++i]);
-		else
-			hash += userpass[i];
-	}
-	//додаємо оригінальну сіль
-	hash += receivingCodes(orginalStrSault);
-	hash += receivingCodes(originalLenghtStr);
-	//додаємо максимальну сіль
-	hash += receivingCodes(maxSault);
-	hash += receivingCodes(maxLengthstr);
+		//мінімальна довжина рядка хеша, кратна 2
+		int minLenStrHash = 6;
+		//приблизна довжина рядка
+		int realMinLenStrHash = 0;
 
-	return hash;
+		//отримуємо сіль рядка(контрольну суму)
+		int orginalStrSault = getControlSum(userpass);
+		//розмір рядка
+		int originalLenghtStr = (userpass.size());
+		//отримання довжини рядка, кратной степені 2, ближньої до заданої довжини хеша
+		while (minLenStrHash <= lengthHash)
+			//удвоюємо рядок
+			realMinLenStrHash = (minLenStrHash *= 2);
+		//отримання приблизного до довжини початкової довжини рядка типу - 2^n
+		//наприклад якщо вхідний рядок буде 50 символів(то ми використовуємо цей другий цикл)
+		while (minLenStrHash < originalLenghtStr)
+			minLenStrHash *= 2;
+		//перевірка щоб рядок хеша був як мінімум, в 2 рази довше оригінального рядка
+		//maxLenStrHash = максимальна довжина хеша
+		if ((minLenStrHash - originalLenghtStr) < minLenStrHash)
+			minLenStrHash *= 2;
+		//кількість символів, які потрібно додати то рядка
+		int addCount = minLenStrHash - originalLenghtStr;
+		//додаємо
+		for (int i = 0; i < addCount; i++)
+			//беремо 0 символ рядка і додаємо до 1 символа рядка, і кладемо в кінець
+			userpass += receivingCodes(userpass[i] + userpass[i + 1]);
+		//отримуємо максимальні сіль
+		int maxSault = getControlSum(userpass);
+		int maxLengthstr = (userpass.size());
+		//сжимаємо до той довжини яка нам потрібна
+		while (userpass.size() != realMinLenStrHash)
+		{
+			for (int i = 0, center = userpass.size() / 2; i < center; i++)
+				//записуємо суму символів, з кінця, і із початку.
+				hash += receivingCodes(userpass[center - i] + userpass[center + i]);
+			userpass = hash;
+			hash.clear();
+		}
+		//скільки нам потрібно ще убрати символів дял отримання довжини
+		int del_symbol = realMinLenStrHash - lengthHash;
+
+		if (del_symbol == 0) {
+			throw Exceptions::DivisionByZeroException();
+		}
+
+		//убираємо
+		for (int i = 0, countCompress = realMinLenStrHash / del_symbol; hash.size() < (lengthHash - 4); i++)
+		{
+			if (i % countCompress == 0)
+				hash += receivingCodes(userpass[i] + userpass[++i]);
+			else
+				hash += userpass[i];
+		}
+		//додаємо оригінальну сіль
+		hash += receivingCodes(orginalStrSault);
+		hash += receivingCodes(originalLenghtStr);
+		//додаємо максимальну сіль
+		hash += receivingCodes(maxSault);
+		hash += receivingCodes(maxLengthstr);
+
+		return hash;
+
+	}
+	catch (const Exceptions::EmptyStringException& e)
+	{
+		std::cerr << "Error: " << e.what() << std::endl;
+	}
+	catch (const Exceptions::InvalidCharacterException& e)
+	{
+		std::cerr << "Error: " << e.what() << std::endl;
+	}
+	catch (const Exceptions::DivisionByZeroException& e)
+	{
+		std::cerr << "Error: " << e.what() << std::endl;
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << "Another error: " << e.what() << std::endl;
+	}
 }
-//Сортування за рейтингом
+	//Сортування за рейтингом
 void SortHospitalsByRating(std::vector<Hospital>& hospitals, array<System::String^>^ dataList)
 {
 	int n = hospitals.size();
@@ -171,7 +203,7 @@ void SortHospitalsByRating(std::vector<Hospital>& hospitals, array<System::Strin
 		}
 	}
 }
-//Стандартизація номера
+	//Стандартизація номера
 std::string standardizePhoneNumberUA(const std::string& rawNumber) {
 	std::string cleanNumber;
 
@@ -191,12 +223,13 @@ std::string standardizePhoneNumberUA(const std::string& rawNumber) {
 	else if (cleanNumber.length() == 12 && cleanNumber.rfind("380", 0) != 0)
 	{
 		// Можливо, неправильний формат
+		throw Exceptions::PhoneFormatException();
 		return "Invalid Number";
-	}
-
-	// Перевірка довжини номера
+	} 
+	
 	if (cleanNumber.length() != 12)
 	{
+		throw Exceptions::PhoneFormatException();
 		return "Invalid Number";
 	}
 
@@ -205,7 +238,7 @@ std::string standardizePhoneNumberUA(const std::string& rawNumber) {
 
 	return formattedNumber;
 }
-//Сортування візитів
+	//Сортування візитів
 void sortVisits(System::Collections::Generic::List<System::String^>^ visits)
 {
 	for (int i = 0; i < visits->Count - 1; i++)
@@ -228,7 +261,7 @@ void sortVisits(System::Collections::Generic::List<System::String^>^ visits)
 		}
 	}
 }
-//Надійність пароля
+	//Надійність пароля
 int CheckPasswordStrength(const std::string& input)
 {
 	//Ініціалізаціія

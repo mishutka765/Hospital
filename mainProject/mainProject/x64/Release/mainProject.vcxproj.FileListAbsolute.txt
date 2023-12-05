@@ -41,11 +41,17 @@ F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 
 F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\Algorithms\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
 F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\Algorithms\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
 F:\Пользователи\paneg\OneDrive\Рабочий стол\Учеба\2 Курс\КурсоваРобота\Hospital\Algorithms\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache
-D:\курсовий 2\develop\mainProject\mainProject\x64\Release\mainProject.vcxproj.AssemblyReference.cache
-D:\курсовий 2\develop\mainProject\mainProject\x64\Release\mainProject.vcxproj.SuggestedBindingRedirects.cache
-D:\курсовий 2\develop\mainProject\mainProject\x64\Release\mainProject.AboutAppForm.resources
-D:\курсовий 2\develop\mainProject\mainProject\x64\Release\mainProject.LogForm.resources
-D:\курсовий 2\develop\mainProject\mainProject\x64\Release\mainProject.NewRecordForm.resources
-D:\курсовий 2\develop\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
-D:\курсовий 2\develop\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
-D:\курсовий 2\develop\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache
+F:\EDC\3sem\KURSA4\prj\Hospital-develop\mainProject\mainProject\x64\Release\mainProject.vcxproj.AssemblyReference.cache
+F:\EDC\3sem\KURSA4\prj\Hospital-develop\mainProject\mainProject\x64\Release\mainProject.AboutAppForm.resources
+F:\EDC\3sem\KURSA4\prj\Hospital-develop\mainProject\mainProject\x64\Release\mainProject.LogForm.resources
+F:\EDC\3sem\KURSA4\prj\Hospital-develop\mainProject\mainProject\x64\Release\mainProject.NewRecordForm.resources
+F:\EDC\3sem\KURSA4\prj\Hospital-develop\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
+F:\EDC\3sem\KURSA4\prj\Hospital-develop\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
+F:\EDC\3sem\KURSA4\prj\Hospital-develop\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache
+F:\EDC\3sem\KURSA4\Exceptions\mainProject\mainProject\x64\Release\mainProject.vcxproj.AssemblyReference.cache
+F:\EDC\3sem\KURSA4\Exceptions\mainProject\mainProject\x64\Release\mainProject.AboutAppForm.resources
+F:\EDC\3sem\KURSA4\Exceptions\mainProject\mainProject\x64\Release\mainProject.LogForm.resources
+F:\EDC\3sem\KURSA4\Exceptions\mainProject\mainProject\x64\Release\mainProject.NewRecordForm.resources
+F:\EDC\3sem\KURSA4\Exceptions\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
+F:\EDC\3sem\KURSA4\Exceptions\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
+F:\EDC\3sem\KURSA4\Exceptions\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache

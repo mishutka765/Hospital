@@ -1,11 +1,12 @@
 ﻿#pragma once
 
 #include "Data.h"
+#include "Exceptions.h"
 
 const std::string dbHost = "tcp://127.0.0.1:3306";
 const std::string dbUser = "root";
-const std::string dbPassword = "123456789"; //��������� ��� �� ���� ������. ��������� �� ���� ����� ����� ��
-const std::string dbName = "newschema";
+const std::string dbPassword = "2203";
+const std::string dbName = "hospitaldbl";
 sql::mysql::MySQL_Driver* driver;
 sql::Connection* con;
 
@@ -21,7 +22,7 @@ bool connect_todb()
 	}
 	catch (sql::SQLException& e)
 	{
-		std::cerr << "Connection failed. Error: " << e.what() << std::endl;
+		std::cerr << "Connection to DB failed. Error: " << e.what() << std::endl;
 		return false;
 	}
 }
@@ -57,6 +58,8 @@ std::string get_filetype(std::string filename)
 		std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 		return extension;
 	}
+
+	return "";
 }
 
 //_+_+_+_+_+_+_+_+_+_+_+_+_+_+
@@ -82,7 +85,32 @@ void User::write_userrow()
 {
 	if (!connect_todb())
 	{
-		std::cerr << "Failed to connect to the database." << std::endl;
+		try {
+			std::cerr << "(Write user row) Data error: Failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("userfile.xml");
+			std::ifstream jsonfile("userfile.json");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				write_userrow("userfile.xml");
+			}
+			else if (jsonfile.is_open()) {
+				jsonfile.close();
+				write_userrow("userfile.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Write user row)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
 		return;
 	}
 
@@ -126,166 +154,229 @@ void User::write_userrow()
 
 void User::write_userrow(const std::string& Filename)
 {
-	if (get_filetype(Filename) == "json")
+	try
 	{
-		json jsonData;
-
-		std::ifstream file(Filename);
-		if (file.is_open())
+		if (get_filetype(Filename) == "json")
 		{
-			file >> jsonData;
-			file.close();
+			json jsonData;
+
+			std::ifstream file(Filename);
+			if (file.is_open())
+			{
+				file >> jsonData;
+				file.close();
+			}
+
+			json userNode;
+			userNode["userID"] = userID;
+			userNode["userAge"] = userAge;
+			userNode["userName"] = userName;
+			userNode["userSurname"] = userSurname;
+			userNode["userMiddleName"] = userMiddleName;
+			userNode["userPhone"] = userPhone;
+			userNode["userPassword"] = userPassword;
+			userNode["userBirthYear"] = userBirthDate.tm_year;
+			userNode["userBirthMon"] = userBirthDate.tm_mon;
+			userNode["userBirthDay"] = userBirthDate.tm_mday;
+			userNode["userFamilyDoctor"] = userFamilyDoctor;
+
+			if (jsonData.is_array())
+			{
+				jsonData.push_back(userNode);
+			}
+			else
+			{
+				jsonData = { userNode };
+			}
+
+			std::ofstream outFile(Filename);
+			outFile << std::setw(4) << jsonData;
+			outFile.close();
+
+			std::cout << "New User object added to JSON file." << std::endl;
 		}
-
-		json userNode;
-		userNode["userID"] = userID;
-		userNode["userAge"] = userAge;
-		userNode["userName"] = userName;
-		userNode["userSurname"] = userSurname;
-		userNode["userMiddleName"] = userMiddleName;
-		userNode["userPhone"] = userPhone;
-		userNode["userPassword"] = userPassword;
-		userNode["userBirthYear"] = userBirthDate.tm_year;
-		userNode["userBirthMon"] = userBirthDate.tm_mon;
-		userNode["userBirthDay"] = userBirthDate.tm_mday;
-		userNode["userFamilyDoctor"] = userFamilyDoctor;
-
-		if (jsonData.is_array())
+		else if (get_filetype(Filename) == "xml")
 		{
-			jsonData.push_back(userNode);
-		}
-		else
-		{
-			jsonData = { userNode };
-		}
+			pugi::xml_document doc;
 
-		std::ofstream outFile(Filename);
-		outFile << std::setw(4) << jsonData;
-		outFile.close();
+			if (doc.load_file(Filename.c_str()))
+			{
+				pugi::xml_node root = doc.child("users");
+				pugi::xml_node userNode = root.append_child("user");
 
-		std::cout << "New User object added to JSON file." << std::endl;
+				userNode.append_attribute("userID") = userID;
+				userNode.append_child("userAge").text().set(userAge);
+				userNode.append_child("userName").text().set(userName.c_str());
+				userNode.append_child("userSurname").text().set(userSurname.c_str());
+				userNode.append_child("userMiddleName").text().set(userMiddleName.c_str());
+				userNode.append_child("userPhone").text().set(userPhone.c_str());
+				userNode.append_child("userPassword").text().set(userPassword.c_str());
+				userNode.append_child("userBirthYear").text().set(userBirthDate.tm_year);
+				userNode.append_child("userBirthMon").text().set(userBirthDate.tm_mon);
+				userNode.append_child("userBirthDay").text().set(userBirthDate.tm_mday);
+				userNode.append_child("userFamilyDoctor").text().set(userFamilyDoctor);
+			}
+			else
+			{
+				pugi::xml_node root = doc.append_child("users");
+				pugi::xml_node userNode = root.append_child("user");
+
+				userNode.append_attribute("userID") = userID;
+				userNode.append_child("userAge").text().set(userAge);
+				userNode.append_child("userName").text().set(userName.c_str());
+				userNode.append_child("userSurname").text().set(userSurname.c_str());
+				userNode.append_child("userMiddleName").text().set(userMiddleName.c_str());
+				userNode.append_child("userPhone").text().set(userPhone.c_str());
+				userNode.append_child("userPassword").text().set(userPassword.c_str());
+				userNode.append_child("userBirthYear").text().set(userBirthDate.tm_year);
+				userNode.append_child("userBirthMon").text().set(userBirthDate.tm_mon);
+				userNode.append_child("userBirthDay").text().set(userBirthDate.tm_mday);
+				userNode.append_child("userFamilyDoctor").text().set(userFamilyDoctor);
+			}
+
+			if (doc.save_file(Filename.c_str()))
+			{
+				std::cout << "XML file updated with new User object: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to update XML file: " << Filename << std::endl;
+			}
+		}
+		else {
+			throw Exceptions::FileNameException();
+		}
 	}
-	else if (get_filetype(Filename) == "xml")
+	catch (const Exceptions::FileNameException& ex)
 	{
-		pugi::xml_document doc;
-
-		if (doc.load_file(Filename.c_str()))
-		{
-			pugi::xml_node root = doc.child("users");
-			pugi::xml_node userNode = root.append_child("user");
-
-			userNode.append_attribute("userID") = userID;
-			userNode.append_child("userAge").text().set(userAge);
-			userNode.append_child("userName").text().set(userName.c_str());
-			userNode.append_child("userSurname").text().set(userSurname.c_str());
-			userNode.append_child("userMiddleName").text().set(userMiddleName.c_str());
-			userNode.append_child("userPhone").text().set(userPhone.c_str());
-			userNode.append_child("userPassword").text().set(userPassword.c_str());
-			userNode.append_child("userBirthYear").text().set(userBirthDate.tm_year);
-			userNode.append_child("userBirthMon").text().set(userBirthDate.tm_mon);
-			userNode.append_child("userBirthDay").text().set(userBirthDate.tm_mday);
-			userNode.append_child("userFamilyDoctor").text().set(userFamilyDoctor);
-		}
-		else
-		{
-			pugi::xml_node root = doc.append_child("users");
-			pugi::xml_node userNode = root.append_child("user");
-
-			userNode.append_attribute("userID") = userID;
-			userNode.append_child("userAge").text().set(userAge);
-			userNode.append_child("userName").text().set(userName.c_str());
-			userNode.append_child("userSurname").text().set(userSurname.c_str());
-			userNode.append_child("userMiddleName").text().set(userMiddleName.c_str());
-			userNode.append_child("userPhone").text().set(userPhone.c_str());
-			userNode.append_child("userPassword").text().set(userPassword.c_str());
-			userNode.append_child("userBirthYear").text().set(userBirthDate.tm_year);
-			userNode.append_child("userBirthMon").text().set(userBirthDate.tm_mon);
-			userNode.append_child("userBirthDay").text().set(userBirthDate.tm_mday);
-			userNode.append_child("userFamilyDoctor").text().set(userFamilyDoctor);
-		}
-
-		if (doc.save_file(Filename.c_str()))
-		{
-			std::cout << "XML file updated with new User object: " << Filename << std::endl;
-		}
-		else
-		{
-			std::cerr << "Failed to update XML file: " << Filename << std::endl;
-		}
+		std::cerr << ex.what() << std::endl;
 	}
+	catch (sql::SQLException& e)
+	{
+		std::cerr << "Data error: writing user row in file: " << e.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return;
 }
 
 User User::read_userrow(int userID, const std::string& Filename)
 {
-	if (get_filetype(Filename) == "json")
+	try
 	{
-		nlohmann::json jsonData;
-		std::ifstream file(Filename);
-		if (file.is_open())
+		if (get_filetype(Filename) == "json")
 		{
-			file >> jsonData;
-			file.close();
-
-			for (const auto& userNode : jsonData)
+			nlohmann::json jsonData;
+			std::ifstream file(Filename);
+			if (file.is_open())
 			{
-				if (userNode["userID"] == userID)
-				{
-					this->userID = userNode["userID"];
-					this->userAge = userNode["userAge"];
-					this->userName = userNode["userName"];
-					this->userSurname = userNode["userSurname"];
-					this->userMiddleName = userNode["userMiddleName"];
-					this->userPhone = userNode["userPhone"];
-					this->userPassword = userNode["userPassword"];
-					this->userBirthDate.tm_year = userNode["userBirthYear"];
-					this->userBirthDate.tm_mon = userNode["userBirthMon"];
-					this->userBirthDate.tm_mday = userNode["userBirthDay"];
-					this->userFamilyDoctor = userNode["userFamilyDoctor"];
+				file >> jsonData;
+				file.close();
 
-					User ret = *this;
-					return ret;
-					break;
+				for (const auto& userNode : jsonData)
+				{
+					if (userNode["userID"] == userID)
+					{
+						this->userID = userNode["userID"];
+						this->userAge = userNode["userAge"];
+						this->userName = userNode["userName"];
+						this->userSurname = userNode["userSurname"];
+						this->userMiddleName = userNode["userMiddleName"];
+						this->userPhone = userNode["userPhone"];
+						this->userPassword = userNode["userPassword"];
+						this->userBirthDate.tm_year = userNode["userBirthYear"];
+						this->userBirthDate.tm_mon = userNode["userBirthMon"];
+						this->userBirthDate.tm_mday = userNode["userBirthDay"];
+						this->userFamilyDoctor = userNode["userFamilyDoctor"];
+
+						User ret = *this;
+						return ret;
+						break;
+					}
 				}
 			}
 		}
-	}
-	else if (get_filetype(Filename) == "xml")
-	{
-		pugi::xml_document doc;
-
-		if (doc.load_file(Filename.c_str()))
+		else if (get_filetype(Filename) == "xml")
 		{
-			pugi::xml_node root = doc.child("users");
-			for (pugi::xml_node userNode = root.child("user"); userNode; userNode = userNode.next_sibling("user"))
-			{
-				if (userNode.attribute("userID").as_int() == userID)
-				{
-					this->userID = userNode.attribute("userID").as_int();
-					this->userAge = userNode.child("userAge").text().as_int();
-					this->userName = userNode.child("userName").text().as_string();
-					this->userSurname = userNode.child("userSurname").text().as_string();
-					this->userMiddleName = userNode.child("userMiddleName").text().as_string();
-					this->userPhone = userNode.child("userPhone").text().as_string();
-					this->userPassword = userNode.child("userPassword").text().as_string();
-					this->userBirthDate.tm_year = userNode.child("userBirthYear").text().as_int();
-					this->userBirthDate.tm_mon = userNode.child("userBirthMon").text().as_int();
-					this->userBirthDate.tm_mday = userNode.child("userBirthDay").text().as_int();
-					this->userFamilyDoctor = userNode.child("userFamilyDoctor").text().as_int();
+			pugi::xml_document doc;
 
-					User ret = *this;
-					return ret;
-					break;
+			if (doc.load_file(Filename.c_str()))
+			{
+				pugi::xml_node root = doc.child("users");
+				for (pugi::xml_node userNode = root.child("user"); userNode; userNode = userNode.next_sibling("user"))
+				{
+					if (userNode.attribute("userID").as_int() == userID)
+					{
+						this->userID = userNode.attribute("userID").as_int();
+						this->userAge = userNode.child("userAge").text().as_int();
+						this->userName = userNode.child("userName").text().as_string();
+						this->userSurname = userNode.child("userSurname").text().as_string();
+						this->userMiddleName = userNode.child("userMiddleName").text().as_string();
+						this->userPhone = userNode.child("userPhone").text().as_string();
+						this->userPassword = userNode.child("userPassword").text().as_string();
+						this->userBirthDate.tm_year = userNode.child("userBirthYear").text().as_int();
+						this->userBirthDate.tm_mon = userNode.child("userBirthMon").text().as_int();
+						this->userBirthDate.tm_mday = userNode.child("userBirthDay").text().as_int();
+						this->userFamilyDoctor = userNode.child("userFamilyDoctor").text().as_int();
+
+						User ret = *this;
+						return ret;
+						break;
+					}
 				}
 			}
+		} else {
+			throw Exceptions::FileNameException();
 		}
 	}
+	catch (const Exceptions::FileNameException& ex)
+	{
+		std::cerr << "(User file read)" << ex.what() << std::endl;
+	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "Data error: writing user row in file: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+
+	return User();
 }
 
 User User::read_userrow(int userID)
 {
 	if (!connect_todb())
 	{
-		std::cerr << "Failed to connect to the database." << std::endl;
+		try {
+			std::cerr << "(Read user row) Data error: Failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("userfile.xml");
+			std::ifstream jsonfile("userfile.json");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				read_userrow(userID, "userfile.xml");
+			}
+			else if (jsonfile.is_open()) {
+				jsonfile.close();
+				read_userrow(userID, "userfile.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Read user row)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
 		return User();
 	}
 
@@ -355,7 +446,32 @@ Hospital Hospital::read_hospitalrow(int hospitalID)
 {
 	if (!connect_todb())
 	{
-		std::cerr << "Failed to connect to the database." << std::endl;
+		try {
+			std::cerr << "(Read hospital row) Data error: Failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("hospitalfile.xml");
+			std::ifstream jsonfile("hospitalfile.json");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				return read_hospitalrow(hospitalID, "hospitalfile.xml");
+			}
+			else if (jsonfile.is_open()) {
+				jsonfile.close();
+				return read_hospitalrow(hospitalID, "hospitalfile.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Read hospital row)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
 		return Hospital();
 	}
 
@@ -390,144 +506,208 @@ Hospital Hospital::read_hospitalrow(int hospitalID)
 	{
 		std::cerr << "Error reading hospital data: " << e.what() << std::endl;
 	}
+	return Hospital();
 }
 
 Hospital Hospital::read_hospitalrow(int hospitalID, const std::string& Filename)
 {
-	if (get_filetype(Filename) == "json")
+	try 
 	{
-		nlohmann::json jsonData;
-		std::ifstream file(Filename);
-		if (file.is_open())
+		if (get_filetype(Filename) == "json")
 		{
-			file >> jsonData;
-			file.close();
-
-			for (const auto& hospitalNode : jsonData)
+			nlohmann::json jsonData;
+			std::ifstream file(Filename);
+			if (file.is_open())
 			{
-				if (hospitalNode["hospitalID"] == hospitalID)
-				{
-					this->hospitalID = hospitalNode["hospitalID"];
-					this->hospitalIsPrivate = hospitalNode["hospitalIsPrivate"];
-					this->hospitalAddress = hospitalNode["hospitalAddress"];
-					this->hospitalName = hospitalNode["hospitalName"];
-					this->hospitalRating = hospitalNode["hospitalRating"];
-					this->hospitalDistrict = hospitalNode["hospitalDistrict"];
+				file >> jsonData;
+				file.close();
 
-					Hospital ret = *this;
-					return ret;
-					break;
+				for (const auto& hospitalNode : jsonData)
+				{
+					if (hospitalNode["hospitalID"] == hospitalID)
+					{
+						this->hospitalID = hospitalNode["hospitalID"];
+						this->hospitalIsPrivate = hospitalNode["hospitalIsPrivate"];
+						this->hospitalAddress = hospitalNode["hospitalAddress"];
+						this->hospitalName = hospitalNode["hospitalName"];
+						this->hospitalRating = hospitalNode["hospitalRating"];
+						this->hospitalDistrict = hospitalNode["hospitalDistrict"];
+
+						Hospital ret = *this;
+						return ret;
+						break;
+					}
 				}
 			}
 		}
-	}
-	else if (get_filetype(Filename) == "xml")
-	{
-		pugi::xml_document doc;
-
-		if (doc.load_file(Filename.c_str()))
+		else if (get_filetype(Filename) == "xml")
 		{
-			pugi::xml_node root = doc.child("hospitals");
-			for (pugi::xml_node hospNode = root.child("hospital"); hospNode; hospNode = hospNode.next_sibling("hospital"))
+			pugi::xml_document doc;
+
+			if (doc.load_file(Filename.c_str()))
 			{
-				if (hospNode.attribute("hospitalID").as_int() == hospitalID)
+				pugi::xml_node root = doc.child("hospitals");
+				for (pugi::xml_node hospNode = root.child("hospital"); hospNode; hospNode = hospNode.next_sibling("hospital"))
 				{
-					this->hospitalID = hospNode.attribute("hospitalID").as_int();
-					this->hospitalIsPrivate = hospNode.child("hospitalIsPrivate").text().as_bool();
-					this->hospitalAddress = hospNode.child("hospitalAddress").text().as_string();
-					this->hospitalName = hospNode.child("hospitalName").text().as_string();
-					this->hospitalRating = hospNode.child("hospitalRating").text().as_int();
-					this->hospitalDistrict = hospNode.child("hospitalDistrict").text().as_string();
-					Hospital ret = *this;
-					return ret;
-					break;
+					if (hospNode.attribute("hospitalID").as_int() == hospitalID)
+					{
+						this->hospitalID = hospNode.attribute("hospitalID").as_int();
+						this->hospitalIsPrivate = hospNode.child("hospitalIsPrivate").text().as_bool();
+						this->hospitalAddress = hospNode.child("hospitalAddress").text().as_string();
+						this->hospitalName = hospNode.child("hospitalName").text().as_string();
+						this->hospitalRating = hospNode.child("hospitalRating").text().as_int();
+						this->hospitalDistrict = hospNode.child("hospitalDistrict").text().as_string();
+						Hospital ret = *this;
+						return ret;
+						break;
+					}
 				}
 			}
 		}
+		else {
+			throw Exceptions::FileNameException();
+		}
 	}
+	catch (const Exceptions::FileNameException& ex)
+	{
+		std::cerr << "(Hospital file read)" << ex.what() << std::endl;
+	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Hospital file read) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return Hospital();
 }
 
 void Hospital::write_hospitalrow(const std::string& Filename)
 {
-	if (get_filetype(Filename) == "json")
+	try 
 	{
-		json jsonData;
-
-		std::ifstream file(Filename);
-		if (file.is_open())
+		if (get_filetype(Filename) == "json")
 		{
-			file >> jsonData;
-			file.close();
+			json jsonData;
+
+			std::ifstream file(Filename);
+			if (file.is_open())
+			{
+				file >> jsonData;
+				file.close();
+			}
+
+			json hospNode;
+			hospNode["hospitalID"] = hospitalID;
+			hospNode["hospitalIsPrivate"] = hospitalIsPrivate;
+			hospNode["hospitalAddress"] = hospitalAddress;
+			hospNode["hospitalName"] = hospitalName;
+			hospNode["hospitalRating"] = hospitalRating;
+			hospNode["hospitalDistrict"] = hospitalDistrict;
+
+			if (jsonData.is_array())
+			{
+				jsonData.push_back(hospNode);
+			}
+			else
+			{
+				jsonData = { hospNode };
+			}
+
+			std::ofstream outFile(Filename);
+			outFile << std::setw(4) << jsonData;
+			outFile.close();
+
+			std::cout << "New Hospital object added to JSON file." << std::endl;
 		}
-
-		json hospNode;
-		hospNode["hospitalID"] = hospitalID;
-		hospNode["hospitalIsPrivate"] = hospitalIsPrivate;
-		hospNode["hospitalAddress"] = hospitalAddress;
-		hospNode["hospitalName"] = hospitalName;
-		hospNode["hospitalRating"] = hospitalRating;
-		hospNode["hospitalDistrict"] = hospitalDistrict;
-
-		if (jsonData.is_array())
+		else if (get_filetype(Filename) == "xml")
 		{
-			jsonData.push_back(hospNode);
-		}
-		else
-		{
-			jsonData = { hospNode };
-		}
+			pugi::xml_document doc;
 
-		std::ofstream outFile(Filename);
-		outFile << std::setw(4) << jsonData;
-		outFile.close();
+			if (doc.load_file(Filename.c_str()))
+			{
+				pugi::xml_node root = doc.child("hospitals");
+				pugi::xml_node hospNode = root.append_child("hospital");
 
-		std::cout << "New Hospital object added to JSON file." << std::endl;
+				hospNode.append_attribute("hospitalID") = hospitalID;
+				hospNode.append_child("hospitalIsPrivate").text().set(hospitalIsPrivate);
+				hospNode.append_child("hospitalAddress").text().set(hospitalAddress.c_str());
+				hospNode.append_child("hospitalName").text().set(hospitalName.c_str());
+				hospNode.append_child("hospitalRating").text().set(hospitalRating);
+				hospNode.append_child("hospitalDistrict").text().set(hospitalDistrict.c_str());
+			}
+			else
+			{
+				pugi::xml_node root = doc.append_child("users");
+				pugi::xml_node hospNode = root.append_child("user");
+
+				hospNode.append_attribute("hospitalID") = hospitalID;
+				hospNode.append_child("hospitalIsPrivate").text().set(hospitalIsPrivate);
+				hospNode.append_child("hospitalAddress").text().set(hospitalAddress.c_str());
+				hospNode.append_child("hospitalName").text().set(hospitalName.c_str());
+				hospNode.append_child("hospitalRating").text().set(hospitalRating);
+				hospNode.append_child("hospitalDistrict").text().set(hospitalDistrict.c_str());
+			}
+
+			if (doc.save_file(Filename.c_str()))
+			{
+				std::cout << "XML file updated with new Hospital object: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to update XML file: " << Filename << std::endl;
+			}
+		}
+		else {
+			throw Exceptions::FileNameException();
+		}
 	}
-	else if (get_filetype(Filename) == "xml")
+	catch (const Exceptions::FileNameException& ex)
 	{
-		pugi::xml_document doc;
-
-		if (doc.load_file(Filename.c_str()))
-		{
-			pugi::xml_node root = doc.child("hospitals");
-			pugi::xml_node hospNode = root.append_child("hospital");
-
-			hospNode.append_attribute("hospitalID") = hospitalID;
-			hospNode.append_child("hospitalIsPrivate").text().set(hospitalIsPrivate);
-			hospNode.append_child("hospitalAddress").text().set(hospitalAddress.c_str());
-			hospNode.append_child("hospitalName").text().set(hospitalName.c_str());
-			hospNode.append_child("hospitalRating").text().set(hospitalRating);
-			hospNode.append_child("hospitalDistrict").text().set(hospitalDistrict.c_str());
-		}
-		else
-		{
-			pugi::xml_node root = doc.append_child("users");
-			pugi::xml_node hospNode = root.append_child("user");
-
-			hospNode.append_attribute("hospitalID") = hospitalID;
-			hospNode.append_child("hospitalIsPrivate").text().set(hospitalIsPrivate);
-			hospNode.append_child("hospitalAddress").text().set(hospitalAddress.c_str());
-			hospNode.append_child("hospitalName").text().set(hospitalName.c_str());
-			hospNode.append_child("hospitalRating").text().set(hospitalRating);
-			hospNode.append_child("hospitalDistrict").text().set(hospitalDistrict.c_str());
-		}
-
-		if (doc.save_file(Filename.c_str()))
-		{
-			std::cout << "XML file updated with new Hospital object: " << Filename << std::endl;
-		}
-		else
-		{
-			std::cerr << "Failed to update XML file: " << Filename << std::endl;
-		}
+		std::cerr << "(Hospital file write)" << ex.what() << std::endl;
 	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Hospital file write) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return;
 }
 
 void Hospital::write_hospitalrow()
 {
 	if (!connect_todb())
 	{
-		std::cerr << "Failed to connect to the database." << std::endl;
+		try {
+			std::cerr << "(Write hospital row) Data error: Failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("hospitalfile.xml");
+			std::ifstream jsonfile("hospitalfile.xml");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				write_hospitalrow("hospitalfile.xml");
+			}
+			else if (jsonfile.is_open()) {
+				jsonfile.close();
+				write_hospitalrow("hospitalfile.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Write hospital row)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
 		return;
 	}
 
@@ -611,11 +791,15 @@ std::string Doctor::get_workingdays(int docID)
 			close_connection();
 			return result;
 		}
+		else {
+			std::cerr << "Data error: Error reading working days: " << std::endl;
+		}
 	}
 	catch (sql::SQLException& e)
 	{
-		std::cerr << "Error reading hospital data: " << e.what() << std::endl;
+		std::cerr << "Data error: Error reading hospital data: " << e.what() << std::endl;
 	}
+	return "";
 }
 
 std::vector<int> Doctor::getContracts(int doctorID, std::vector<User> users)
@@ -655,99 +839,146 @@ std::vector<int> Doctor::getContractsDB(int doctorID)
 
 		close_connection();
 	}
+	else {
+		std::cerr << "Data error: DataBase connection error." << std::endl;
+	}
 
 	return contracts;
 }
 
 Doctor Doctor::read_doctorrow(int doctorID, const std::string& Filename)
 {
-	if (get_filetype(Filename) == "json")
+	try 
 	{
-		nlohmann::json jsonData;
-		std::ifstream file(Filename);
-		if (file.is_open())
+		if (get_filetype(Filename) == "json")
 		{
-			file >> jsonData;
-			file.close();
-
-			for (const auto& docNode : jsonData)
+			nlohmann::json jsonData;
+			std::ifstream file(Filename);
+			if (file.is_open())
 			{
-				if (docNode["docID"] == docID)
+				file >> jsonData;
+				file.close();
+
+				for (const auto& docNode : jsonData)
 				{
-					this->docID = docNode["docID"];
-					this->docName = docNode["docName"];
-					this->docSurname = docNode["docSurname"];
-					this->docMiddleName = docNode["DocMiddleName"];
-					this->docSpeciality = docNode["docSpeciality"];
-					this->docEmploymentDate.tm_year = docNode["docEmpYear"];
-					this->docEmploymentDate.tm_mon = docNode["docEmpMon"];
-					this->docEmploymentDate.tm_mday = docNode["docEmpDay"];
-					this->docExpirienceYears = docNode["docExpirienceYears"];
-					this->docRating = docNode["docRating"];
-					this->docMaxDayClients = docNode["docMaxDayClients"];
-					this->docWorkingDays = get_workingdays(docID);
-					this->docWorkingHoursStart.tm_hour = docNode["docWorkingHoursStartHour"];
-					this->docWorkingHoursStart.tm_min = docNode["docWorkingHoursStartMin"];
-					this->docWorkingHoursEnd.tm_hour = docNode["docWorkingHoursEndHour"];
-					this->docWorkingHoursEnd.tm_min = docNode["docWorkingHoursEndMin"];
-					//TODO reading contracts
-					this->docReviews = docNode["docReviews"];
-					this->docWorkPlace = docNode["docWorkPlace"];
-					Doctor ret = *this;
-					return ret;
-					break;
+					if (docNode["docID"] == docID)
+					{
+						this->docID = docNode["docID"];
+						this->docName = docNode["docName"];
+						this->docSurname = docNode["docSurname"];
+						this->docMiddleName = docNode["DocMiddleName"];
+						this->docSpeciality = docNode["docSpeciality"];
+						this->docEmploymentDate.tm_year = docNode["docEmpYear"];
+						this->docEmploymentDate.tm_mon = docNode["docEmpMon"];
+						this->docEmploymentDate.tm_mday = docNode["docEmpDay"];
+						this->docExpirienceYears = docNode["docExpirienceYears"];
+						this->docRating = docNode["docRating"];
+						this->docMaxDayClients = docNode["docMaxDayClients"];
+						this->docWorkingDays = get_workingdays(docID);
+						this->docWorkingHoursStart.tm_hour = docNode["docWorkingHoursStartHour"];
+						this->docWorkingHoursStart.tm_min = docNode["docWorkingHoursStartMin"];
+						this->docWorkingHoursEnd.tm_hour = docNode["docWorkingHoursEndHour"];
+						this->docWorkingHoursEnd.tm_min = docNode["docWorkingHoursEndMin"];
+						//TODO reading contracts
+						this->docReviews = docNode["docReviews"];
+						this->docWorkPlace = docNode["docWorkPlace"];
+						Doctor ret = *this;
+						return ret;
+						break;
+					}
 				}
 			}
 		}
-	}
-	else if (get_filetype(Filename) == "xml")
-	{
-		pugi::xml_document doc;
-
-		if (doc.load_file(Filename.c_str()))
+		else if (get_filetype(Filename) == "xml")
 		{
-			pugi::xml_node root = doc.child("doctors");
-			for (pugi::xml_node docNode = root.child("doctor"); docNode; docNode = docNode.next_sibling("doctor"))
+			pugi::xml_document doc;
+
+			if (doc.load_file(Filename.c_str()))
 			{
-				if (docNode.attribute("docID").as_int() == docID)
+				pugi::xml_node root = doc.child("doctors");
+				for (pugi::xml_node docNode = root.child("doctor"); docNode; docNode = docNode.next_sibling("doctor"))
 				{
-					this->docID = docNode.attribute("docID").as_int();
-					this->docName = docNode.child_value("docName");
-					this->docSurname = docNode.child_value("docSurname");
-					this->docMiddleName = docNode.child_value("docMiddleName");
+					if (docNode.attribute("docID").as_int() == docID)
+					{
+						this->docID = docNode.attribute("docID").as_int();
+						this->docName = docNode.child_value("docName");
+						this->docSurname = docNode.child_value("docSurname");
+						this->docMiddleName = docNode.child_value("docMiddleName");
 
-					this->docEmploymentDate.tm_year = docNode.child("docEmpYear").text().as_int();
-					this->docEmploymentDate.tm_mon = docNode.child("docEmpMon").text().as_int();
-					this->docEmploymentDate.tm_mday = docNode.child("docEmpDay").text().as_int();
+						this->docEmploymentDate.tm_year = docNode.child("docEmpYear").text().as_int();
+						this->docEmploymentDate.tm_mon = docNode.child("docEmpMon").text().as_int();
+						this->docEmploymentDate.tm_mday = docNode.child("docEmpDay").text().as_int();
 
-					this->docWorkingDays = docNode.child_value("docWorkingDays");
-					this->docSpeciality = docNode.child_value("docSpeciality");
-					this->docExpirienceYears = docNode.child("docExpirienceYears").text().as_int();
-					this->docRating = docNode.child("docRating").text().as_int();
-					this->docMaxDayClients = docNode.child("docMaxDayClients").text().as_int();
+						this->docWorkingDays = docNode.child_value("docWorkingDays");
+						this->docSpeciality = docNode.child_value("docSpeciality");
+						this->docExpirienceYears = docNode.child("docExpirienceYears").text().as_int();
+						this->docRating = docNode.child("docRating").text().as_int();
+						this->docMaxDayClients = docNode.child("docMaxDayClients").text().as_int();
 
-					this->docWorkingHoursStart.tm_hour = docNode.child("docWorkingHoursStartHour").text().as_int();
-					this->docWorkingHoursStart.tm_min = docNode.child("docWorkingHoursStartMin").text().as_int();
-					this->docWorkingHoursEnd.tm_hour = docNode.child("docWorkingHoursEndHour").text().as_int();
-					this->docWorkingHoursEnd.tm_min = docNode.child("docWorkingHoursEndMin").text().as_int();
-					//TODO reading contracts
-					this->docReviews = docNode.child_value("docReviews");
-					this->docWorkPlace = docNode.child("docWorkPlace").text().as_int();
+						this->docWorkingHoursStart.tm_hour = docNode.child("docWorkingHoursStartHour").text().as_int();
+						this->docWorkingHoursStart.tm_min = docNode.child("docWorkingHoursStartMin").text().as_int();
+						this->docWorkingHoursEnd.tm_hour = docNode.child("docWorkingHoursEndHour").text().as_int();
+						this->docWorkingHoursEnd.tm_min = docNode.child("docWorkingHoursEndMin").text().as_int();
+						//TODO reading contracts
+						this->docReviews = docNode.child_value("docReviews");
+						this->docWorkPlace = docNode.child("docWorkPlace").text().as_int();
 
-					Doctor ret = *this;
-					return ret;
-					break;
+						Doctor ret = *this;
+						return ret;
+						break;
+					}
 				}
 			}
 		}
+		else {
+			throw Exceptions::FileNameException();
+		}
 	}
+	catch (const Exceptions::FileNameException& ex)
+	{
+		std::cerr << "(Doctor file read)" << ex.what() << std::endl;
+	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Doctor file read) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return Doctor();
 }
 
 Doctor Doctor::read_doctorrow(int doctorID)
 {
 	if (!connect_todb())
 	{
-		std::cerr << "Failed to connect to the database." << std::endl;
+		try {
+			std::cerr << "(Read doctor row) Data error: Failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("doctorfile.xml");
+			std::ifstream jsonfile("doctorfile.json");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				return read_doctorrow(doctorID, "doctorfile.xml");
+			}
+			else if (jsonfile.is_open()) {
+				jsonfile.close();
+				return read_doctorrow(doctorID, "doctorfile.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Read doctor row)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
 		return Doctor();
 	}
 
@@ -802,127 +1033,178 @@ Doctor Doctor::read_doctorrow(int doctorID)
 	{
 		std::cerr << "Error reading doctor data: " << e.what() << std::endl;
 	}
+	return Doctor();
 }
 
 void Doctor::write_doctorrow(const std::string& Filename)
 {
-	if (get_filetype(Filename) == "json")
+	try
 	{
-		json jsonData;
-
-		std::ifstream file(Filename);
-		if (file.is_open())
+		if (get_filetype(Filename) == "json")
 		{
-			file >> jsonData;
-			file.close();
+			json jsonData;
+
+			std::ifstream file(Filename);
+			if (file.is_open())
+			{
+				file >> jsonData;
+				file.close();
+			}
+
+			json docNode;
+
+			docNode["docID"] = this->docID;
+			docNode["docName"] = this->docName;
+			docNode["docSurname"] = this->docSurname;
+			docNode["DocMiddleName"] = this->docMiddleName;
+			docNode["docSpeciality"] = this->docSpeciality;
+			docNode["docEmpYear"] = this->docEmploymentDate.tm_year;
+			docNode["docEmpMon"] = this->docEmploymentDate.tm_mon;
+			docNode["docEmpDay"] = this->docEmploymentDate.tm_mday;
+			docNode["docExpirienceYears"] = this->docExpirienceYears;
+			docNode["docRating"] = this->docRating;
+			docNode["docMaxDayClients"] = this->docMaxDayClients;
+			docNode["docWorkingDays"] = this->docWorkingDays;
+			docNode["docWorkingHoursStartHour"] = this->docWorkingHoursStart.tm_hour;
+			docNode["docWorkingHoursStartMin"] = this->docWorkingHoursStart.tm_min;
+			docNode["docWorkingHoursEndHour"] = this->docWorkingHoursEnd.tm_hour;
+			docNode["docWorkingHoursEndMin"] = this->docWorkingHoursEnd.tm_min;
+			docNode["docReviews"] = this->docReviews;
+			docNode["docWorkPlace"] = this->docWorkPlace;
+			//TODO writing contracts
+
+			if (jsonData.is_array())
+			{
+				jsonData.push_back(docNode);
+			}
+			else
+			{
+				jsonData = { docNode };
+			}
+
+			std::ofstream outFile(Filename);
+			outFile << std::setw(4) << jsonData;
+			outFile.close();
+
+			std::cout << "New Doctor object added to JSON file." << std::endl;
 		}
-
-		json docNode;
-
-		docNode["docID"] = this->docID;
-		docNode["docName"] = this->docName;
-		docNode["docSurname"] = this->docSurname;
-		docNode["DocMiddleName"] = this->docMiddleName;
-		docNode["docSpeciality"] = this->docSpeciality;
-		docNode["docEmpYear"] = this->docEmploymentDate.tm_year;
-		docNode["docEmpMon"] = this->docEmploymentDate.tm_mon;
-		docNode["docEmpDay"] = this->docEmploymentDate.tm_mday;
-		docNode["docExpirienceYears"] = this->docExpirienceYears;
-		docNode["docRating"] = this->docRating;
-		docNode["docMaxDayClients"] = this->docMaxDayClients;
-		docNode["docWorkingDays"] = this->docWorkingDays;
-		docNode["docWorkingHoursStartHour"] = this->docWorkingHoursStart.tm_hour;
-		docNode["docWorkingHoursStartMin"] = this->docWorkingHoursStart.tm_min;
-		docNode["docWorkingHoursEndHour"] = this->docWorkingHoursEnd.tm_hour;
-		docNode["docWorkingHoursEndMin"] = this->docWorkingHoursEnd.tm_min;
-		docNode["docReviews"] = this->docReviews;
-		docNode["docWorkPlace"] = this->docWorkPlace;
-		//TODO writing contracts
-
-		if (jsonData.is_array())
+		else if (get_filetype(Filename) == "xml")
 		{
-			jsonData.push_back(docNode);
-		}
-		else
-		{
-			jsonData = { docNode };
-		}
+			pugi::xml_document doc;
 
-		std::ofstream outFile(Filename);
-		outFile << std::setw(4) << jsonData;
-		outFile.close();
+			if (doc.load_file(Filename.c_str()))
+			{
+				pugi::xml_node root = doc.child("doctors");
+				pugi::xml_node docNode = root.append_child("doctor");
 
-		std::cout << "New Doctor object added to JSON file." << std::endl;
+				//����� �� ���� ���� �� ��� �����������. ������� �������� ����� ������ ����� ��� ������
+				docNode.append_attribute("docID").set_value(this->docID);
+				docNode.append_child("docName").text().set(this->docName.c_str());
+				docNode.append_child("docSurname").text().set(this->docSurname.c_str());
+				docNode.append_child("docMiddleName").text().set(this->docMiddleName.c_str());
+				docNode.append_child("docSpeciality").text().set(this->docSpeciality.c_str());
+				docNode.append_child("docEmpYear").text().set(this->docEmploymentDate.tm_year);
+				docNode.append_child("docEmpMon").text().set(this->docEmploymentDate.tm_mon);
+				docNode.append_child("docEmpDay").text().set(this->docEmploymentDate.tm_mday);
+				docNode.append_child("docExpirienceYears").text().set(this->docExpirienceYears);
+				docNode.append_child("docRating").text().set(this->docRating);
+				docNode.append_child("docMaxDayClients").text().set(this->docMaxDayClients);
+				docNode.append_child("docWorkingDays").text().set(this->docWorkingDays.c_str());
+				docNode.append_child("docReviews").text().set(this->docReviews.c_str());
+				docNode.append_child("docWorkPlace").text().set(this->docWorkPlace);
+				docNode.append_child("docWorkingHoursStartHour").text().set(this->docWorkingHoursStart.tm_hour);
+				docNode.append_child("docWorkingHoursStartMin").text().set(this->docWorkingHoursStart.tm_min);
+				docNode.append_child("docWorkingHoursEndHour").text().set(this->docWorkingHoursEnd.tm_hour);
+				docNode.append_child("docWorkingHoursEndMin").text().set(this->docWorkingHoursEnd.tm_min);
+				//TODO writing contracts
+			}
+			else
+			{
+				pugi::xml_node root = doc.append_child("doctor");
+				pugi::xml_node docNode = root.append_child("doctor");
+
+				docNode.append_attribute("docID").set_value(this->docID);
+				docNode.append_child("docName").text().set(this->docName.c_str());
+				docNode.append_child("docSurname").text().set(this->docSurname.c_str());
+				docNode.append_child("docMiddleName").text().set(this->docMiddleName.c_str());
+				docNode.append_child("docSpeciality").text().set(this->docSpeciality.c_str());
+				docNode.append_child("docEmpYear").text().set(this->docEmploymentDate.tm_year);
+				docNode.append_child("docEmpMon").text().set(this->docEmploymentDate.tm_mon);
+				docNode.append_child("docEmpDay").text().set(this->docEmploymentDate.tm_mday);
+				docNode.append_child("docExpirienceYears").text().set(this->docExpirienceYears);
+				docNode.append_child("docRating").text().set(this->docRating);
+				docNode.append_child("docMaxDayClients").text().set(this->docMaxDayClients);
+				docNode.append_child("docWorkingDays").text().set(this->docWorkingDays.c_str());
+				docNode.append_child("docReviews").text().set(this->docReviews.c_str());
+				docNode.append_child("docWorkPlace").text().set(this->docWorkPlace);
+				docNode.append_child("docWorkingHoursStartHour").text().set(this->docWorkingHoursStart.tm_hour);
+				docNode.append_child("docWorkingHoursStartMin").text().set(this->docWorkingHoursStart.tm_min);
+				docNode.append_child("docWorkingHoursEndHour").text().set(this->docWorkingHoursEnd.tm_hour);
+				docNode.append_child("docWorkingHoursEndMin").text().set(this->docWorkingHoursEnd.tm_min);
+				//TODO writing contracts
+			}
+
+			if (doc.save_file(Filename.c_str()))
+			{
+				std::cout << "XML file updated with new Doctor object: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to update XML file: " << Filename << std::endl;
+			}
+		}
+		else {
+			throw Exceptions::FileNameException();
+		}
 	}
-	else if (get_filetype(Filename) == "xml")
+	catch (const Exceptions::FileNameException& ex)
 	{
-		pugi::xml_document doc;
-
-		if (doc.load_file(Filename.c_str()))
-		{
-			pugi::xml_node root = doc.child("doctors");
-			pugi::xml_node docNode = root.append_child("doctor");
-
-			//����� �� ���� ���� �� ��� �����������. ������� �������� ����� ������ ����� ��� ������
-			docNode.append_attribute("docID").set_value(this->docID);
-			docNode.append_child("docName").text().set(this->docName.c_str());
-			docNode.append_child("docSurname").text().set(this->docSurname.c_str());
-			docNode.append_child("docMiddleName").text().set(this->docMiddleName.c_str());
-			docNode.append_child("docSpeciality").text().set(this->docSpeciality.c_str());
-			docNode.append_child("docEmpYear").text().set(this->docEmploymentDate.tm_year);
-			docNode.append_child("docEmpMon").text().set(this->docEmploymentDate.tm_mon);
-			docNode.append_child("docEmpDay").text().set(this->docEmploymentDate.tm_mday);
-			docNode.append_child("docExpirienceYears").text().set(this->docExpirienceYears);
-			docNode.append_child("docRating").text().set(this->docRating);
-			docNode.append_child("docMaxDayClients").text().set(this->docMaxDayClients);
-			docNode.append_child("docWorkingDays").text().set(this->docWorkingDays.c_str());
-			docNode.append_child("docReviews").text().set(this->docReviews.c_str());
-			docNode.append_child("docWorkPlace").text().set(this->docWorkPlace);
-			docNode.append_child("docWorkingHoursStartHour").text().set(this->docWorkingHoursStart.tm_hour);
-			docNode.append_child("docWorkingHoursStartMin").text().set(this->docWorkingHoursStart.tm_min);
-			docNode.append_child("docWorkingHoursEndHour").text().set(this->docWorkingHoursEnd.tm_hour);
-			docNode.append_child("docWorkingHoursEndMin").text().set(this->docWorkingHoursEnd.tm_min);
-			//TODO writing contracts
-		}
-		else
-		{
-			pugi::xml_node root = doc.append_child("doctor");
-			pugi::xml_node docNode = root.append_child("doctor");
-
-			docNode.append_attribute("docID").set_value(this->docID);
-			docNode.append_child("docName").text().set(this->docName.c_str());
-			docNode.append_child("docSurname").text().set(this->docSurname.c_str());
-			docNode.append_child("docMiddleName").text().set(this->docMiddleName.c_str());
-			docNode.append_child("docSpeciality").text().set(this->docSpeciality.c_str());
-			docNode.append_child("docEmpYear").text().set(this->docEmploymentDate.tm_year);
-			docNode.append_child("docEmpMon").text().set(this->docEmploymentDate.tm_mon);
-			docNode.append_child("docEmpDay").text().set(this->docEmploymentDate.tm_mday);
-			docNode.append_child("docExpirienceYears").text().set(this->docExpirienceYears);
-			docNode.append_child("docRating").text().set(this->docRating);
-			docNode.append_child("docMaxDayClients").text().set(this->docMaxDayClients);
-			docNode.append_child("docWorkingDays").text().set(this->docWorkingDays.c_str());
-			docNode.append_child("docReviews").text().set(this->docReviews.c_str());
-			docNode.append_child("docWorkPlace").text().set(this->docWorkPlace);
-			docNode.append_child("docWorkingHoursStartHour").text().set(this->docWorkingHoursStart.tm_hour);
-			docNode.append_child("docWorkingHoursStartMin").text().set(this->docWorkingHoursStart.tm_min);
-			docNode.append_child("docWorkingHoursEndHour").text().set(this->docWorkingHoursEnd.tm_hour);
-			docNode.append_child("docWorkingHoursEndMin").text().set(this->docWorkingHoursEnd.tm_min);
-			//TODO writing contracts
-		}
-
-		if (doc.save_file(Filename.c_str()))
-		{
-			std::cout << "XML file updated with new Doctor object: " << Filename << std::endl;
-		}
-		else
-		{
-			std::cerr << "Failed to update XML file: " << Filename << std::endl;
-		}
+		std::cerr << "(Doctor file write)" << ex.what() << std::endl;
 	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Doctor file write) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return;
 }
 
 void Doctor::write_doctorrow()
 {
+	if (!connect_todb())
+	{
+		try {
+			std::cerr << "(Write doctor row) Data error: Failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("doctorfile.xml");
+			std::ifstream jsonfile("doctorfile.json");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				write_doctorrow("doctorfile.xml");
+			}
+			else if (jsonfile.is_open()) {
+				jsonfile.close();
+				write_doctorrow("doctorfile.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Write doctor row)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
+		return;
+	}
+
 	//������ ��� ������� �� ��������, �� ������ �� ������ ���� ����
 	try
 	{
@@ -1012,86 +1294,106 @@ Visit::Visit()
 
 Visit Visit::read_visitrow(int visitID, const std::string& Filename)
 {
-	Visit visit;
-
-	if (get_filetype(Filename) == "json")
+	try
 	{
-		nlohmann::json jsonData;
-		std::ifstream file(Filename);
+		Visit visit;
 
-		if (file.is_open())
+		if (get_filetype(Filename) == "json")
 		{
-			file >> jsonData;
-			file.close();
-		}
-		else
-		{
-			std::cerr << "Failed to open JSON file: " << Filename << std::endl;
-			return visit; // ���� ����� �� ���������� ������������ ��������� ������
-		}
+			nlohmann::json jsonData;
+			std::ifstream file(Filename);
 
-		for (const auto& record : jsonData)
-		{
-			if (record["visitID"] == visitID)
+			if (file.is_open())
 			{
-				visit.visitID = record["visitID"];
-				visit.clientID = record["clientID"];
-				visit.doctorID = record["doctorID"];
-				visit.visitDate.tm_year = record["visitDateYear"];
-				visit.visitDate.tm_mon = record["visitDateMon"];
-				visit.visitDate.tm_mday = record["visitDateDay"];
-				visit.visitStatus = record["visitStatus"];
-				visit.diagnosis = record["diagnosis"];
-				visit.prescription = record["prescription"];
-				visit.visitTime.tm_hour = record["visitHour"];
-				visit.visitTime.tm_min = record["visitMinute"];
+				file >> jsonData;
+				file.close();
+			}
+			else
+			{
+				std::cerr << "Failed to open JSON file: " << Filename << std::endl;
+				return visit; // ���� ����� �� ���������� ������������ ��������� ������
+			}
+
+			for (const auto& record : jsonData)
+			{
+				if (record["visitID"] == visitID)
+				{
+					visit.visitID = record["visitID"];
+					visit.clientID = record["clientID"];
+					visit.doctorID = record["doctorID"];
+					visit.visitDate.tm_year = record["visitDateYear"];
+					visit.visitDate.tm_mon = record["visitDateMon"];
+					visit.visitDate.tm_mday = record["visitDateDay"];
+					visit.visitStatus = record["visitStatus"];
+					visit.diagnosis = record["diagnosis"];
+					visit.prescription = record["prescription"];
+					visit.visitTime.tm_hour = record["visitHour"];
+					visit.visitTime.tm_min = record["visitMinute"];
+					return visit;
+				}
+			}
+
+			return visit;
+		}
+		else if (get_filetype(Filename) == "xml")
+		{
+			pugi::xml_document doc;
+			if (doc.load_file(Filename.c_str()))
+			{
+				pugi::xml_node root = doc.child("visits");
+
+				for (pugi::xml_node visitNode = root.child("visit"); visitNode; visitNode = visitNode.next_sibling("visit"))
+				{
+					if (visitNode.attribute("visitID").as_int() == visitID)
+					{
+						visit.visitID = visitNode.attribute("visitID").as_int();
+						visit.clientID = visitNode.child("clientID").text().as_int();
+						visit.doctorID = visitNode.child("doctorID").text().as_int();
+						visit.visitStatus = visitNode.child("visitStatus").text().as_bool();
+						visit.diagnosis = visitNode.child("diagnosis").text().get();
+						visit.prescription = visitNode.child("prescription").text().get();
+						visit.visitTime.tm_hour = visitNode.child("visitHour").text().as_int();
+						visit.visitTime.tm_min = visitNode.child("visitMinute").text().as_int();
+						visit.visitDate.tm_year = visitNode.child("visitDateYear").text().as_int();
+						visit.visitDate.tm_mon = visitNode.child("visitDateMon").text().as_int();
+						visit.visitDate.tm_mday = visitNode.child("visitDateDay").text().as_int();
+
+						*this = visit;
+						return visit;
+					}
+				}
 				return visit;
 			}
+			else
+			{
+				std::cerr << "Failed to open XML file: " << Filename << std::endl;
+				return visit;
+			}
+		}
+		else {
+			throw Exceptions::FileNameException();
 		}
 
 		return visit;
 	}
-	else if (get_filetype(Filename) == "xml")
+	catch (const Exceptions::FileNameException& ex)
 	{
-		pugi::xml_document doc;
-		if (doc.load_file(Filename.c_str()))
-		{
-			pugi::xml_node root = doc.child("visits");
-
-			for (pugi::xml_node visitNode = root.child("visit"); visitNode; visitNode = visitNode.next_sibling("visit"))
-			{
-				if (visitNode.attribute("visitID").as_int() == visitID)
-				{
-					visit.visitID = visitNode.attribute("visitID").as_int();
-					visit.clientID = visitNode.child("clientID").text().as_int();
-					visit.doctorID = visitNode.child("doctorID").text().as_int();
-					visit.visitStatus = visitNode.child("visitStatus").text().as_bool();
-					visit.diagnosis = visitNode.child("diagnosis").text().get();
-					visit.prescription = visitNode.child("prescription").text().get();
-					visit.visitTime.tm_hour = visitNode.child("visitHour").text().as_int();
-					visit.visitTime.tm_min = visitNode.child("visitMinute").text().as_int();
-					visit.visitDate.tm_year = visitNode.child("visitDateYear").text().as_int();
-					visit.visitDate.tm_mon = visitNode.child("visitDateMon").text().as_int();
-					visit.visitDate.tm_mday = visitNode.child("visitDateDay").text().as_int();
-
-					*this = visit;
-					return visit;
-				}
-			}
-			return visit;
-		}
-		else
-		{
-			std::cerr << "Failed to open XML file: " << Filename << std::endl;
-			return visit;
-		}
+		std::cerr << "(Visit file read)" << ex.what() << std::endl;
 	}
-
-	return visit;
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Visit file read) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return Visit();
 }
 
 Visit Visit::read_visitrow(int visitID)
 {
+
 	Visit visit;
 
 	if (connect_todb())
@@ -1142,7 +1444,31 @@ Visit Visit::read_visitrow(int visitID)
 	}
 	else
 	{
-		std::cerr << "Failed to connect to the database." << std::endl;
+		try {
+			std::cerr << "(Read visit row) Data error: failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("visits.xml");
+			std::ifstream jsonfile("visits.json");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				return read_visitrow(visitID, "visits.xml");
+			}else if (jsonfile.is_open()) {
+				jsonfile.close();
+				return read_visitrow(visitID, "visits.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Read visit row)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
 	}
 
 	return visit;
@@ -1150,70 +1476,88 @@ Visit Visit::read_visitrow(int visitID)
 
 void Visit::write_visitrow(const std::string& Filename)
 {
-	if (get_filetype(Filename) == "json")
+	try
 	{
-		nlohmann::json jsonData;
-
-		if (std::ifstream(Filename))
+		if (get_filetype(Filename) == "json")
 		{
-			jsonData = nlohmann::json::parse(std::ifstream(Filename));
-		}
+			nlohmann::json jsonData;
 
-		nlohmann::json visitNode;
-
-		visitNode["visitID"] = visitID;
-		visitNode["clientID"] = clientID;
-		visitNode["doctorID"] = doctorID;
-		visitNode["visitDateYear"] = visitDate.tm_year;
-		visitNode["visitDateMon"] = visitDate.tm_mon;
-		visitNode["visitDateDay"] = visitDate.tm_mday;
-		visitNode["Diagnosis"] = diagnosis;
-		visitNode["Prescription"] = prescription;
-		visitNode["visitStatus"] = visitStatus;
-		visitNode["visitHour"] = visitTime.tm_hour;
-		visitNode["visitMinute"] = visitTime.tm_min;
-
-		jsonData.push_back(visitNode);
-
-		std::ofstream file(Filename);
-		if (file.is_open())
-		{
-			file << std::setw(4) << jsonData;
-			file.close();
-			std::cout << "JSON file saved successfully: " << Filename << std::endl;
-		}
-		else
-		{
-			std::cerr << "Failed to save JSON file: " << Filename << std::endl;
-		}
-	}
-	else if (get_filetype(Filename) == "xml")
-	{
-		pugi::xml_document doc;
-		if (doc.load_file(Filename.c_str()))
-		{
-			pugi::xml_node root = doc.child("visits");
-
-			for (pugi::xml_node visitNode = root.child("visit"); visitNode; visitNode = visitNode.next_sibling("visit"))
+			if (std::ifstream(Filename))
 			{
-				if (visitNode.attribute("visitID").as_int() == visitID)
+				jsonData = nlohmann::json::parse(std::ifstream(Filename));
+			}
+
+			nlohmann::json visitNode;
+
+			visitNode["visitID"] = visitID;
+			visitNode["clientID"] = clientID;
+			visitNode["doctorID"] = doctorID;
+			visitNode["visitDateYear"] = visitDate.tm_year;
+			visitNode["visitDateMon"] = visitDate.tm_mon;
+			visitNode["visitDateDay"] = visitDate.tm_mday;
+			visitNode["Diagnosis"] = diagnosis;
+			visitNode["Prescription"] = prescription;
+			visitNode["visitStatus"] = visitStatus;
+			visitNode["visitHour"] = visitTime.tm_hour;
+			visitNode["visitMinute"] = visitTime.tm_min;
+
+			jsonData.push_back(visitNode);
+
+			std::ofstream file(Filename);
+			if (file.is_open())
+			{
+				file << std::setw(4) << jsonData;
+				file.close();
+				std::cout << "JSON file saved successfully: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to save JSON file: " << Filename << std::endl;
+			}
+		}
+		else if (get_filetype(Filename) == "xml")
+		{
+			pugi::xml_document doc;
+			if (doc.load_file(Filename.c_str()))
+			{
+				pugi::xml_node root = doc.child("visits");
+
+				for (pugi::xml_node visitNode = root.child("visit"); visitNode; visitNode = visitNode.next_sibling("visit"))
 				{
-					visitNode.append_attribute("visitID") = visitID;
-					visitNode.append_child("clientID").text().set(clientID);
-					visitNode.append_child("doctorID").text().set(doctorID);
-					visitNode.append_child("visitDateYear").text().set(visitDate.tm_year);
-					visitNode.append_child("visitDateMon").text().set(visitDate.tm_mon);
-					visitNode.append_child("visitDateDay").text().set(visitDate.tm_mday);
-					visitNode.append_child("diagnosis").text().set(diagnosis.c_str());
-					visitNode.append_child("prescription").text().set(prescription.c_str());
-					visitNode.append_child("visitHour").text().set(visitTime.tm_hour);
-					visitNode.append_child("visitMinute").text().set(visitTime.tm_min);
+					if (visitNode.attribute("visitID").as_int() == visitID)
+					{
+						visitNode.append_attribute("visitID") = visitID;
+						visitNode.append_child("clientID").text().set(clientID);
+						visitNode.append_child("doctorID").text().set(doctorID);
+						visitNode.append_child("visitDateYear").text().set(visitDate.tm_year);
+						visitNode.append_child("visitDateMon").text().set(visitDate.tm_mon);
+						visitNode.append_child("visitDateDay").text().set(visitDate.tm_mday);
+						visitNode.append_child("diagnosis").text().set(diagnosis.c_str());
+						visitNode.append_child("prescription").text().set(prescription.c_str());
+						visitNode.append_child("visitHour").text().set(visitTime.tm_hour);
+						visitNode.append_child("visitMinute").text().set(visitTime.tm_min);
+					}
 				}
 			}
 		}
+		else {
+			throw Exceptions::FileNameException();
+		}
 	}
+	catch (const Exceptions::FileNameException& ex)
+	{
+		std::cerr << "(Visit file write)" << ex.what() << std::endl;
+	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Visit file write) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return;
 }
-
 
 
 void Visit::update_visitStatus()
@@ -1246,13 +1590,36 @@ void Visit::update_visitStatus()
 	}
 }
 
-
-
 void Visit::write_visitrow()
 {
 	if (!connect_todb())
 	{
-		std::cerr << "Failed to connect to the database." << std::endl;
+		try {
+			std::cerr << "(Write visit row) Data error: Failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("visits.xml");
+			std::ifstream jsonfile("visits.json");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				write_visitrow("visits.xml");
+			}
+			else if (jsonfile.is_open()) {
+				jsonfile.close();
+				write_visitrow("visits.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Write visit row)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
 		return;
 	}
 
@@ -1327,7 +1694,32 @@ std::vector<User> read_usertable()
 
 	if (!connect_todb())
 	{
-		std::cerr << "Failed to connect to the database." << std::endl;
+		try {
+			std::cerr << "(Read user table) Data error: Failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("userfile.xml");
+			std::ifstream jsonfile("userfile.json");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				return read_usertable("userfile.xml");
+			}
+			else if (jsonfile.is_open()) {
+				jsonfile.close();
+				return read_usertable("userfile.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Read user table)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
 		return users;
 	}
 
@@ -1369,148 +1761,189 @@ std::vector<User> read_usertable()
 
 std::vector<User> read_usertable(const std::string& Filename)
 {
-	std::string extension = get_filetype(Filename);
-	std::vector<User> users;
 
-	if (extension == "xml") //��� ���(� � ������ ����� ����) ����� ����������� ������ ���� extension � �� json � �� xml
+	std::vector<User> emptyVector;
+	try
 	{
-		pugi::xml_document doc;
-		if (!doc.load_file(Filename.c_str()))
+		std::string extension = get_filetype(Filename);
+		std::vector<User> users;
+
+		if (extension == "xml") //��� ���(� � ������ ����� ����) ����� ����������� ������ ���� extension � �� json � �� xml
 		{
-			std::cerr << "Failed to load XML file: " << Filename << std::endl;
-			return users;
-		}
-
-		pugi::xml_node root = doc.child("users");
-
-		for (pugi::xml_node userNode = root.child("user"); userNode; userNode = userNode.next_sibling("user"))
-		{
-			User user;
-
-			user.userID = userNode.attribute("userID").as_int();
-			user.userAge = std::stoi(userNode.child_value("userAge"));
-			user.userName = userNode.child_value("userName");
-			user.userSurname = userNode.child_value("userSurname");
-			user.userMiddleName = userNode.child_value("userMiddleName");
-			user.userPhone = userNode.child_value("userPhone");
-			user.userPassword = userNode.child_value("userPassword");
-			user.userBirthDate.tm_year = userNode.child("userBirthYear").text().as_int();
-			user.userBirthDate.tm_mon = userNode.child("userBirthMon").text().as_int();
-			user.userBirthDate.tm_mday = userNode.child("userBirthDay").text().as_int();
-			user.userFamilyDoctor = userNode.child("userFamilyDoctor").text().as_int();
-
-			users.push_back(user);
-		}
-
-		return users;
-	}
-	else if (extension == "json")
-	{
-		try
-		{
-			std::ifstream file(Filename);
-			if (!file.is_open())
+			pugi::xml_document doc;
+			if (!doc.load_file(Filename.c_str()))
 			{
-				std::cerr << "Failed to open JSON file: " << Filename << std::endl;
+				std::cerr << "Failed to load XML file: " << Filename << std::endl;
 				return users;
 			}
-			json jsonData;
-			file >> jsonData;
 
-			for (const auto& userNode : jsonData)
+			pugi::xml_node root = doc.child("users");
+
+			for (pugi::xml_node userNode = root.child("user"); userNode; userNode = userNode.next_sibling("user"))
 			{
 				User user;
 
-				user.userID = userNode["userID"];
-				user.userAge = userNode["userAge"];
-				user.userName = userNode["userName"];
-				user.userSurname = userNode["userSurname"];
-				user.userMiddleName = userNode["userMiddleName"];
-				user.userPhone = userNode["userPhone"];
-				user.userPassword = userNode["userPassword"];
-				user.userBirthDate.tm_year = userNode["userBirthYear"];
-				user.userBirthDate.tm_mon = userNode["userBirthMon"];
-				user.userBirthDate.tm_mday = userNode["userBirthDay"];
-				user.userFamilyDoctor = userNode["userFamilyDoctor"];
+				user.userID = userNode.attribute("userID").as_int();
+				user.userAge = std::stoi(userNode.child_value("userAge"));
+				user.userName = userNode.child_value("userName");
+				user.userSurname = userNode.child_value("userSurname");
+				user.userMiddleName = userNode.child_value("userMiddleName");
+				user.userPhone = userNode.child_value("userPhone");
+				user.userPassword = userNode.child_value("userPassword");
+				user.userBirthDate.tm_year = userNode.child("userBirthYear").text().as_int();
+				user.userBirthDate.tm_mon = userNode.child("userBirthMon").text().as_int();
+				user.userBirthDate.tm_mday = userNode.child("userBirthDay").text().as_int();
+				user.userFamilyDoctor = userNode.child("userFamilyDoctor").text().as_int();
 
 				users.push_back(user);
 			}
+
 			return users;
 		}
-		catch (const std::exception& e)
+		else if (extension == "json")
 		{
-			std::cerr << "Error reading user data from JSON: " << e.what() << std::endl;
+			try
+			{
+				std::ifstream file(Filename);
+				if (!file.is_open())
+				{
+					std::cerr << "Failed to open JSON file: " << Filename << std::endl;
+					return users;
+				}
+				json jsonData;
+				file >> jsonData;
+
+				for (const auto& userNode : jsonData)
+				{
+					User user;
+
+					user.userID = userNode["userID"];
+					user.userAge = userNode["userAge"];
+					user.userName = userNode["userName"];
+					user.userSurname = userNode["userSurname"];
+					user.userMiddleName = userNode["userMiddleName"];
+					user.userPhone = userNode["userPhone"];
+					user.userPassword = userNode["userPassword"];
+					user.userBirthDate.tm_year = userNode["userBirthYear"];
+					user.userBirthDate.tm_mon = userNode["userBirthMon"];
+					user.userBirthDate.tm_mday = userNode["userBirthDay"];
+					user.userFamilyDoctor = userNode["userFamilyDoctor"];
+
+					users.push_back(user);
+				}
+				return users;
+			}
+			catch (const std::exception& e)
+			{
+				std::cerr << "Error reading user data from JSON: " << e.what() << std::endl;
+			}
+		}
+		else {
+			throw Exceptions::FileNameException();
 		}
 	}
+	catch (const Exceptions::FileNameException& ex)
+	{
+		std::cerr << "(User table file read)" << ex.what() << std::endl;
+	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(User table file read) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+
+	return emptyVector;
 }
 
 void write_usertable(const std::vector<User>& users, const std::string& Filename)
 {
-	if (get_filetype(Filename) == "json")
+	try
 	{
-		json jsonData;
-
-		for (const User& user : users)
+		if (get_filetype(Filename) == "json")
 		{
-			json userNode;
-			userNode["userID"] = user.userID;
-			userNode["userAge"] = user.userAge;
-			userNode["userName"] = user.userName;
-			userNode["userSurname"] = user.userSurname;
-			userNode["userMiddleName"] = user.userMiddleName;
-			userNode["userPhone"] = user.userPhone;
-			userNode["userPassword"] = user.userPassword;
-			userNode["userBirthYear"] = user.userBirthDate.tm_year;
-			userNode["userBirthMon"] = user.userBirthDate.tm_mon;
-			userNode["userBirthDay"] = user.userBirthDate.tm_mday;// winforms date doesn't work here;
-			userNode["userFamilyDoctor"] = user.userFamilyDoctor;
+			json jsonData;
 
-			jsonData.push_back(userNode);
+			for (const User& user : users)
+			{
+				json userNode;
+				userNode["userID"] = user.userID;
+				userNode["userAge"] = user.userAge;
+				userNode["userName"] = user.userName;
+				userNode["userSurname"] = user.userSurname;
+				userNode["userMiddleName"] = user.userMiddleName;
+				userNode["userPhone"] = user.userPhone;
+				userNode["userPassword"] = user.userPassword;
+				userNode["userBirthYear"] = user.userBirthDate.tm_year;
+				userNode["userBirthMon"] = user.userBirthDate.tm_mon;
+				userNode["userBirthDay"] = user.userBirthDate.tm_mday;// winforms date doesn't work here;
+				userNode["userFamilyDoctor"] = user.userFamilyDoctor;
+
+				jsonData.push_back(userNode);
+			}
+
+			std::ofstream file(Filename);
+			if (file.is_open())
+			{
+				file << std::setw(4) << jsonData;
+				file.close();
+				std::cout << "JSON file saved successfully: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to save JSON file: " << Filename << std::endl;
+			}
 		}
+		else if (get_filetype(Filename) == "xml")
+		{
+			pugi::xml_document doc;
+			pugi::xml_node root = doc.append_child("users");
 
-		std::ofstream file(Filename);
-		if (file.is_open())
-		{
-			file << std::setw(4) << jsonData;
-			file.close();
-			std::cout << "JSON file saved successfully: " << Filename << std::endl;
+			for (const User& user : users)
+			{
+				pugi::xml_node userNode = root.append_child("user");
+
+				userNode.append_attribute("userID") = user.userID;
+				userNode.append_child("userAge").text().set(user.userAge);
+				userNode.append_child("userName").text().set(user.userName.c_str());
+				userNode.append_child("userSurname").text().set(user.userSurname.c_str());
+				userNode.append_child("userMiddleName").text().set(user.userMiddleName.c_str());
+				userNode.append_child("userPhone").text().set(user.userPhone.c_str());
+				userNode.append_child("userPassword").text().set(user.userPassword.c_str());
+				userNode.append_child("userBirthYear").text().set(user.userBirthDate.tm_year);
+				userNode.append_child("userBirthMon").text().set(user.userBirthDate.tm_mon);
+				userNode.append_child("userBirthDay").text().set(user.userBirthDate.tm_mday);
+				userNode.append_child("userFamilyDoctor").text().set(user.userFamilyDoctor);
+			}
+
+			if (doc.save_file(Filename.c_str()))
+			{
+				std::cout << "XML file saved successfully: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to save XML file: " << Filename << std::endl;
+			}
 		}
-		else
-		{
-			std::cerr << "Failed to save JSON file: " << Filename << std::endl;
+		else {
+			throw Exceptions::FileNameException();
 		}
 	}
-	else if (get_filetype(Filename) == "xml")
+	catch (const Exceptions::FileNameException& ex)
 	{
-		pugi::xml_document doc;
-		pugi::xml_node root = doc.append_child("users");
-
-		for (const User& user : users)
-		{
-			pugi::xml_node userNode = root.append_child("user");
-
-			userNode.append_attribute("userID") = user.userID;
-			userNode.append_child("userAge").text().set(user.userAge);
-			userNode.append_child("userName").text().set(user.userName.c_str());
-			userNode.append_child("userSurname").text().set(user.userSurname.c_str());
-			userNode.append_child("userMiddleName").text().set(user.userMiddleName.c_str());
-			userNode.append_child("userPhone").text().set(user.userPhone.c_str());
-			userNode.append_child("userPassword").text().set(user.userPassword.c_str());
-			userNode.append_child("userBirthYear").text().set(user.userBirthDate.tm_year);
-			userNode.append_child("userBirthMon").text().set(user.userBirthDate.tm_mon);
-			userNode.append_child("userBirthDay").text().set(user.userBirthDate.tm_mday);
-			userNode.append_child("userFamilyDoctor").text().set(user.userFamilyDoctor);
-		}
-
-		if (doc.save_file(Filename.c_str()))
-		{
-			std::cout << "XML file saved successfully: " << Filename << std::endl;
-		}
-		else
-		{
-			std::cerr << "Failed to save XML file: " << Filename << std::endl;
-		}
+		std::cerr << "(User table file write)" << ex.what() << std::endl;
 	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(User table file write) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return;
 }
 
 void write_usertable(std::vector<User>& users)
@@ -1529,71 +1962,92 @@ void usertable_toDB(const std::string& Filename)
 
 std::vector<Hospital> read_hospitaltable(const std::string& Filename)
 {
-	std::vector<Hospital> hosps;
-	if (get_filetype(Filename) == "xml")
+
+	std::vector<Hospital> emptyVector;
+	try
 	{
-		pugi::xml_document doc;
-		if (!doc.load_file(Filename.c_str()))
+		std::vector<Hospital> hosps;
+		if (get_filetype(Filename) == "xml")
 		{
-			std::cerr << "Failed to load XML file: " << Filename << std::endl;
-			return hosps;
-		}
-
-		pugi::xml_node root = doc.child("hospitals");
-
-		for (pugi::xml_node hospitalNode = root.child("hospital"); hospitalNode; hospitalNode = hospitalNode.next_sibling("hospital"))
-		{
-			Hospital tmp;
-
-			tmp.hospitalID = hospitalNode.attribute("hospitalID").as_int();
-			tmp.hospitalAddress = hospitalNode.child_value("hospitalAddress");
-			tmp.hospitalName = hospitalNode.child_value("hospitalName");
-			tmp.hospitalRating = std::stoi(hospitalNode.child_value("hospitalRating"));
-			tmp.hospitalDistrict = hospitalNode.child_value("hospitalDistrict");
-
-			const char* isPrivateStr = hospitalNode.child_value("hospitalIsPrivate"); //�������� ����� ���-�� �� ���, �� ����� ���
-			tmp.hospitalIsPrivate = (std::string(isPrivateStr) == "true");
-
-			hosps.push_back(tmp);
-		}
-
-		return hosps;
-	}
-	else if (get_filetype(Filename) == "json")
-	{
-		try
-		{
-			std::ifstream file(Filename);
-			if (!file.is_open())
+			pugi::xml_document doc;
+			if (!doc.load_file(Filename.c_str()))
 			{
-				std::cerr << "Failed to open JSON file: " << Filename << std::endl;
+				std::cerr << "Failed to load XML file: " << Filename << std::endl;
 				return hosps;
 			}
 
-			json jsonData;
-			file >> jsonData;
+			pugi::xml_node root = doc.child("hospitals");
 
-			for (const auto& hospNode : jsonData)
+			for (pugi::xml_node hospitalNode = root.child("hospital"); hospitalNode; hospitalNode = hospitalNode.next_sibling("hospital"))
 			{
 				Hospital tmp;
 
-				tmp.hospitalID = hospNode["hospitalID"];
-				tmp.hospitalIsPrivate = hospNode["hospitalIsPrivate"];
-				tmp.hospitalAddress = hospNode["hospitalAddress"];
-				tmp.hospitalName = hospNode["hospitalName"];
-				tmp.hospitalRating = hospNode["hospitalRating"];
-				tmp.hospitalDistrict = hospNode["hospitalDistrict"];
+				tmp.hospitalID = hospitalNode.attribute("hospitalID").as_int();
+				tmp.hospitalAddress = hospitalNode.child_value("hospitalAddress");
+				tmp.hospitalName = hospitalNode.child_value("hospitalName");
+				tmp.hospitalRating = std::stoi(hospitalNode.child_value("hospitalRating"));
+				tmp.hospitalDistrict = hospitalNode.child_value("hospitalDistrict");
+
+				const char* isPrivateStr = hospitalNode.child_value("hospitalIsPrivate"); //�������� ����� ���-�� �� ���, �� ����� ���
+				tmp.hospitalIsPrivate = (std::string(isPrivateStr) == "true");
 
 				hosps.push_back(tmp);
 			}
-		}
-		catch (const std::exception& e)
-		{
-			std::cerr << "Error reading user data from JSON: " << e.what() << std::endl;
-		}
 
-		return hosps;
+			return hosps;
+		}
+		else if (get_filetype(Filename) == "json")
+		{
+			try
+			{
+				std::ifstream file(Filename);
+				if (!file.is_open())
+				{
+					std::cerr << "Failed to open JSON file: " << Filename << std::endl;
+					return hosps;
+				}
+
+				json jsonData;
+				file >> jsonData;
+
+				for (const auto& hospNode : jsonData)
+				{
+					Hospital tmp;
+
+					tmp.hospitalID = hospNode["hospitalID"];
+					tmp.hospitalIsPrivate = hospNode["hospitalIsPrivate"];
+					tmp.hospitalAddress = hospNode["hospitalAddress"];
+					tmp.hospitalName = hospNode["hospitalName"];
+					tmp.hospitalRating = hospNode["hospitalRating"];
+					tmp.hospitalDistrict = hospNode["hospitalDistrict"];
+
+					hosps.push_back(tmp);
+				}
+			}
+			catch (const std::exception& e)
+			{
+				std::cerr << "Error reading user data from JSON: " << e.what() << std::endl;
+			}
+
+			return hosps;
+		}
+		else {
+			throw Exceptions::FileNameException();
+		}
 	}
+	catch (const Exceptions::FileNameException& ex)
+	{
+		std::cerr << "(Hospital table file read)" << ex.what() << std::endl;
+	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Hospital table file read) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return emptyVector;
 }
 
 std::vector<Hospital> read_hospitaltable()
@@ -1602,7 +2056,32 @@ std::vector<Hospital> read_hospitaltable()
 
 	if (!connect_todb())
 	{
-		std::cerr << "Failed to connect to the database." << std::endl;
+		try {
+			std::cerr << "(Read hospital table) Data error: Failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("hospitalfile.xml");
+			std::ifstream jsonfile("hospitalfile.json");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				return read_hospitaltable("hospitalfile.xml");
+			}
+			else if (jsonfile.is_open()) {
+				jsonfile.close();
+				return read_hospitaltable("hospitalfile.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Read hospital table)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
 		return hosps;
 	}
 
@@ -1640,61 +2119,80 @@ std::vector<Hospital> read_hospitaltable()
 
 void write_hospitaltable(const std::vector<Hospital>& hospitals, const std::string& Filename)
 {
-	if (get_filetype(Filename) == "json")
+	try
 	{
-		json jsonData;
-
-		for (const Hospital& hospital : hospitals)
+		if (get_filetype(Filename) == "json")
 		{
-			json hospNode;
-			hospNode["hospitalID"] = hospital.hospitalID;
-			hospNode["hospitalIsPrivate"] = hospital.hospitalIsPrivate;
-			hospNode["hospitalAddress"] = hospital.hospitalAddress;
-			hospNode["hospitalName"] = hospital.hospitalName;
-			hospNode["hospitalRating"] = hospital.hospitalRating;
-			hospNode["hospitalDistrict"] = hospital.hospitalDistrict;
+			json jsonData;
 
-			jsonData.push_back(hospNode);
+			for (const Hospital& hospital : hospitals)
+			{
+				json hospNode;
+				hospNode["hospitalID"] = hospital.hospitalID;
+				hospNode["hospitalIsPrivate"] = hospital.hospitalIsPrivate;
+				hospNode["hospitalAddress"] = hospital.hospitalAddress;
+				hospNode["hospitalName"] = hospital.hospitalName;
+				hospNode["hospitalRating"] = hospital.hospitalRating;
+				hospNode["hospitalDistrict"] = hospital.hospitalDistrict;
+
+				jsonData.push_back(hospNode);
+			}
+
+			std::ofstream file(Filename);
+			if (file.is_open())
+			{
+				file << std::setw(4) << jsonData;
+				file.close();
+				std::cout << "JSON file saved successfully: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to save JSON file: " << Filename << std::endl;
+			}
 		}
+		else if (get_filetype(Filename) == "xml")
+		{
+			pugi::xml_document doc;
+			pugi::xml_node root = doc.append_child("hospitals");
 
-		std::ofstream file(Filename);
-		if (file.is_open())
-		{
-			file << std::setw(4) << jsonData;
-			file.close();
-			std::cout << "JSON file saved successfully: " << Filename << std::endl;
+			for (const Hospital& hospital : hospitals)
+			{
+				pugi::xml_node hospNode = root.append_child("hospital");
+
+				hospNode.append_attribute("hospitalID") = hospital.hospitalID;
+				hospNode.append_child("hospitalIsPrivate").text().set(hospital.hospitalIsPrivate);
+				hospNode.append_child("hospitalAddress").text().set(hospital.hospitalAddress.c_str());
+				hospNode.append_child("hospitalName").text().set(hospital.hospitalName.c_str());
+				hospNode.append_child("hospitalRating").text().set(hospital.hospitalRating);
+				hospNode.append_child("hospitalDistrict").text().set(hospital.hospitalDistrict.c_str());
+			}
+
+			if (doc.save_file(Filename.c_str()))
+			{
+				std::cout << "XML file saved successfully: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to save XML file: " << Filename << std::endl;
+			}
 		}
-		else
-		{
-			std::cerr << "Failed to save JSON file: " << Filename << std::endl;
+		else {
+			throw Exceptions::FileNameException();
 		}
 	}
-	else if (get_filetype(Filename) == "xml")
+	catch (const Exceptions::FileNameException& ex)
 	{
-		pugi::xml_document doc;
-		pugi::xml_node root = doc.append_child("hospitals");
-
-		for (const Hospital& hospital : hospitals)
-		{
-			pugi::xml_node hospNode = root.append_child("hospital");
-
-			hospNode.append_attribute("hospitalID") = hospital.hospitalID;
-			hospNode.append_child("hospitalIsPrivate").text().set(hospital.hospitalIsPrivate);
-			hospNode.append_child("hospitalAddress").text().set(hospital.hospitalAddress.c_str());
-			hospNode.append_child("hospitalName").text().set(hospital.hospitalName.c_str());
-			hospNode.append_child("hospitalRating").text().set(hospital.hospitalRating);
-			hospNode.append_child("hospitalDistrict").text().set(hospital.hospitalDistrict.c_str());
-		}
-
-		if (doc.save_file(Filename.c_str()))
-		{
-			std::cout << "XML file saved successfully: " << Filename << std::endl;
-		}
-		else
-		{
-			std::cerr << "Failed to save XML file: " << Filename << std::endl;
-		}
+		std::cerr << "(Hospital table file write)" << ex.what() << std::endl;
 	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Hospital table file write) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return;
 }
 
 void write_hospitaltable(std::vector<Hospital>& hospitals)
@@ -1713,96 +2211,116 @@ void hospitaltable_toDB(const std::string& Filename)
 
 std::vector<Doctor> read_doctortable(const std::string& Filename)
 {
-	std::vector<Doctor> docs;
-	if (get_filetype(Filename) == "xml")
+	std::vector<Doctor> emptyVector;
+	try 
 	{
-		pugi::xml_document doc;
-		if (!doc.load_file(Filename.c_str()))
+		std::vector<Doctor> docs;
+		if (get_filetype(Filename) == "xml")
 		{
-			std::cerr << "Failed to load XML file: " << Filename << std::endl;
-			return docs;
-		}
-
-		pugi::xml_node root = doc.child("doctors");
-
-		for (pugi::xml_node docNode = root.child("doctor"); docNode; docNode = docNode.next_sibling("doctor"))
-		{
-			Doctor tmp;
-
-			tmp.docID = docNode.attribute("docID").as_int();
-			tmp.docName = docNode.child_value("docName");
-			tmp.docSurname = docNode.child_value("docSurname");
-			tmp.docMiddleName = docNode.child_value("docMiddleName");
-
-			tmp.docEmploymentDate.tm_year = docNode.child("docEmpYear").text().as_int();
-			tmp.docEmploymentDate.tm_mon = docNode.child("docEmpMon").text().as_int();
-			tmp.docEmploymentDate.tm_mday = docNode.child("docEmpDay").text().as_int();
-
-			tmp.docWorkingDays = docNode.child_value("docWorkingDays");
-			tmp.docSpeciality = docNode.child_value("docSpeciality");
-			tmp.docExpirienceYears = docNode.child("docExpirienceYears").text().as_int();
-			tmp.docRating = docNode.child("docRating").text().as_int();
-			tmp.docMaxDayClients = docNode.child("docMaxDayClients").text().as_int();
-
-			tmp.docWorkingHoursStart.tm_hour = docNode.child("docWorkingHoursStartHour").text().as_int();
-			tmp.docWorkingHoursStart.tm_min = docNode.child("docWorkingHoursStartMin").text().as_int();
-			tmp.docWorkingHoursEnd.tm_hour = docNode.child("docWorkingHoursEndHour").text().as_int();
-			tmp.docWorkingHoursEnd.tm_min = docNode.child("docWorkingHoursEndMin").text().as_int();
-
-			tmp.docReviews = docNode.child_value("docReviews");
-			tmp.docWorkPlace = docNode.child("docWorkPlace").text().as_int();
-
-			docs.push_back(tmp);
-		}
-		return docs;
-	}
-	else if (get_filetype(Filename) == "json")
-	{
-		try
-		{
-			std::ifstream file(Filename);
-			if (!file.is_open())
+			pugi::xml_document doc;
+			if (!doc.load_file(Filename.c_str()))
 			{
-				std::cerr << "Failed to open JSON file: " << Filename << std::endl;
+				std::cerr << "Failed to load XML file: " << Filename << std::endl;
 				return docs;
 			}
 
-			json jsonData;
-			file >> jsonData;
+			pugi::xml_node root = doc.child("doctors");
 
-			for (const auto& docNode : jsonData)
+			for (pugi::xml_node docNode = root.child("doctor"); docNode; docNode = docNode.next_sibling("doctor"))
 			{
 				Doctor tmp;
 
-				tmp.docID = docNode["docID"];
-				tmp.docName = docNode["docName"];
-				tmp.docSurname = docNode["docSurname"];
-				tmp.docMiddleName = docNode["DefDocMiddleName"];
-				tmp.docSpeciality = docNode["docSpeciality"];
-				tmp.docEmploymentDate.tm_year = docNode["docEmpYear"];
-				tmp.docEmploymentDate.tm_mon = docNode["docEmpMon"];
-				tmp.docEmploymentDate.tm_mday = docNode["docEmpDay"];
-				tmp.docExpirienceYears = docNode["docExpirienceYears"];
-				tmp.docRating = docNode["docRating"];
-				tmp.docMaxDayClients = docNode["docMaxDayClients"];
-				tmp.docWorkingDays = docNode["docWorkingDays"];
-				tmp.docWorkingHoursStart.tm_hour = docNode["docWorkingHoursStartHour"];
-				tmp.docWorkingHoursStart.tm_min = docNode["docWorkingHoursStartMin"];
-				tmp.docWorkingHoursEnd.tm_hour = docNode["docWorkingHoursEndHour"];
-				tmp.docWorkingHoursEnd.tm_min = docNode["docWorkingHoursEndMin"];
-				tmp.docReviews = docNode["docReviews"];
-				tmp.docWorkPlace = docNode["docWorkPlace"];
+				tmp.docID = docNode.attribute("docID").as_int();
+				tmp.docName = docNode.child_value("docName");
+				tmp.docSurname = docNode.child_value("docSurname");
+				tmp.docMiddleName = docNode.child_value("docMiddleName");
+
+				tmp.docEmploymentDate.tm_year = docNode.child("docEmpYear").text().as_int();
+				tmp.docEmploymentDate.tm_mon = docNode.child("docEmpMon").text().as_int();
+				tmp.docEmploymentDate.tm_mday = docNode.child("docEmpDay").text().as_int();
+
+				tmp.docWorkingDays = docNode.child_value("docWorkingDays");
+				tmp.docSpeciality = docNode.child_value("docSpeciality");
+				tmp.docExpirienceYears = docNode.child("docExpirienceYears").text().as_int();
+				tmp.docRating = docNode.child("docRating").text().as_int();
+				tmp.docMaxDayClients = docNode.child("docMaxDayClients").text().as_int();
+
+				tmp.docWorkingHoursStart.tm_hour = docNode.child("docWorkingHoursStartHour").text().as_int();
+				tmp.docWorkingHoursStart.tm_min = docNode.child("docWorkingHoursStartMin").text().as_int();
+				tmp.docWorkingHoursEnd.tm_hour = docNode.child("docWorkingHoursEndHour").text().as_int();
+				tmp.docWorkingHoursEnd.tm_min = docNode.child("docWorkingHoursEndMin").text().as_int();
+
+				tmp.docReviews = docNode.child_value("docReviews");
+				tmp.docWorkPlace = docNode.child("docWorkPlace").text().as_int();
 
 				docs.push_back(tmp);
 			}
+			return docs;
 		}
-		catch (const std::exception& e)
+		else if (get_filetype(Filename) == "json")
 		{
-			std::cerr << "Error reading user data from JSON: " << e.what() << std::endl;
-		}
+			try
+			{
+				std::ifstream file(Filename);
+				if (!file.is_open())
+				{
+					std::cerr << "Failed to open JSON file: " << Filename << std::endl;
+					return docs;
+				}
 
-		return docs;
+				json jsonData;
+				file >> jsonData;
+
+				for (const auto& docNode : jsonData)
+				{
+					Doctor tmp;
+
+					tmp.docID = docNode["docID"];
+					tmp.docName = docNode["docName"];
+					tmp.docSurname = docNode["docSurname"];
+					tmp.docMiddleName = docNode["DefDocMiddleName"];
+					tmp.docSpeciality = docNode["docSpeciality"];
+					tmp.docEmploymentDate.tm_year = docNode["docEmpYear"];
+					tmp.docEmploymentDate.tm_mon = docNode["docEmpMon"];
+					tmp.docEmploymentDate.tm_mday = docNode["docEmpDay"];
+					tmp.docExpirienceYears = docNode["docExpirienceYears"];
+					tmp.docRating = docNode["docRating"];
+					tmp.docMaxDayClients = docNode["docMaxDayClients"];
+					tmp.docWorkingDays = docNode["docWorkingDays"];
+					tmp.docWorkingHoursStart.tm_hour = docNode["docWorkingHoursStartHour"];
+					tmp.docWorkingHoursStart.tm_min = docNode["docWorkingHoursStartMin"];
+					tmp.docWorkingHoursEnd.tm_hour = docNode["docWorkingHoursEndHour"];
+					tmp.docWorkingHoursEnd.tm_min = docNode["docWorkingHoursEndMin"];
+					tmp.docReviews = docNode["docReviews"];
+					tmp.docWorkPlace = docNode["docWorkPlace"];
+
+					docs.push_back(tmp);
+				}
+			}
+			catch (const std::exception& e)
+			{
+				std::cerr << "Error reading user data from JSON: " << e.what() << std::endl;
+			}
+
+			return docs;
+		}
+		else {
+			throw Exceptions::FileNameException();
+		}
 	}
+	catch (const Exceptions::FileNameException& ex)
+	{
+		std::cerr << "(Doctor table file read)" << ex.what() << std::endl;
+	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Doctor table file read) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return emptyVector;
 }
 
 std::vector<Doctor> read_doctortable()
@@ -1811,7 +2329,32 @@ std::vector<Doctor> read_doctortable()
 
 	if (!connect_todb())
 	{
-		std::cerr << "Failed to connect to the database." << std::endl;
+		try {
+			std::cerr << "(Read doctor table) Data error: Failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("doctorfile.xml");
+			std::ifstream jsonfile("doctorfile.json");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				return read_doctortable("doctorfile.xml");
+			}
+			else if (jsonfile.is_open()) {
+				jsonfile.close();
+				return read_doctortable("doctorfile.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Read doctor table)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
 		return doctors;
 	}
 
@@ -1860,92 +2403,112 @@ std::vector<Doctor> read_doctortable()
 	{
 		std::cerr << "Error reading hospital data: " << e.what() << std::endl;
 	}
+	return doctors;
 }
 
 void write_doctortable(const std::vector<Doctor>& doctors, const std::string& Filename)
 {
-	if (get_filetype(Filename) == "json")
+	try
 	{
-		json jsonData;
-
-		for (const Doctor& doctor : doctors)
+		if (get_filetype(Filename) == "json")
 		{
-			json docNode;
+			json jsonData;
 
-			docNode["docID"] = doctor.docID;
-			docNode["docName"] = doctor.docName;
-			docNode["docSurname"] = doctor.docSurname;
-			docNode["DocMiddleName"] = doctor.docMiddleName;
-			docNode["docSpeciality"] = doctor.docSpeciality;
-			docNode["docEmpYear"] = doctor.docEmploymentDate.tm_year;
-			docNode["docEmpMon"] = doctor.docEmploymentDate.tm_mon;
-			docNode["docEmpDay"] = doctor.docEmploymentDate.tm_mday;
-			docNode["docExpirienceYears"] = doctor.docExpirienceYears;
-			docNode["docRating"] = doctor.docRating;
-			docNode["docMaxDayClients"] = doctor.docMaxDayClients;
-			docNode["docWorkingDays"] = doctor.docWorkingDays;
-			docNode["docWorkingHoursStartHour"] = doctor.docWorkingHoursStart.tm_hour;
-			docNode["docWorkingHoursStartMin"] = doctor.docWorkingHoursStart.tm_min;
-			docNode["docWorkingHoursEndHour"] = doctor.docWorkingHoursEnd.tm_hour;
-			docNode["docWorkingHoursEndMin"] = doctor.docWorkingHoursEnd.tm_min;
-			docNode["docReviews"] = doctor.docReviews;
-			docNode["docWorkPlace"] = doctor.docWorkPlace;
+			for (const Doctor& doctor : doctors)
+			{
+				json docNode;
 
-			jsonData.push_back(docNode);
+				docNode["docID"] = doctor.docID;
+				docNode["docName"] = doctor.docName;
+				docNode["docSurname"] = doctor.docSurname;
+				docNode["DocMiddleName"] = doctor.docMiddleName;
+				docNode["docSpeciality"] = doctor.docSpeciality;
+				docNode["docEmpYear"] = doctor.docEmploymentDate.tm_year;
+				docNode["docEmpMon"] = doctor.docEmploymentDate.tm_mon;
+				docNode["docEmpDay"] = doctor.docEmploymentDate.tm_mday;
+				docNode["docExpirienceYears"] = doctor.docExpirienceYears;
+				docNode["docRating"] = doctor.docRating;
+				docNode["docMaxDayClients"] = doctor.docMaxDayClients;
+				docNode["docWorkingDays"] = doctor.docWorkingDays;
+				docNode["docWorkingHoursStartHour"] = doctor.docWorkingHoursStart.tm_hour;
+				docNode["docWorkingHoursStartMin"] = doctor.docWorkingHoursStart.tm_min;
+				docNode["docWorkingHoursEndHour"] = doctor.docWorkingHoursEnd.tm_hour;
+				docNode["docWorkingHoursEndMin"] = doctor.docWorkingHoursEnd.tm_min;
+				docNode["docReviews"] = doctor.docReviews;
+				docNode["docWorkPlace"] = doctor.docWorkPlace;
+
+				jsonData.push_back(docNode);
+			}
+
+			std::ofstream file(Filename);
+			if (file.is_open())
+			{
+				file << std::setw(4) << jsonData;
+				file.close();
+				std::cout << "JSON file saved successfully: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to save JSON file: " << Filename << std::endl;
+			}
 		}
+		else if (get_filetype(Filename) == "xml")
+		{
+			pugi::xml_document doc;
+			pugi::xml_node root = doc.append_child("doctors");
 
-		std::ofstream file(Filename);
-		if (file.is_open())
-		{
-			file << std::setw(4) << jsonData;
-			file.close();
-			std::cout << "JSON file saved successfully: " << Filename << std::endl;
+			for (const Doctor& doctor : doctors) {
+				pugi::xml_node docNode = root.append_child("doctor");
+
+				docNode.append_attribute("docID").set_value(doctor.docID);
+				docNode.append_child("docName").text().set(doctor.docName.c_str());
+				docNode.append_child("docSurname").text().set(doctor.docSurname.c_str());
+				docNode.append_child("docMiddleName").text().set(doctor.docMiddleName.c_str());
+				docNode.append_child("docSpeciality").text().set(doctor.docSpeciality.c_str());
+
+				docNode.append_child("docEmpYear").text().set(doctor.docEmploymentDate.tm_year);
+				docNode.append_child("docEmpMon").text().set(doctor.docEmploymentDate.tm_mon);
+				docNode.append_child("docEmpDay").text().set(doctor.docEmploymentDate.tm_mday);
+
+				docNode.append_child("docExpirienceYears").text().set(doctor.docExpirienceYears);
+				docNode.append_child("docRating").text().set(doctor.docRating);
+				docNode.append_child("docMaxDayClients").text().set(doctor.docMaxDayClients);
+				docNode.append_child("docWorkingDays").text().set(doctor.docWorkingDays.c_str());
+				docNode.append_child("docReviews").text().set(doctor.docReviews.c_str());
+				docNode.append_child("docWorkPlace").text().set(doctor.docWorkPlace);
+
+				docNode.append_child("docWorkingHoursStartHour").text().set(doctor.docWorkingHoursStart.tm_hour);
+				docNode.append_child("docWorkingHoursStartMin").text().set(doctor.docWorkingHoursStart.tm_min);
+				docNode.append_child("docWorkingHoursEndHour").text().set(doctor.docWorkingHoursEnd.tm_hour);
+				docNode.append_child("docWorkingHoursEndMin").text().set(doctor.docWorkingHoursEnd.tm_min);
+			}
+
+			if (doc.save_file(Filename.c_str()))
+			{
+				std::cout << "XML file saved successfully: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to save XML file: " << Filename << std::endl;
+			}
 		}
-		else
-		{
-			std::cerr << "Failed to save JSON file: " << Filename << std::endl;
+		else {
+			throw Exceptions::FileNameException();
 		}
 	}
-	else if (get_filetype(Filename) == "xml")
+	catch (const Exceptions::FileNameException& ex)
 	{
-		pugi::xml_document doc;
-		pugi::xml_node root = doc.append_child("doctors");
-
-		for (const Doctor& doctor : doctors) {
-			pugi::xml_node docNode = root.append_child("doctor");
-
-			docNode.append_attribute("docID").set_value(doctor.docID);
-			docNode.append_child("docName").text().set(doctor.docName.c_str());
-			docNode.append_child("docSurname").text().set(doctor.docSurname.c_str());
-			docNode.append_child("docMiddleName").text().set(doctor.docMiddleName.c_str());
-			docNode.append_child("docSpeciality").text().set(doctor.docSpeciality.c_str());
-
-			docNode.append_child("docEmpYear").text().set(doctor.docEmploymentDate.tm_year);
-			docNode.append_child("docEmpMon").text().set(doctor.docEmploymentDate.tm_mon);
-			docNode.append_child("docEmpDay").text().set(doctor.docEmploymentDate.tm_mday);
-
-			docNode.append_child("docExpirienceYears").text().set(doctor.docExpirienceYears);
-			docNode.append_child("docRating").text().set(doctor.docRating);
-			docNode.append_child("docMaxDayClients").text().set(doctor.docMaxDayClients);
-			docNode.append_child("docWorkingDays").text().set(doctor.docWorkingDays.c_str());
-			docNode.append_child("docReviews").text().set(doctor.docReviews.c_str());
-			docNode.append_child("docWorkPlace").text().set(doctor.docWorkPlace);
-
-			docNode.append_child("docWorkingHoursStartHour").text().set(doctor.docWorkingHoursStart.tm_hour);
-			docNode.append_child("docWorkingHoursStartMin").text().set(doctor.docWorkingHoursStart.tm_min);
-			docNode.append_child("docWorkingHoursEndHour").text().set(doctor.docWorkingHoursEnd.tm_hour);
-			docNode.append_child("docWorkingHoursEndMin").text().set(doctor.docWorkingHoursEnd.tm_min);
-		}
-
-		if (doc.save_file(Filename.c_str()))
-		{
-			std::cout << "XML file saved successfully: " << Filename << std::endl;
-		}
-		else
-		{
-			std::cerr << "Failed to save XML file: " << Filename << std::endl;
-		}
+		std::cerr << "(Doctor table file write)" << ex.what() << std::endl;
 	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Doctor table file write) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return;
 }
 
 void write_doctortable(std::vector<Doctor>& doctors)
@@ -1964,44 +2527,58 @@ void doctortable_toDB(const std::string& Filename)
 
 std::vector<Visit> read_visittable(const std::string& Filename)
 {
-	std::vector<Visit> visits;
-
-	if (get_filetype(Filename) == "xml")
+	std::vector<Visit> emptyVector;
+	try
 	{
-		pugi::xml_document doc;
-		if (!doc.load_file(Filename.c_str()))
+		std::vector<Visit> visits;
+
+		if (get_filetype(Filename) == "xml")
 		{
-			std::cerr << "Failed to load XML file: " << Filename << std::endl;
-			return visits;
+			pugi::xml_document doc;
+			if (!doc.load_file(Filename.c_str()))
+			{
+				std::cerr << "Failed to load XML file: " << Filename << std::endl;
+				return visits;
+			}
+
+			pugi::xml_node root = doc.child("visits");
+
+			for (pugi::xml_node visitNode = root.child("visit"); visitNode; visitNode = visitNode.next_sibling("visit"))
+			{
+				Visit tmp;
+
+				tmp.visitID = visitNode.attribute("visitID").as_int();
+				tmp.clientID = visitNode.attribute("clientID").as_int();
+				tmp.doctorID = visitNode.attribute("doctorID").as_int();
+				tmp.visitStatus = visitNode.attribute("visitStatus").as_bool();
+				tmp.diagnosis = visitNode.child_value("diagnosis");
+				tmp.prescription = visitNode.child_value("prescription");
+				tmp.visitDate.tm_year = visitNode.child("visitDateYear").text().as_int();
+				tmp.visitDate.tm_mon = visitNode.child("visitDateYear").text().as_int();
+				tmp.visitDate.tm_mday = visitNode.child("visitDateYear").text().as_int();
+				tmp.visitTime.tm_hour = visitNode.child("visitHour").text().as_int();
+				tmp.visitTime.tm_min = visitNode.child("visitMinute").text().as_int();
+
+				visits.push_back(tmp);
+			}
 		}
-
-		pugi::xml_node root = doc.child("visits");
-
-		for (pugi::xml_node visitNode = root.child("visit"); visitNode; visitNode = visitNode.next_sibling("visit"))
-		{
-			Visit tmp;
-
-			tmp.visitID = visitNode.attribute("visitID").as_int();
-			tmp.clientID = visitNode.attribute("clientID").as_int();
-			tmp.doctorID = visitNode.attribute("doctorID").as_int();
-			tmp.visitStatus = visitNode.attribute("visitStatus").as_bool();
-			tmp.diagnosis = visitNode.child_value("diagnosis");
-			tmp.prescription = visitNode.child_value("prescription");
-			tmp.visitDate.tm_year = visitNode.child("visitDateYear").text().as_int();
-			tmp.visitDate.tm_mon = visitNode.child("visitDateYear").text().as_int();
-			tmp.visitDate.tm_mday = visitNode.child("visitDateYear").text().as_int();
-			tmp.visitTime.tm_hour = visitNode.child("visitHour").text().as_int();
-			tmp.visitTime.tm_min = visitNode.child("visitMinute").text().as_int();
-
-			visits.push_back(tmp);
+		else {
+			throw Exceptions::FileNameException();
 		}
 	}
-	else
+	catch (const Exceptions::FileNameException& ex)
 	{
-		std::cerr << "Unsupported file format: " << Filename << std::endl;
+		std::cerr << "(Doctor table file read)" << ex.what() << std::endl;
 	}
-
-	return visits;
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Doctor table file read) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return emptyVector;
 }
 
 std::vector<Visit> read_visittable()
@@ -2042,7 +2619,32 @@ std::vector<Visit> read_visittable()
 	}
 	else
 	{
-		std::cerr << "Failed to connect to the database." << std::endl;
+		try {
+			std::cerr << "(Read visits table) Data error: Failed to connect to the database." << std::endl;
+
+			std::ifstream xmlfile("visits.xml");
+			std::ifstream jsonfile("visits.json");
+
+			if (xmlfile.is_open()) {
+				xmlfile.close();
+				return read_visittable("visits.xml");
+			}
+			else if (jsonfile.is_open()) {
+				jsonfile.close();
+				return read_visittable("visits.json");
+			}
+			else {
+				throw Exceptions::DataFilesException();
+			}
+		}
+		catch (const Exceptions::DataFilesException& ex)
+		{
+			std::cerr << "(Read visits table)" << ex.what() << std::endl;
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << "Data error: " << ex.what() << std::endl;
+		}
 	}
 
 	return visits;
@@ -2050,70 +2652,89 @@ std::vector<Visit> read_visittable()
 
 void write_visittable(const std::vector<Visit>& visits, const std::string& Filename)
 {
-	if (get_filetype(Filename) == "json")
+	try
 	{
-		json jsonData;
-
-		for (const Visit& visit : visits)
+		if (get_filetype(Filename) == "json")
 		{
-			json visitNode;
-			visitNode["visitID"] = visit.visitID;
-			visitNode["clientID"] = visit.clientID;
-			visitNode["doctorID"] = visit.doctorID;
-			visitNode["visitDateYear"] = visit.visitDate.tm_year;
-			visitNode["visitDateMon"] = visit.visitDate.tm_mon;
-			visitNode["visitDateDay"] = visit.visitDate.tm_mday;
-			visitNode["visitHour"] = visit.visitTime.tm_hour;
-			visitNode["visitMinute"] = visit.visitTime.tm_min;
-			visitNode["Diagnosis"] = visit.diagnosis;
-			visitNode["Prescription"] = visit.prescription;
-			visitNode["Status"] = visit.visitStatus;
+			json jsonData;
 
-			jsonData.push_back(visitNode);
+			for (const Visit& visit : visits)
+			{
+				json visitNode;
+				visitNode["visitID"] = visit.visitID;
+				visitNode["clientID"] = visit.clientID;
+				visitNode["doctorID"] = visit.doctorID;
+				visitNode["visitDateYear"] = visit.visitDate.tm_year;
+				visitNode["visitDateMon"] = visit.visitDate.tm_mon;
+				visitNode["visitDateDay"] = visit.visitDate.tm_mday;
+				visitNode["visitHour"] = visit.visitTime.tm_hour;
+				visitNode["visitMinute"] = visit.visitTime.tm_min;
+				visitNode["Diagnosis"] = visit.diagnosis;
+				visitNode["Prescription"] = visit.prescription;
+				visitNode["Status"] = visit.visitStatus;
+
+				jsonData.push_back(visitNode);
+			}
+
+			std::ofstream file(Filename);
+			if (file.is_open())
+			{
+				file << std::setw(4) << jsonData;
+				file.close();
+				std::cout << "JSON file saved successfully: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to save JSON file: " << Filename << std::endl;
+			}
 		}
+		else if (get_filetype(Filename) == "xml")
+		{
+			pugi::xml_document doc;
+			pugi::xml_node root = doc.append_child("visits");
 
-		std::ofstream file(Filename);
-		if (file.is_open())
-		{
-			file << std::setw(4) << jsonData;
-			file.close();
-			std::cout << "JSON file saved successfully: " << Filename << std::endl;
+			for (const Visit& visit : visits)
+			{
+				pugi::xml_node visitNode = root.append_child("visit");
+
+				visitNode.append_attribute("visitID") = visit.visitID;
+				visitNode.append_child("clientID").text().set(visit.clientID);
+				visitNode.append_child("doctorID").text().set(visit.doctorID);
+				visitNode.append_child("visitDateYear").text().set(visit.visitDate.tm_year);
+				visitNode.append_child("visitDateMon").text().set(visit.visitDate.tm_mon);
+				visitNode.append_child("visitDateDay").text().set(visit.visitDate.tm_mday);
+				visitNode.append_child("visitHour").text().set(visit.visitTime.tm_hour);
+				visitNode.append_child("visitMinute").text().set(visit.visitTime.tm_min);
+				visitNode.append_child("diagnosis").text().set(visit.diagnosis.c_str());
+				visitNode.append_child("prescription").text().set(visit.prescription.c_str());
+			}
+
+			if (doc.save_file(Filename.c_str()))
+			{
+				std::cout << "XML file saved successfully: " << Filename << std::endl;
+			}
+			else
+			{
+				std::cerr << "Failed to save XML file: " << Filename << std::endl;
+			}
 		}
-		else
-		{
-			std::cerr << "Failed to save JSON file: " << Filename << std::endl;
+		else {
+			throw Exceptions::FileNameException();
 		}
 	}
-	else if (get_filetype(Filename) == "xml")
+	catch (const Exceptions::FileNameException& ex)
 	{
-		pugi::xml_document doc;
-		pugi::xml_node root = doc.append_child("visits");
-
-		for (const Visit& visit : visits)
-		{
-			pugi::xml_node visitNode = root.append_child("visit");
-
-			visitNode.append_attribute("visitID") = visit.visitID;
-			visitNode.append_child("clientID").text().set(visit.clientID);
-			visitNode.append_child("doctorID").text().set(visit.doctorID);
-			visitNode.append_child("visitDateYear").text().set(visit.visitDate.tm_year);
-			visitNode.append_child("visitDateMon").text().set(visit.visitDate.tm_mon);
-			visitNode.append_child("visitDateDay").text().set(visit.visitDate.tm_mday);
-			visitNode.append_child("visitHour").text().set(visit.visitTime.tm_hour);
-			visitNode.append_child("visitMinute").text().set(visit.visitTime.tm_min);
-			visitNode.append_child("diagnosis").text().set(visit.diagnosis.c_str());
-			visitNode.append_child("prescription").text().set(visit.prescription.c_str());
-		}
-
-		if (doc.save_file(Filename.c_str()))
-		{
-			std::cout << "XML file saved successfully: " << Filename << std::endl;
-		}
-		else
-		{
-			std::cerr << "Failed to save XML file: " << Filename << std::endl;
-		}
+		std::cerr << "(Visit table file write)" << ex.what() << std::endl;
 	}
+	catch (sql::SQLException& ex)
+	{
+		std::cerr << "(Visit table file write) Data error: " << ex.what() << std::endl;
+	}
+	catch (const std::exception& ex)
+	{
+		std::cerr << "Data error: " << ex.what() << std::endl;
+	}
+	return;
 }
 
 void write_visittable(std::vector<Visit>& visits)
