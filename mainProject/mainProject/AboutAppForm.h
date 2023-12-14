@@ -68,7 +68,6 @@ namespace mainProject {
 			this->rTbAbout->Size = System::Drawing::Size(879, 704);
 			this->rTbAbout->TabIndex = 0;
 			this->rTbAbout->Text = resources->GetString(L"rTbAbout.Text");
-			this->rTbAbout->TextChanged += gcnew System::EventHandler(this, &AboutAppForm::rTbAbout_TextChanged);
 			// 
 			// button1
 			// 
@@ -93,7 +92,6 @@ namespace mainProject {
 			this->linfo->Size = System::Drawing::Size(321, 16);
 			this->linfo->TabIndex = 31;
 			this->linfo->Text = L"Для отриманя інформації по формі - натисніть F1";
-			this->linfo->Click += gcnew System::EventHandler(this, &AboutAppForm::linfo_Click);
 			// 
 			// AboutAppForm
 			// 
@@ -126,10 +124,6 @@ namespace mainProject {
 
 		// Показати MessageBox із текстом допомоги
 		MessageBox::Show(helpText, "Довідка", MessageBoxButtons::OK, MessageBoxIcon::Information);
-	}
-	private: System::Void rTbAbout_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	}
-	private: System::Void linfo_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void AboutAppForm_Load(System::Object^ sender, System::EventArgs^ e) {
 	}

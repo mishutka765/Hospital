@@ -340,20 +340,18 @@ namespace mainProject {
 				L"Voznesenivskyi", L"Dniprovskyi ", L"Kommunarsky",
 					L"Oleksandrivskyi ", L"Shevchenkivskyi", L"Khortytskyi", L"Zavodskoy"
 			});
-			this->cLBplace->Location = System::Drawing::Point(8, 184);
-			this->cLBplace->Margin = System::Windows::Forms::Padding(4);
+			this->cLBplace->Location = System::Drawing::Point(22, 171);
 			this->cLBplace->Name = L"cLBplace";
-			this->cLBplace->Size = System::Drawing::Size(183, 140);
+			this->cLBplace->Size = System::Drawing::Size(141, 124);
 			this->cLBplace->TabIndex = 0;
 			this->cLBplace->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::cLBplace_MouseMove);
 			// 
 			// CbPrivate
 			// 
 			this->CbPrivate->AutoSize = true;
-			this->CbPrivate->Location = System::Drawing::Point(8, 47);
-			this->CbPrivate->Margin = System::Windows::Forms::Padding(4);
+			this->CbPrivate->Location = System::Drawing::Point(13, 41);
 			this->CbPrivate->Name = L"CbPrivate";
-			this->CbPrivate->Size = System::Drawing::Size(94, 20);
+			this->CbPrivate->Size = System::Drawing::Size(75, 17);
 			this->CbPrivate->TabIndex = 1;
 			this->CbPrivate->Text = L"Ïðèâàòíà";
 			this->CbPrivate->UseVisualStyleBackColor = true;
@@ -362,10 +360,9 @@ namespace mainProject {
 			// CbState
 			// 
 			this->CbState->AutoSize = true;
-			this->CbState->Location = System::Drawing::Point(7, 90);
-			this->CbState->Margin = System::Windows::Forms::Padding(4);
+			this->CbState->Location = System::Drawing::Point(13, 79);
 			this->CbState->Name = L"CbState";
-			this->CbState->Size = System::Drawing::Size(95, 20);
+			this->CbState->Size = System::Drawing::Size(79, 17);
 			this->CbState->TabIndex = 2;
 			this->CbState->Text = L"Äåðæàâíà";
 			this->CbState->UseVisualStyleBackColor = true;
@@ -375,14 +372,13 @@ namespace mainProject {
 			// 
 			this->cLbDocType->FormattingEnabled = true;
 			this->cLbDocType->Items->AddRange(gcnew cli::array< System::Object^  >(18) {
-				L"Obstetrician-gynecologist", L"Dermatologist",
-					L"Gastroenterologist", L"Hematologist", L"Gynaecologist", L"Cardiologist", L"Neurologist", L"Oculist", L"Onkoloh", L"Ortoped",
-					L"Otolarynholoh (LOR-likar)", L"Psykhiatr", L"Pulmonoloh", L"Revmatoloh", L"Dentist", L"Terapevt", L"Uroloh", L"Endokrynoloh"
+				L"Cardiologist", L"Dentist", L"Dermatologist",
+					L"Endokrynoloh", L"Gastroenterologist", L"Gynaecologist", L"Hematologist", L"Neurologist", L"Obstetrician-gynecologist", L"Oculist",
+					L"Onkoloh", L"Ortoped", L"Otolarynholoh (LOR-likar)", L"Pulmonoloh", L"Psykhiatr", L"Revmatoloh", L"Terapevt", L"Uroloh"
 			});
-			this->cLbDocType->Location = System::Drawing::Point(217, 184);
-			this->cLbDocType->Margin = System::Windows::Forms::Padding(4);
+			this->cLbDocType->Location = System::Drawing::Point(401, 177);
 			this->cLbDocType->Name = L"cLbDocType";
-			this->cLbDocType->Size = System::Drawing::Size(213, 140);
+			this->cLbDocType->Size = System::Drawing::Size(161, 274);
 			this->cLbDocType->TabIndex = 3;
 			this->cLbDocType->Tag = L"";
 			this->cLbDocType->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::cLbDocType_MouseMove);
@@ -391,11 +387,9 @@ namespace mainProject {
 			// 
 			this->groupBox1->Controls->Add(this->CbState);
 			this->groupBox1->Controls->Add(this->CbPrivate);
-			this->groupBox1->Location = System::Drawing::Point(452, 184);
-			this->groupBox1->Margin = System::Windows::Forms::Padding(4);
+			this->groupBox1->Location = System::Drawing::Point(223, 171);
 			this->groupBox1->Name = L"groupBox1";
-			this->groupBox1->Padding = System::Windows::Forms::Padding(4);
-			this->groupBox1->Size = System::Drawing::Size(111, 140);
+			this->groupBox1->Size = System::Drawing::Size(118, 124);
 			this->groupBox1->TabIndex = 6;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"Òèï êë³í³êè:";
@@ -403,60 +397,54 @@ namespace mainProject {
 			// lPlace
 			// 
 			this->lPlace->AutoSize = true;
-			this->lPlace->Location = System::Drawing::Point(8, 163);
-			this->lPlace->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lPlace->Location = System::Drawing::Point(24, 145);
 			this->lPlace->Name = L"lPlace";
-			this->lPlace->Size = System::Drawing::Size(88, 16);
+			this->lPlace->Size = System::Drawing::Size(87, 13);
 			this->lPlace->TabIndex = 7;
-			this->lPlace->Text = L"Ðàéîí ì³ñòà:";
+			this->lPlace->Text = L"Âèáåð³òü ðàéîí:";
 			// 
 			// lDocType
 			// 
 			this->lDocType->AutoSize = true;
-			this->lDocType->Location = System::Drawing::Point(213, 163);
-			this->lDocType->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lDocType->Location = System::Drawing::Point(398, 151);
 			this->lDocType->Name = L"lDocType";
-			this->lDocType->Size = System::Drawing::Size(143, 16);
+			this->lDocType->Size = System::Drawing::Size(112, 13);
 			this->lDocType->TabIndex = 8;
 			this->lDocType->Text = L"Ñïåö³àë³çàö³ÿ ë³êàðÿ:";
 			// 
 			// lDateVizit
 			// 
 			this->lDateVizit->AutoSize = true;
-			this->lDateVizit->Location = System::Drawing::Point(8, 358);
-			this->lDateVizit->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lDateVizit->Location = System::Drawing::Point(19, 323);
 			this->lDateVizit->Name = L"lDateVizit";
-			this->lDateVizit->Size = System::Drawing::Size(252, 16);
+			this->lDateVizit->Size = System::Drawing::Size(195, 13);
 			this->lDateVizit->TabIndex = 9;
 			this->lDateVizit->Text = L"Îáåð³òü äàòó òà â³ëüíèé ÷àñ ïðèéîìó:";
 			// 
 			// cBTimeSelect
 			// 
 			this->cBTimeSelect->FormattingEnabled = true;
-			this->cBTimeSelect->Location = System::Drawing::Point(16, 446);
-			this->cBTimeSelect->Margin = System::Windows::Forms::Padding(4);
+			this->cBTimeSelect->Location = System::Drawing::Point(22, 393);
 			this->cBTimeSelect->Name = L"cBTimeSelect";
-			this->cBTimeSelect->Size = System::Drawing::Size(268, 24);
+			this->cBTimeSelect->Size = System::Drawing::Size(195, 21);
 			this->cBTimeSelect->TabIndex = 10;
 			this->cBTimeSelect->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::cBTimeSelect_MouseMove);
 			// 
 			// tBComments
 			// 
-			this->tBComments->Location = System::Drawing::Point(516, 686);
-			this->tBComments->Margin = System::Windows::Forms::Padding(4);
+			this->tBComments->Location = System::Drawing::Point(401, 574);
 			this->tBComments->Multiline = true;
 			this->tBComments->Name = L"tBComments";
-			this->tBComments->Size = System::Drawing::Size(583, 144);
+			this->tBComments->Size = System::Drawing::Size(552, 118);
 			this->tBComments->TabIndex = 12;
 			this->tBComments->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::tBComments_MouseUp);
 			// 
 			// lComments
 			// 
 			this->lComments->AutoSize = true;
-			this->lComments->Location = System::Drawing::Point(513, 662);
-			this->lComments->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lComments->Location = System::Drawing::Point(398, 558);
 			this->lComments->Name = L"lComments";
-			this->lComments->Size = System::Drawing::Size(343, 16);
+			this->lComments->Size = System::Drawing::Size(271, 13);
 			this->lComments->TabIndex = 13;
 			this->lComments->Text = L"Ìîæåòå çàëèøèòè ñêàðãè ùîäî ñàìîïî÷óòòÿ íèæ÷å:";
 			// 
@@ -465,10 +453,9 @@ namespace mainProject {
 			this->lChoose->AutoSize = true;
 			this->lChoose->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->lChoose->Location = System::Drawing::Point(415, 32);
-			this->lChoose->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lChoose->Location = System::Drawing::Point(309, 39);
 			this->lChoose->Name = L"lChoose";
-			this->lChoose->Size = System::Drawing::Size(294, 24);
+			this->lChoose->Size = System::Drawing::Size(227, 18);
 			this->lChoose->TabIndex = 14;
 			this->lChoose->Text = L"Çàïîâí³òü áëîêè íèæ÷å äàíèìè";
 			// 
@@ -478,10 +465,9 @@ namespace mainProject {
 			this->bSend->FlatAppearance->MouseOverBackColor = System::Drawing::Color::White;
 			this->bSend->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->bSend->Location = System::Drawing::Point(16, 755);
-			this->bSend->Margin = System::Windows::Forms::Padding(4);
+			this->bSend->Location = System::Drawing::Point(27, 631);
 			this->bSend->Name = L"bSend";
-			this->bSend->Size = System::Drawing::Size(269, 75);
+			this->bSend->Size = System::Drawing::Size(202, 61);
 			this->bSend->TabIndex = 15;
 			this->bSend->Text = L"Çàïèñàòèñÿ";
 			this->bSend->UseVisualStyleBackColor = true;
@@ -492,20 +478,18 @@ namespace mainProject {
 			// 
 			this->linfo->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->linfo->AutoSize = true;
-			this->linfo->Location = System::Drawing::Point(4, 1014);
-			this->linfo->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->linfo->Location = System::Drawing::Point(3, 841);
 			this->linfo->Name = L"linfo";
-			this->linfo->Size = System::Drawing::Size(321, 16);
+			this->linfo->Size = System::Drawing::Size(256, 13);
 			this->linfo->TabIndex = 31;
 			this->linfo->Text = L"Äëÿ îòðèìàíÿ ³íôîðìàö³¿ ïî ôîðì³ - íàòèñí³òü F1";
 			// 
 			// dTPSelect
 			// 
 			this->dTPSelect->Format = System::Windows::Forms::DateTimePickerFormat::Time;
-			this->dTPSelect->Location = System::Drawing::Point(16, 399);
-			this->dTPSelect->Margin = System::Windows::Forms::Padding(4);
+			this->dTPSelect->Location = System::Drawing::Point(22, 356);
 			this->dTPSelect->Name = L"dTPSelect";
-			this->dTPSelect->Size = System::Drawing::Size(117, 22);
+			this->dTPSelect->Size = System::Drawing::Size(89, 20);
 			this->dTPSelect->TabIndex = 32;
 			this->dTPSelect->ValueChanged += gcnew System::EventHandler(this, &NewRecordForm::dTPSelect_ValueChanged);
 			this->dTPSelect->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &NewRecordForm::dTPSelect_MouseMove);
@@ -513,29 +497,27 @@ namespace mainProject {
 			// cLbDoc
 			// 
 			this->cLbDoc->FormattingEnabled = true;
-			this->cLbDoc->Location = System::Drawing::Point(516, 399);
-			this->cLbDoc->Margin = System::Windows::Forms::Padding(4);
+			this->cLbDoc->Location = System::Drawing::Point(621, 352);
 			this->cLbDoc->Name = L"cLbDoc";
-			this->cLbDoc->Size = System::Drawing::Size(583, 242);
+			this->cLbDoc->Size = System::Drawing::Size(332, 199);
 			this->cLbDoc->TabIndex = 34;
 			this->cLbDoc->SelectedIndexChanged += gcnew System::EventHandler(this, &NewRecordForm::cLbDoc_SelectedIndexChanged);
 			// 
 			// cLbHospital
 			// 
 			this->cLbHospital->FormattingEnabled = true;
-			this->cLbHospital->Location = System::Drawing::Point(589, 184);
+			this->cLbHospital->Location = System::Drawing::Point(621, 177);
 			this->cLbHospital->Margin = System::Windows::Forms::Padding(4);
 			this->cLbHospital->Name = L"cLbHospital";
-			this->cLbHospital->Size = System::Drawing::Size(510, 140);
+			this->cLbHospital->Size = System::Drawing::Size(332, 124);
 			this->cLbHospital->TabIndex = 35;
 			this->cLbHospital->SelectedIndexChanged += gcnew System::EventHandler(this, &NewRecordForm::cLbHospital_SelectedIndexChanged);
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(16, 686);
-			this->button1->Margin = System::Windows::Forms::Padding(4);
+			this->button1->Location = System::Drawing::Point(27, 566);
 			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(269, 43);
+			this->button1->Size = System::Drawing::Size(202, 35);
 			this->button1->TabIndex = 36;
 			this->button1->Text = L"Çíàéòè äîñòóïíèõ ë³êàð³â";
 			this->button1->UseVisualStyleBackColor = true;
@@ -544,39 +526,36 @@ namespace mainProject {
 			// lÑlinic
 			// 
 			this->lÑlinic->AutoSize = true;
-			this->lÑlinic->Location = System::Drawing::Point(586, 164);
-			this->lÑlinic->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lÑlinic->Location = System::Drawing::Point(618, 151);
 			this->lÑlinic->Name = L"lÑlinic";
-			this->lÑlinic->Size = System::Drawing::Size(55, 16);
+			this->lÑlinic->Size = System::Drawing::Size(45, 13);
 			this->lÑlinic->TabIndex = 37;
 			this->lÑlinic->Text = L"Êë³í³êè:";
 			// 
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(334, 358);
-			this->label2->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label2->Location = System::Drawing::Point(618, 323);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(48, 16);
+			this->label2->Size = System::Drawing::Size(40, 13);
 			this->label2->TabIndex = 38;
 			this->label2->Text = L"Ë³êàð³:";
 			// 
 			// piñBox
 			// 
 			this->piñBox->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"piñBox.Image")));
-			this->piñBox->Location = System::Drawing::Point(-35, -5);
-			this->piñBox->Margin = System::Windows::Forms::Padding(4);
+			this->piñBox->Location = System::Drawing::Point(-24, 3);
 			this->piñBox->Name = L"piñBox";
-			this->piñBox->Size = System::Drawing::Size(241, 144);
+			this->piñBox->Size = System::Drawing::Size(181, 117);
 			this->piñBox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->piñBox->TabIndex = 42;
 			this->piñBox->TabStop = false;
 			// 
 			// NewRecordForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1113, 845);
+			this->ClientSize = System::Drawing::Size(985, 704);
 			this->Controls->Add(this->piñBox);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->lÑlinic);
@@ -596,9 +575,7 @@ namespace mainProject {
 			this->Controls->Add(this->cLbDocType);
 			this->Controls->Add(this->cLBplace);
 			this->Controls->Add(this->groupBox1);
-			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"NewRecordForm";
 			this->Text = L"Ñòâîðèòè íîâèé çàïèñ";
 			this->Load += gcnew System::EventHandler(this, &NewRecordForm::NewRecordForm_Load);

@@ -84,4 +84,29 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="userfile.json">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="doctors.json">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="hospitalfile.json">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="doctorfile.xml">
+      <Filter>Файлы ресурсов</Filter>
+    </Xml>
+    <Xml Include="hospitalfile.xml">
+      <Filter>Файлы ресурсов</Filter>
+    </Xml>
+    <Xml Include="userfile.xml">
+      <Filter>Файлы ресурсов</Filter>
+    </Xml>
+    <Xml Include="visits.xml">
+      <Filter>Файлы ресурсов</Filter>
+    </Xml>
+  </ItemGroup>
 </Project>

@@ -55,3 +55,11 @@ F:\EDC\3sem\KURSA4\Exceptions\mainProject\mainProject\x64\Release\mainProject.Ne
 F:\EDC\3sem\KURSA4\Exceptions\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
 F:\EDC\3sem\KURSA4\Exceptions\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
 F:\EDC\3sem\KURSA4\Exceptions\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache
+D:\курсс\Exceptions\mainProject\mainProject\x64\Release\mainProject.vcxproj.AssemblyReference.cache
+D:\курсс\Exceptions\mainProject\mainProject\x64\Release\mainProject.vcxproj.SuggestedBindingRedirects.cache
+D:\курсс\Exceptions\mainProject\mainProject\x64\Release\mainProject.AboutAppForm.resources
+D:\курсс\Exceptions\mainProject\mainProject\x64\Release\mainProject.LogForm.resources
+D:\курсс\Exceptions\mainProject\mainProject\x64\Release\mainProject.NewRecordForm.resources
+D:\курсс\Exceptions\mainProject\mainProject\x64\Release\mainProject.SignForm.resources
+D:\курсс\Exceptions\mainProject\mainProject\x64\Release\mainProject.StartForm.resources
+D:\курсс\Exceptions\mainProject\mainProject\x64\Release\mainProject.vcxproj.GenerateResource.cache

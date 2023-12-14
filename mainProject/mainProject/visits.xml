@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<visits>
+	<visit visitID="1">
+		<clientID>1</clientID>
+		<doctorID>1</doctorID>
+		<DateYear>2023</DateYear>
+		<DateMon>10</DateMon>
+		<DateDay>15</DateDay>
+		<diagnosis>Checkup</diagnosis>
+		<prescription>Prescription 1</prescription>
+	</visit>
+	<visit visitID="2">
+		<clientID>1</clientID>
+		<doctorID>3</doctorID>
+		<DateYear>2023</DateYear>
+		<DateMon>11</DateMon>
+		<DateDay>10</DateDay>
+		<diagnosis>Headache</diagnosis>
+		<prescription>Prescription 2</prescription>
+	</visit>
+	<visit visitID="3">
+		<clientID>2</clientID>
+		<doctorID>2</doctorID>
+		<DateYear>2023</DateYear>
+		<DateMon>9</DateMon>
+		<DateDay>20</DateDay>
+		<diagnosis>Back Pain</diagnosis>
+		<prescription>Prescription 3</prescription>
+	</visit>
+	<visit visitID="4">
+		<clientID>2</clientID>
+		<doctorID>4</doctorID>
+		<DateYear>2023</DateYear>
+		<DateMon>10</DateMon>
+		<DateDay>5</DateDay>
+		<diagnosis>Cough</diagnosis>
+		<prescription>Prescription 4</prescription>
+	</visit>
+	<visit visitID="5">
+		<clientID>3</clientID>
+		<doctorID>3</doctorID>
+		<DateYear>2023</DateYear>
+		<DateMon>8</DateMon>
+		<DateDay>10</DateDay>
+		<diagnosis>Stomachache</diagnosis>
+		<prescription>Prescription 7</prescription>
+	</visit>
+	<visit visitID="6">
+		<clientID>3</clientID>
+		<doctorID>5</doctorID>
+		<DateYear>2023</DateYear>
+		<DateMon>9</DateMon>
+		<DateDay>2</DateDay>
+		<diagnosis>Sprained Ankle</diagnosis>
+		<prescription>Prescription 8</prescription>
+	</visit>
+	<visit visitID="7">
+		<clientID>4</clientID>
+		<doctorID>7</doctorID>
+		<DateYear>2023</DateYear>
+		<DateMon>11</DateMon>
+		<DateDay>20</DateDay>
+		<diagnosis>Cold</diagnosis>
+		<prescription>Prescription 9</prescription>
+	</visit>
+	<visit visitID="8">
+		<clientID>4</clientID>
+		<doctorID>9</doctorID>
+		<DateYear>2023</DateYear>
+		<DateMon>12</DateMon>
+		<DateDay>5</DateDay>
+		<diagnosis>Back Pain</diagnosis>
+		<prescription>Prescription 10</prescription>
+	</visit>
+	<visit visitID="9">
+		<clientID>5</clientID>
+		<doctorID>2</doctorID>
+		<DateYear>2023</DateYear>
+		<DateMon>10</DateMon>
+		<DateDay>25</DateDay>
+		<diagnosis>Cough</diagnosis>
+		<prescription>Prescription 11</prescription>
+	</visit>
+	<visit visitID="10">
+		<clientID>5</clientID>
+		<doctorID>4</doctorID>
+		<DateYear>2023</DateYear>
+		<DateMon>11</DateMon>
+		<DateDay>15</DateDay>
+		<diagnosis>Migraine</diagnosis>
+		<prescription>Prescription 12</prescription>
+	</visit>
+</visits>

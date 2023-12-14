@@ -5,7 +5,7 @@
 
 const std::string dbHost = "tcp://127.0.0.1:3306";
 const std::string dbUser = "root";
-const std::string dbPassword = "2203";
+const std::string dbPassword = "7H7S4sd9dS";
 const std::string dbName = "hospitaldbl";
 sql::mysql::MySQL_Driver* driver;
 sql::Connection* con;

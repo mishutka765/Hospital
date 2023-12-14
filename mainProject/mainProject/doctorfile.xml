@@ -1,0 +1,231 @@
+<?xml version="1.0"?>
+<doctors>
+	<doctor docID="1">
+		<docName>Doctor1</docName>
+		<docSurname>Lastname1</docSurname>
+		<docMiddleName>Middle1</docMiddleName>
+		<docSpeciality>Cardiologist</docSpeciality>
+		<docEmpYear>123</docEmpYear>
+		<docEmpMon>0</docEmpMon>
+		<docEmpDay>15</docEmpDay>
+		<docExpirienceYears>10</docExpirienceYears>
+		<docRating>9</docRating>
+		<docMaxDayClients>20</docMaxDayClients>
+		<docWorkingDays>Monday</docWorkingDays>
+		<docReviews>Excellent doctor</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>8</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>14</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+	<doctor docID="2">
+		<docName>Doctor2</docName>
+		<docSurname>Lastname2</docSurname>
+		<docMiddleName>Middle2</docMiddleName>
+		<docSpeciality>Pediatrician</docSpeciality>
+		<docEmpYear>122</docEmpYear>
+		<docEmpMon>10</docEmpMon>
+		<docEmpDay>5</docEmpDay>
+		<docExpirienceYears>7</docExpirienceYears>
+		<docRating>8</docRating>
+		<docMaxDayClients>18</docMaxDayClients>
+		<docWorkingDays>Tuesday</docWorkingDays>
+		<docReviews>Great with kids</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>9</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>16</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+	<doctor docID="3">
+		<docName>Doctor1</docName>
+		<docSurname>Lastname1</docSurname>
+		<docMiddleName>Middle1</docMiddleName>
+		<docSpeciality>Speciality1</docSpeciality>
+		<docEmpYear>122</docEmpYear>
+		<docEmpMon>0</docEmpMon>
+		<docEmpDay>1</docEmpDay>
+		<docExpirienceYears>5</docExpirienceYears>
+		<docRating>9</docRating>
+		<docMaxDayClients>20</docMaxDayClients>
+		<docWorkingDays></docWorkingDays>
+		<docReviews>Doctor1 Reviews</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>9</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>17</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+	<doctor docID="4">
+		<docName>Doctor2</docName>
+		<docSurname>Lastname2</docSurname>
+		<docMiddleName>Middle2</docMiddleName>
+		<docSpeciality>Speciality2</docSpeciality>
+		<docEmpYear>122</docEmpYear>
+		<docEmpMon>1</docEmpMon>
+		<docEmpDay>1</docEmpDay>
+		<docExpirienceYears>6</docExpirienceYears>
+		<docRating>8</docRating>
+		<docMaxDayClients>18</docMaxDayClients>
+		<docWorkingDays></docWorkingDays>
+		<docReviews>Doctor2 Reviews</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>8</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>16</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+	<doctor docID="5">
+		<docName>Doctor3</docName>
+		<docSurname>Lastname3</docSurname>
+		<docMiddleName>Middle3</docMiddleName>
+		<docSpeciality>Speciality3</docSpeciality>
+		<docEmpYear>122</docEmpYear>
+		<docEmpMon>2</docEmpMon>
+		<docEmpDay>1</docEmpDay>
+		<docExpirienceYears>7</docExpirienceYears>
+		<docRating>7</docRating>
+		<docMaxDayClients>16</docMaxDayClients>
+		<docWorkingDays></docWorkingDays>
+		<docReviews>Doctor3 Reviews</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>8</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>16</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+	<doctor docID="6">
+		<docName>Doctor4</docName>
+		<docSurname>Lastname4</docSurname>
+		<docMiddleName>Middle4</docMiddleName>
+		<docSpeciality>Speciality4</docSpeciality>
+		<docEmpYear>122</docEmpYear>
+		<docEmpMon>3</docEmpMon>
+		<docEmpDay>1</docEmpDay>
+		<docExpirienceYears>8</docExpirienceYears>
+		<docRating>8</docRating>
+		<docMaxDayClients>20</docMaxDayClients>
+		<docWorkingDays></docWorkingDays>
+		<docReviews>Doctor4 Reviews</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>9</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>17</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+	<doctor docID="7">
+		<docName>Doctor5</docName>
+		<docSurname>Lastname5</docSurname>
+		<docMiddleName>Middle5</docMiddleName>
+		<docSpeciality>Speciality5</docSpeciality>
+		<docEmpYear>122</docEmpYear>
+		<docEmpMon>4</docEmpMon>
+		<docEmpDay>1</docEmpDay>
+		<docExpirienceYears>9</docExpirienceYears>
+		<docRating>9</docRating>
+		<docMaxDayClients>18</docMaxDayClients>
+		<docWorkingDays></docWorkingDays>
+		<docReviews>Doctor5 Reviews</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>9</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>17</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+	<doctor docID="8">
+		<docName>Doctor6</docName>
+		<docSurname>Lastname6</docSurname>
+		<docMiddleName>Middle6</docMiddleName>
+		<docSpeciality>Speciality6</docSpeciality>
+		<docEmpYear>122</docEmpYear>
+		<docEmpMon>5</docEmpMon>
+		<docEmpDay>1</docEmpDay>
+		<docExpirienceYears>10</docExpirienceYears>
+		<docRating>10</docRating>
+		<docMaxDayClients>22</docMaxDayClients>
+		<docWorkingDays></docWorkingDays>
+		<docReviews>Doctor6 Reviews</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>10</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>18</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+	<doctor docID="9">
+		<docName>Doctor7</docName>
+		<docSurname>Lastname7</docSurname>
+		<docMiddleName>Middle7</docMiddleName>
+		<docSpeciality>Speciality7</docSpeciality>
+		<docEmpYear>122</docEmpYear>
+		<docEmpMon>6</docEmpMon>
+		<docEmpDay>1</docEmpDay>
+		<docExpirienceYears>6</docExpirienceYears>
+		<docRating>9</docRating>
+		<docMaxDayClients>19</docMaxDayClients>
+		<docWorkingDays></docWorkingDays>
+		<docReviews>Doctor7 Reviews</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>8</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>17</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+	<doctor docID="10">
+		<docName>Doctor8</docName>
+		<docSurname>Lastname8</docSurname>
+		<docMiddleName>Middle8</docMiddleName>
+		<docSpeciality>Speciality8</docSpeciality>
+		<docEmpYear>122</docEmpYear>
+		<docEmpMon>7</docEmpMon>
+		<docEmpDay>1</docEmpDay>
+		<docExpirienceYears>7</docExpirienceYears>
+		<docRating>7</docRating>
+		<docMaxDayClients>16</docMaxDayClients>
+		<docWorkingDays></docWorkingDays>
+		<docReviews>Doctor8 Reviews</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>8</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>16</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+	<doctor docID="11">
+		<docName>Doctor9</docName>
+		<docSurname>Lastname9</docSurname>
+		<docMiddleName>Middle9</docMiddleName>
+		<docSpeciality>Speciality9</docSpeciality>
+		<docEmpYear>122</docEmpYear>
+		<docEmpMon>8</docEmpMon>
+		<docEmpDay>1</docEmpDay>
+		<docExpirienceYears>8</docExpirienceYears>
+		<docRating>8</docRating>
+		<docMaxDayClients>20</docMaxDayClients>
+		<docWorkingDays></docWorkingDays>
+		<docReviews>Doctor9 Reviews</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>9</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>17</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+	<doctor docID="12">
+		<docName>Doctor10</docName>
+		<docSurname>Lastname10</docSurname>
+		<docMiddleName>Middle10</docMiddleName>
+		<docSpeciality>Speciality10</docSpeciality>
+		<docEmpYear>122</docEmpYear>
+		<docEmpMon>9</docEmpMon>
+		<docEmpDay>1</docEmpDay>
+		<docExpirienceYears>9</docExpirienceYears>
+		<docRating>10</docRating>
+		<docMaxDayClients>21</docMaxDayClients>
+		<docWorkingDays>Monday, Tuesday</docWorkingDays>
+		<docReviews>Doctor10 Reviews</docReviews>
+		<docWorkPlace>1</docWorkPlace>
+		<docWorkingHoursStartHour>10</docWorkingHoursStartHour>
+		<docWorkingHoursStartMin>0</docWorkingHoursStartMin>
+		<docWorkingHoursEndHour>18</docWorkingHoursEndHour>
+		<docWorkingHoursEndMin>0</docWorkingHoursEndMin>
+	</doctor>
+</doctors>

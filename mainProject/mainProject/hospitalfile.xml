@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<hospitals>
+	<hospital hospitalID="1">
+		<hospitalIsPrivate>true</hospitalIsPrivate>
+		<hospitalAddress>123 Main St, CityA, DistrictA</hospitalAddress>
+		<hospitalName>CityA Hospital</hospitalName>
+		<hospitalRating>9</hospitalRating>
+	</hospital>
+	<hospital hospitalID="2">
+		<hospitalIsPrivate>false</hospitalIsPrivate>
+		<hospitalAddress>456 Elm St, CityB, DistrictB</hospitalAddress>
+		<hospitalName>CityB Public Hospital</hospitalName>
+		<hospitalRating>7</hospitalRating>
+	</hospital>
+	<hospital hospitalID="3">
+		<hospitalIsPrivate>true</hospitalIsPrivate>
+		<hospitalAddress>789 Oak St, CityC, DistrictC</hospitalAddress>
+		<hospitalName>CityC Private Hospital</hospitalName>
+		<hospitalRating>8</hospitalRating>
+	</hospital>
+</hospitals>

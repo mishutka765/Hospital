@@ -1,0 +1,23 @@
+[
+    {
+        "hospitalAddress": "123 Main St, CityA, DistrictA",
+        "hospitalID": 1,
+        "hospitalIsPrivate": true,
+        "hospitalName": "CityA Hospital",
+        "hospitalRating": 9
+    },
+    {
+        "hospitalAddress": "456 Elm St, CityB, DistrictB",
+        "hospitalID": 2,
+        "hospitalIsPrivate": false,
+        "hospitalName": "CityB Public Hospital",
+        "hospitalRating": 7
+    },
+    {
+        "hospitalAddress": "789 Oak St, CityC, DistrictC",
+        "hospitalID": 3,
+        "hospitalIsPrivate": true,
+        "hospitalName": "CityC Private Hospital",
+        "hospitalRating": 8
+    }
+]

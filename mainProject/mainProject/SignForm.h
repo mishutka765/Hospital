@@ -119,20 +119,18 @@ namespace mainProject {
 			// 
 			this->lEnterData->AutoSize = true;
 			this->lEnterData->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11));
-			this->lEnterData->Location = System::Drawing::Point(220, 178);
-			this->lEnterData->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lEnterData->Location = System::Drawing::Point(165, 145);
 			this->lEnterData->Name = L"lEnterData";
-			this->lEnterData->Size = System::Drawing::Size(294, 24);
+			this->lEnterData->Size = System::Drawing::Size(226, 18);
 			this->lEnterData->TabIndex = 0;
 			this->lEnterData->Text = L"Введіть свої дані в поля нижче:";
 			// 
 			// lPassw
 			// 
 			this->lPassw->AutoSize = true;
-			this->lPassw->Location = System::Drawing::Point(28, 397);
-			this->lPassw->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lPassw->Location = System::Drawing::Point(21, 323);
 			this->lPassw->Name = L"lPassw";
-			this->lPassw->Size = System::Drawing::Size(142, 16);
+			this->lPassw->Size = System::Drawing::Size(111, 13);
 			this->lPassw->TabIndex = 4;
 			this->lPassw->Text = L"Придумайте пароль:";
 			// 
@@ -140,10 +138,9 @@ namespace mainProject {
 			// 
 			this->CbShow->AutoSize = true;
 			this->CbShow->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7));
-			this->CbShow->Location = System::Drawing::Point(346, 397);
-			this->CbShow->Margin = System::Windows::Forms::Padding(4);
+			this->CbShow->Location = System::Drawing::Point(271, 323);
 			this->CbShow->Name = L"CbShow";
-			this->CbShow->Size = System::Drawing::Size(128, 19);
+			this->CbShow->Size = System::Drawing::Size(109, 17);
 			this->CbShow->TabIndex = 15;
 			this->CbShow->Text = L"показати пароль";
 			this->CbShow->UseVisualStyleBackColor = true;
@@ -152,11 +149,10 @@ namespace mainProject {
 			// 
 			// mTbPassw
 			// 
-			this->mTbPassw->Location = System::Drawing::Point(188, 395);
-			this->mTbPassw->Margin = System::Windows::Forms::Padding(4);
+			this->mTbPassw->Location = System::Drawing::Point(141, 321);
 			this->mTbPassw->Name = L"mTbPassw";
 			this->mTbPassw->PasswordChar = '*';
-			this->mTbPassw->Size = System::Drawing::Size(143, 22);
+			this->mTbPassw->Size = System::Drawing::Size(108, 20);
 			this->mTbPassw->TabIndex = 14;
 			this->mTbPassw->MaskInputRejected += gcnew System::Windows::Forms::MaskInputRejectedEventHandler(this, &SignForm::mTbPassw_MaskInputRejected);
 			this->mTbPassw->TextChanged += gcnew System::EventHandler(this, &SignForm::mTbPassw_TextChanged_1);
@@ -164,60 +160,62 @@ namespace mainProject {
 			// TbPatr
 			// 
 			this->TbPatr->ForeColor = System::Drawing::Color::Black;
-			this->TbPatr->Location = System::Drawing::Point(507, 258);
-			this->TbPatr->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
+			this->TbPatr->Location = System::Drawing::Point(380, 210);
+			this->TbPatr->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->TbPatr->Name = L"TbPatr";
-			this->TbPatr->Size = System::Drawing::Size(143, 22);
+			this->TbPatr->Size = System::Drawing::Size(108, 20);
 			this->TbPatr->TabIndex = 21;
 			// 
 			// TbSurn
 			// 
-			this->TbSurn->Location = System::Drawing::Point(346, 258);
-			this->TbSurn->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
+			this->TbSurn->Location = System::Drawing::Point(260, 210);
+			this->TbSurn->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->TbSurn->Name = L"TbSurn";
-			this->TbSurn->Size = System::Drawing::Size(143, 22);
+			this->TbSurn->Size = System::Drawing::Size(108, 20);
 			this->TbSurn->TabIndex = 20;
 			// 
 			// TbTel
 			// 
-			this->TbTel->Location = System::Drawing::Point(188, 308);
-			this->TbTel->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
+			this->TbTel->Location = System::Drawing::Point(141, 250);
+			this->TbTel->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->TbTel->Name = L"TbTel";
-			this->TbTel->Size = System::Drawing::Size(143, 22);
+			this->TbTel->Size = System::Drawing::Size(108, 20);
 			this->TbTel->TabIndex = 19;
 			// 
 			// TbName
 			// 
-			this->TbName->Location = System::Drawing::Point(188, 258);
-			this->TbName->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
+			this->TbName->Location = System::Drawing::Point(141, 210);
+			this->TbName->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->TbName->Name = L"TbName";
-			this->TbName->Size = System::Drawing::Size(143, 22);
+			this->TbName->Size = System::Drawing::Size(108, 20);
 			this->TbName->TabIndex = 18;
 			// 
 			// lTel
 			// 
 			this->lTel->AutoSize = true;
-			this->lTel->Location = System::Drawing::Point(100, 311);
+			this->lTel->Location = System::Drawing::Point(75, 253);
+			this->lTel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->lTel->Name = L"lTel";
-			this->lTel->Size = System::Drawing::Size(70, 16);
+			this->lTel->Size = System::Drawing::Size(55, 13);
 			this->lTel->TabIndex = 17;
 			this->lTel->Text = L"Телефон:";
 			// 
 			// lFio
 			// 
 			this->lFio->AutoSize = true;
-			this->lFio->Location = System::Drawing::Point(138, 261);
+			this->lFio->Location = System::Drawing::Point(104, 212);
+			this->lFio->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			this->lFio->Name = L"lFio";
-			this->lFio->Size = System::Drawing::Size(32, 16);
+			this->lFio->Size = System::Drawing::Size(28, 13);
 			this->lFio->TabIndex = 16;
 			this->lFio->Text = L"ПІБ:";
 			// 
 			// BSign
 			// 
-			this->BSign->Location = System::Drawing::Point(254, 489);
-			this->BSign->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
+			this->BSign->Location = System::Drawing::Point(190, 397);
+			this->BSign->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->BSign->Name = L"BSign";
-			this->BSign->Size = System::Drawing::Size(187, 37);
+			this->BSign->Size = System::Drawing::Size(140, 30);
 			this->BSign->TabIndex = 22;
 			this->BSign->Text = L"Зареєструватись";
 			this->BSign->UseVisualStyleBackColor = true;
@@ -225,20 +223,18 @@ namespace mainProject {
 			// 
 			// dateBith
 			// 
-			this->dateBith->Location = System::Drawing::Point(188, 351);
-			this->dateBith->Margin = System::Windows::Forms::Padding(4);
+			this->dateBith->Location = System::Drawing::Point(141, 285);
 			this->dateBith->Name = L"dateBith";
-			this->dateBith->Size = System::Drawing::Size(265, 22);
+			this->dateBith->Size = System::Drawing::Size(200, 20);
 			this->dateBith->TabIndex = 26;
 			this->dateBith->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &SignForm::dateBith_MouseMove);
 			// 
 			// lBirthDate
 			// 
 			this->lBirthDate->AutoSize = true;
-			this->lBirthDate->Location = System::Drawing::Point(45, 351);
-			this->lBirthDate->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lBirthDate->Location = System::Drawing::Point(34, 285);
 			this->lBirthDate->Name = L"lBirthDate";
-			this->lBirthDate->Size = System::Drawing::Size(125, 16);
+			this->lBirthDate->Size = System::Drawing::Size(101, 13);
 			this->lBirthDate->TabIndex = 25;
 			this->lBirthDate->Text = L"Дата народження:";
 			// 
@@ -246,10 +242,9 @@ namespace mainProject {
 			// 
 			this->lPatr->AutoSize = true;
 			this->lPatr->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 6));
-			this->lPatr->Location = System::Drawing::Point(504, 284);
-			this->lPatr->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lPatr->Location = System::Drawing::Point(408, 232);
 			this->lPatr->Name = L"lPatr";
-			this->lPatr->Size = System::Drawing::Size(62, 13);
+			this->lPatr->Size = System::Drawing::Size(47, 9);
 			this->lPatr->TabIndex = 29;
 			this->lPatr->Text = L"по-батькові";
 			// 
@@ -257,10 +252,9 @@ namespace mainProject {
 			// 
 			this->lSurname->AutoSize = true;
 			this->lSurname->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 6));
-			this->lSurname->Location = System::Drawing::Point(343, 284);
-			this->lSurname->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lSurname->Location = System::Drawing::Point(292, 232);
 			this->lSurname->Name = L"lSurname";
-			this->lSurname->Size = System::Drawing::Size(51, 13);
+			this->lSurname->Size = System::Drawing::Size(38, 9);
 			this->lSurname->TabIndex = 28;
 			this->lSurname->Text = L"прізвище";
 			// 
@@ -269,10 +263,9 @@ namespace mainProject {
 			this->lName->AutoSize = true;
 			this->lName->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 6, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->lName->Location = System::Drawing::Point(185, 284);
-			this->lName->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lName->Location = System::Drawing::Point(188, 232);
 			this->lName->Name = L"lName";
-			this->lName->Size = System::Drawing::Size(23, 13);
+			this->lName->Size = System::Drawing::Size(19, 9);
 			this->lName->TabIndex = 27;
 			this->lName->Text = L"ім\'я";
 			// 
@@ -280,50 +273,45 @@ namespace mainProject {
 			// 
 			this->linfo->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->linfo->AutoSize = true;
-			this->linfo->Location = System::Drawing::Point(16, 572);
-			this->linfo->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->linfo->Location = System::Drawing::Point(12, 465);
 			this->linfo->Name = L"linfo";
-			this->linfo->Size = System::Drawing::Size(321, 16);
+			this->linfo->Size = System::Drawing::Size(256, 13);
 			this->linfo->TabIndex = 30;
 			this->linfo->Text = L"Для отриманя інформації по формі - натисніть F1";
 			// 
 			// picBox
 			// 
 			this->picBox->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"picBox.Image")));
-			this->picBox->Location = System::Drawing::Point(188, -37);
-			this->picBox->Margin = System::Windows::Forms::Padding(4);
+			this->picBox->Location = System::Drawing::Point(141, -30);
 			this->picBox->Name = L"picBox";
-			this->picBox->Size = System::Drawing::Size(360, 238);
+			this->picBox->Size = System::Drawing::Size(270, 193);
 			this->picBox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->picBox->TabIndex = 31;
 			this->picBox->TabStop = false;
 			// 
 			// progressBarPasswordStrength
 			// 
-			this->progressBarPasswordStrength->Location = System::Drawing::Point(188, 425);
-			this->progressBarPasswordStrength->Margin = System::Windows::Forms::Padding(4);
+			this->progressBarPasswordStrength->Location = System::Drawing::Point(141, 355);
 			this->progressBarPasswordStrength->Maximum = 3;
 			this->progressBarPasswordStrength->Name = L"progressBarPasswordStrength";
-			this->progressBarPasswordStrength->Size = System::Drawing::Size(143, 10);
+			this->progressBarPasswordStrength->Size = System::Drawing::Size(108, 12);
 			this->progressBarPasswordStrength->TabIndex = 32;
 			this->progressBarPasswordStrength->Value = 1;
 			// 
 			// passwordStrong
 			// 
 			this->passwordStrong->AutoSize = true;
-			this->passwordStrong->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->passwordStrong->Location = System::Drawing::Point(105, 420);
-			this->passwordStrong->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->passwordStrong->Location = System::Drawing::Point(66, 354);
 			this->passwordStrong->Name = L"passwordStrong";
-			this->passwordStrong->Size = System::Drawing::Size(0, 15);
+			this->passwordStrong->Size = System::Drawing::Size(66, 13);
 			this->passwordStrong->TabIndex = 33;
+			this->passwordStrong->Text = L"Складність:";
 			// 
 			// SignForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(712, 599);
+			this->ClientSize = System::Drawing::Size(534, 487);
 			this->Controls->Add(this->passwordStrong);
 			this->Controls->Add(this->progressBarPasswordStrength);
 			this->Controls->Add(this->linfo);
@@ -346,9 +334,9 @@ namespace mainProject {
 			this->Controls->Add(this->picBox);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->Margin = System::Windows::Forms::Padding(3, 2, 3, 2);
+			this->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
 			this->Name = L"SignForm";
-			this->Text = L"Реєстрація";
+			this->Text = L"Зареєструватися";
 			this->Load += gcnew System::EventHandler(this, &SignForm::SignForm_Load);
 			this->HelpRequested += gcnew System::Windows::Forms::HelpEventHandler(this, &SignForm::SignForm_HelpRequested);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->picBox))->EndInit();

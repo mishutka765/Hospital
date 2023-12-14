@@ -1,0 +1,137 @@
+[
+    {
+        "userAge": 25,
+        "userID": 1,
+        "userMiddleName": "Middle1",
+        "userName": "User1",
+        "userPassword": "password1",
+        "userPhone": "123-456-7890",
+        "userSurname": "Lastname1"
+    },
+    {
+        "userAge": 32,
+        "userID": 2,
+        "userMiddleName": "Middle2",
+        "userName": "User2",
+        "userPassword": "password2",
+        "userPhone": "234-567-8901",
+        "userSurname": "Lastname2"
+    },
+    {
+        "userAge": 18,
+        "userID": 3,
+        "userMiddleName": "Viktorovych",
+        "userName": "Danil",
+        "userPassword": "P5s3w0rD",
+        "userPhone": "+3800634445566",
+        "userSurname": "Dedov"
+    },
+    {
+        "userAge": 45,
+        "userID": 4,
+        "userMiddleName": "Middle4",
+        "userName": "User4",
+        "userPassword": "password4",
+        "userPhone": "456-789-0123",
+        "userSurname": "Lastname4"
+    },
+    {
+        "userAge": 38,
+        "userID": 5,
+        "userMiddleName": "Middle5",
+        "userName": "User5",
+        "userPassword": "password5",
+        "userPhone": "567-890-1234",
+        "userSurname": "Lastname5"
+    },
+    {
+        "userAge": 51,
+        "userID": 6,
+        "userMiddleName": "Middle6",
+        "userName": "User6",
+        "userPassword": "password6",
+        "userPhone": "678-901-2345",
+        "userSurname": "Lastname6"
+    },
+    {
+        "userAge": 42,
+        "userID": 7,
+        "userMiddleName": "Middle7",
+        "userName": "User7",
+        "userPassword": "password7",
+        "userPhone": "789-901-2345",
+        "userSurname": "Lastname7"
+    },
+    {
+        "userAge": 27,
+        "userID": 8,
+        "userMiddleName": "Middle8",
+        "userName": "User8",
+        "userPassword": "password8",
+        "userPhone": "890-123-4567",
+        "userSurname": "Lastname8"
+    },
+    {
+        "userAge": 33,
+        "userID": 9,
+        "userMiddleName": "Middle9",
+        "userName": "User9",
+        "userPassword": "password9",
+        "userPhone": "901-234-5678",
+        "userSurname": "Lastname9"
+    },
+    {
+        "userAge": 56,
+        "userID": 10,
+        "userMiddleName": "Middle10",
+        "userName": "User10",
+        "userPassword": "password10",
+        "userPhone": "012-345-6789",
+        "userSurname": "Lastname10"
+    },
+    {
+        "userAge": 41,
+        "userID": 11,
+        "userMiddleName": "Middle11",
+        "userName": "User11",
+        "userPassword": "password11",
+        "userPhone": "123-456-7890",
+        "userSurname": "Lastname11"
+    },
+    {
+        "userAge": 35,
+        "userID": 12,
+        "userMiddleName": "Middle12",
+        "userName": "User12",
+        "userPassword": "password12",
+        "userPhone": "234-567-8901",
+        "userSurname": "Lastname12"
+    },
+    {
+        "userAge": 29,
+        "userID": 13,
+        "userMiddleName": "Middle13",
+        "userName": "User13",
+        "userPassword": "password13",
+        "userPhone": "345-678-9012",
+        "userSurname": "Lastname13"
+    },
+    {
+        "userAge": 45,
+        "userID": 14,
+        "userMiddleName": "Middle14",
+        "userName": "User14",
+        "userPassword": "password14",
+        "userPhone": "456-789-0123",
+        "userSurname": "Lastname14"
+    },
+    {
+        "userAge": 38,
+        "userID": 15,
+        "userMiddleName": "Middle15",
+        "userName": "User15",
+        "userPassword": "password15",
+        "userPhone": "567-890-1234",
+        "userSurname": "Lastname15"
+    }
+]

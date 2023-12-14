@@ -106,11 +106,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>STATIC_CONCPP;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>F:\EDC\3sem\KURSA4\sqlConnector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\курсовий\mysql-connector-c++-8.1.0-winx64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>mysqlcppconn-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>F:\EDC\3sem\KURSA4\sqlConnector\lib64;F:\EDC\3sem\KURSA4\sqlConnector\lib64\vs14;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\курсовий\mysql-connector-c++-8.1.0-winx64\lib64\vs14;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -172,6 +172,17 @@
     <EmbeddedResource Include="StartForm.resx">
       <DependentUpon>StartForm.h</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="doctors.json" />
+    <None Include="hospitalfile.json" />
+    <None Include="userfile.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="doctorfile.xml" />
+    <Xml Include="hospitalfile.xml" />
+    <Xml Include="userfile.xml" />
+    <Xml Include="visits.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
